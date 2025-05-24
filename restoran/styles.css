@@ -363,6 +363,82 @@ footer nav ul li a {
     font-size: 14px;
 }
 
+/* Стили для страницы меню */
+.menu-categories {
+    padding: 100px 0 60px;
+    background-color: #F4F2E5;
+}
+
+.menu-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.menu-header h1 {
+    font-size: 48px;
+    color: #5B120D;
+    margin-bottom: 30px;
+}
+
+.menu-types {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.menu-type-btn {
+    padding: 12px 24px;
+    background-color: #F4F2E5;
+    color: #5B120D;
+    border: 2px solid #5B120D;
+    border-radius: 33px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.menu-type-btn.active,
+.menu-type-btn:hover {
+    background-color: #5B120D;
+    color: #F4F2E5;
+}
+
+.categories-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 0 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.category-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+
+.category-card h2 {
+    padding: 20px;
+    text-align: center;
+    color: #5B120D;
+    font-size: 24px;
+    margin: 0;
+}
+
+.category-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+}
+
 @media (max-width: 768px) {
     nav ul {
         flex-direction: column;
@@ -407,8 +483,121 @@ footer nav ul li a {
         padding: 20px;
     }
 
-    .modal-content {
-        margin: 20px auto;
-        padding: 20px;
+    /* Адаптация для страницы меню */
+    .menu-header h1 {
+        font-size: 36px;
+    }
+    
+    /* .menu-types {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .categories-section {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+    } */
+
+    
+    
+}
+/* Добавляем в конец файла */
+.menu-container {
+    padding: 100px 40px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.menu-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.menu-header h1 {
+    font-size: 48px;
+    color: #5B120D;
+    margin-bottom: 20px;
+}
+
+.menu-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.menu-switch-btn {
+    padding: 12px 24px;
+    background: none;
+    border: 2px solid #5B120D;
+    border-radius: 33px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    color: #5B120D;
+    transition: all 0.3s;
+}
+
+.menu-switch-btn.active {
+    background-color: #5B120D;
+    color: white;
+}
+
+.menu-content {
+    display: none;
+}
+
+.menu-content.active-content {
+    display: block;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.category-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+
+.category-card h2 {
+    padding: 20px;
+    text-align: center;
+    color: #5B120D;
+    font-size: 24px;
+    margin: 0;
+}
+
+.category-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+}
+
+@media (max-width: 768px) {
+    .menu-container {
+        padding: 80px 20px 40px;
+    }
+    
+    .menu-header h1 {
+        font-size: 36px;
+    }
+    
+    .menu-switcher {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .category-grid {
+        grid-template-columns: 1fr;
     }
 }

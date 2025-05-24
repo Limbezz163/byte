@@ -3,155 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Меню - BITE</title>
+    <title>BITE - Меню</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .menu-page {
-            padding-top: 80px;
-        }
-        
-        
-        
-        .menu-types {
-            display: flex;
-            padding: 20px;
-            background-color: #F4F2E5;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .menu-type-btn {
-            flex: 1;
-            padding: 15px;
-            background: none;
-            border: none;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #5B120D;
-            text-transform: uppercase;
-        }
-        
-        .menu-type-btn.active {
-            background-color: #5B120D;
-            color: #F4F2E5;
-        }
-        
-        .menu-categories {
-            padding: 20px;
-            background-color: #eee;
-        }
-        
-        .categories-list {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-        }
-        
-        .category-btn {
-            padding: 10px 20px;
-            background: none;
-            border: 1px solid #5B120D;
-            border-radius: 20px;
-            cursor: pointer;
-            white-space: nowrap;
-            color: #5B120D;
-        }
-        
-        .category-btn.active {
-            background-color: #5B120D;
-            color: #F4F2E5;
-        }
-        
-        .menu-items {
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .dish-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            background-color: white;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .dish-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .dish-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-        
-        .dish-name {
-            font-size: 20px;
-            color: #5B120D;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        
-        .dish-weight {
-            font-size: 14px;
-            color: #777;
-            margin-bottom: 10px;
-        }
-        
-        .dish-description {
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 15px;
-            color: #555;
-        }
-        
-        .dish-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .dish-price {
-            font-size: 20px;
-            font-weight: bold;
-            color: #5B120D;
-        }
-        
-        .add-to-cart {
-            background-color: #5B120D;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-
-        .add-to-cart:hover {
-            background-color: #7a1a1a;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 30px;
-            font-size: 18px;
-            color: #5B120D;
-        }
-
-        .error {
-            text-align: center;
-            padding: 30px;
-            font-size: 18px;
-            color: #d32f2f;
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -160,9 +13,9 @@
             
             <nav class="nav-center">
                 <ul>
-                    <li><a href="index.html">Меню</a></li>
-                    <li><a href="index.html#delivery">Доставка</a></li>
-                    <li><a href="index.html#about">О ресторане</a></li>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="#delivery">Доставка</a></li>
+                    <li><a href="#about">О ресторане</a></li>
                 </ul>
             </nav>
             
@@ -184,27 +37,52 @@
         </div>
     </header>
     
-    <main class="menu-page">
-        
-        
-        <div class="menu-types">
-            <button class="menu-type-btn active" data-type="main">ОСНОВНОЕ МЕНЮ</button>
-            <button class="menu-type-btn" data-type="bar">БАРНОЕ МЕНЮ</button>
-        </div>
-        
-        <div class="menu-categories">
-            <div class="categories-list">
-                <button class="category-btn active" data-category="all">Все блюда</button>
-                <button class="category-btn" data-category="cold">Холодные блюда</button>
-                <button class="category-btn" data-category="hot">Горячие блюда</button>
-                <button class="category-btn" data-category="snacks">Закуски</button>
-                <button class="category-btn" data-category="desserts">Десерты</button>
+    <main class="menu-container">
+        <div class="menu-header">
+            <h1>МЕНЮ</h1>
+            <div class="menu-switcher">
+                <button class="menu-switch-btn active" data-menu="main">ОСНОВНОЕ МЕНЮ</button>
+                <button class="menu-switch-btn" data-menu="bar">БАРНОЕ МЕНЮ</button>
             </div>
         </div>
-        
-        <div class="menu-items" id="menu-items-container">
-            <!-- Блюда будут загружаться здесь динамически -->
-            <div class="loading">Загрузка меню...</div>
+
+        <!-- Основное меню -->
+        <div id="main-menu" class="menu-content active-content">
+            <div class="category-grid">
+                <div class="category-card">
+                    <h2>Холодные блюда</h2>
+                    <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')"></div>
+                </div>
+                <div class="category-card">
+                    <h2>Горячие блюда</h2>
+                    <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')"></div>
+                </div>
+            
+                <div class="category-card">
+                    <h2>Десерты</h2>
+                    <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1563805042-7684c019e1cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Барное меню -->
+        <div id="bar-menu" class="menu-content">
+            <div class="category-grid">
+                <div class="category-card">
+                    <h2>Холодные напитки</h2>
+                    <div class="category-image" style="background-image: url('https://donnamaria.ru/upload/iblock/c62/c6280c3b66c534662515f602b00ea189.jpg')"></div>
+                </div>
+                <div class="category-card">
+                    <h2>Коктейли</h2>
+                    <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1551751299-1b51cab2694c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')"></div>
+                </div>
+                
+                <div class="category-card">
+                    <h2>Вино</h2>
+                    <div class="category-image" style="background-image: url('https://web.alkoteka.com/filemanager/Blog_kavista/Cover/dlitVidergka_mob.jpg')"></div>
+                </div>
+                
+            </div>
         </div>
     </main>
     
@@ -212,10 +90,10 @@
         <div class="container">
             <nav>
                 <ul>
-                    <li><a href="index.html#menu">Меню</a></li>
-                    <li><a href="index.html#delivery">Доставка</a></li>
-                    <li><a href="index.html#about">О ресторане</a></li>
-                    <li><a href="index.html#contacts">Справочная информация</a></li>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="#delivery">Доставка</a></li>
+                    <li><a href="#about">О ресторане</a></li>
+                    <li><a href="#contacts">Справочная информация</a></li>
                 </ul>
             </nav>
         </div>
@@ -276,107 +154,5 @@
     </div>
 
     <script src="script.js"></script>
-    <script>
-        // Функция для загрузки меню из API
-        async function loadMenu() {
-            const container = document.getElementById('menu-items-container');
-            
-            try {
-                // Показываем индикатор загрузки
-                container.innerHTML = '<div class="loading">Загрузка меню...</div>';
-                
-                // Запрашиваем данные из API
-                const response = await fetch('http://localhost:8080/api/menu?limit=10&offset=0');
-                
-                if (!response.ok) {
-                    throw new Error('Ошибка загрузки меню');
-                }
-                
-                const data = await response.json();
-                
-                // Очищаем контейнер
-                container.innerHTML = '';
-                
-                // Если нет блюд
-                if (data.length === 0) {
-                    container.innerHTML = '<div class="error">Меню временно недоступно</div>';
-                    return;
-                }
-                
-                // Создаем карточки для каждого блюда
-                data.forEach(dish => {
-                    const dishCard = document.createElement('div');
-                    dishCard.className = 'dish-card';
-                    dishCard.dataset.category = dish.category || 'all';
-                    
-                    dishCard.innerHTML = `
-                        ${dish.image ? `<img src="${dish.image}" alt="${dish.name}" class="dish-image">` : ''}
-                        <h3 class="dish-name">${dish.name}</h3>
-                        <div class="dish-weight">${dish.weight || '--'} гр</div>
-                        <p class="dish-description">${dish.description || 'Описание отсутствует'}</p>
-                        <div class="dish-footer">
-                            <div class="dish-price">${dish.price ? dish.price + ' ₽' : '--'}</div>
-                            <button class="add-to-cart">В корзину</button>
-                        </div>
-                    `;
-                    
-                    container.appendChild(dishCard);
-                });
-                
-                // Добавляем обработчики событий для фильтрации
-                setupFilterHandlers();
-                
-            } catch (error) {
-                console.error('Ошибка загрузки меню:', error);
-                container.innerHTML = `<div class="error">Ошибка загрузки меню: ${error.message}</div>`;
-            }
-        }
-        
-        // Функция для настройки обработчиков фильтрации
-        function setupFilterHandlers() {
-            // Фильтрация по типу меню
-            document.querySelectorAll('.menu-type-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.menu-type-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    // Здесь можно добавить логику фильтрации по типу меню
-                });
-            });
-            
-            // Фильтрация по категориям
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    const category = this.dataset.category;
-                    const dishCards = document.querySelectorAll('.dish-card');
-                    
-                    dishCards.forEach(card => {
-                        if (category === 'all' || card.dataset.category === category) {
-                            card.style.display = 'block';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-                });
-            });
-            
-            // Обработчики для кнопок "В корзину"
-            document.querySelectorAll('.add-to-cart').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const dishCard = this.closest('.dish-card');
-                    const dishName = dishCard.querySelector('.dish-name').textContent;
-                    const dishPrice = dishCard.querySelector('.dish-price').textContent;
-                    
-                    alert(`Добавлено в корзину: ${dishName} (${dishPrice})`);
-                    // Здесь можно добавить логику добавления в корзину
-                });
-            });
-        }
-        
-        // Загружаем меню при загрузке страницы
-        document.addEventListener('DOMContentLoaded', loadMenu);
-    </script>
 </body>
 </html>
