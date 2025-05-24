@@ -1,23 +1,22 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-	"os"
 	"user-service/internal/auth"
 	"user-service/internal/config"
 	"user-service/internal/handler"
 	"user-service/internal/logger"
+
+	"github.com/gorilla/mux"
 )
 
-var jwtKey = []byte(os.Getenv("JWT_KEY"))
-
 func main() {
+
 	logger := logger.InitLogger()
 	defer logger.Sync()
-
 	config.Init()
+
 	logger.Info("JTW key created successfully")
 
 	logger.Info("Launch user handlers")
