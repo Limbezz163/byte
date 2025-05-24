@@ -406,4 +406,9 @@ footer nav ul li a {
         margin: 20px auto;
         padding: 20px;
     }
+
+    .modal-content {
+        margin: 20px auto;
+        padding: 20px;
+    }
 }
