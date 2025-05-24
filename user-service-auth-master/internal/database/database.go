@@ -17,5 +17,6 @@ func ConnectDataBase() *pgxpool.Pool {
 		log.Printf("Failed to connect to database: %v\n", err)
 		return nil
 	}
+
 	return dbpool
 }
