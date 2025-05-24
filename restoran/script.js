@@ -29,17 +29,20 @@ const authTabs = document.querySelectorAll(".auth-tab");
 const changeToRegisterBtn = document.getElementById("change-to-register");
 
 // Открытие модального окна по клику на иконку
-authBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  authModal.style.display = "block";
-  // По умолчанию показываем вкладку входа
-  document.querySelector('.tab-btn[data-tab="login"]').click();
-});
+if (authBtn) {
+  authBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    authModal.style.display = "block";
+    document.querySelector('.tab-btn[data-tab="login"]').click();
+  });
+}
 
 // Закрытие модального окна
-closeBtn.addEventListener("click", () => {
-  authModal.style.display = "none";
-});
+if (closeBtn) {
+  closeBtn.addEventListener("click", () => {
+    authModal.style.display = "none";
+  });
+}
 
 // Закрытие при клике вне окна
 window.addEventListener("click", (e) => {
@@ -49,39 +52,45 @@ window.addEventListener("click", (e) => {
 });
 
 // Переключение между вкладками
-tabBtns.forEach((btn) => {
-  btn.addEventListener("click", function () {
-    const tabId = this.getAttribute("data-tab");
+if (tabBtns) {
+  tabBtns.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const tabId = this.getAttribute("data-tab");
 
-    tabBtns.forEach((b) => b.classList.remove("active"));
-    authTabs.forEach((tab) => tab.classList.remove("active"));
+      tabBtns.forEach((b) => b.classList.remove("active"));
+      authTabs.forEach((tab) => tab.classList.remove("active"));
 
-    this.classList.add("active");
-    document.getElementById(`${tabId}-tab`).classList.add("active");
+      this.classList.add("active");
+      document.getElementById(`${tabId}-tab`).classList.add("active");
+    });
   });
-});
+}
 
 // Кнопка "Изменить данные" (переход на регистрацию)
-changeToRegisterBtn.addEventListener("click", () => {
-  document.querySelector('.tab-btn[data-tab="register"]').click();
-});
+if (changeToRegisterBtn) {
+  changeToRegisterBtn.addEventListener("click", () => {
+    document.querySelector('.tab-btn[data-tab="register"]').click();
+  });
+}
 
 // Обработка формы входа
-document.getElementById("login-form").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const username = document.getElementById("login-username").value;
-  const password = document.getElementById("login-password").value;
+const loginForm = document.getElementById("login-form");
+if (loginForm) {
+  loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const username = document.getElementById("login-username").value;
+    const password = document.getElementById("login-password").value;
 
-  // Здесь должна быть логика входа
-  console.log("Вход:", username, password);
-  alert("Вы успешно вошли!");
-  authModal.style.display = "none";
-});
+    console.log("Вход:", username, password);
+    alert("Вы успешно вошли!");
+    authModal.style.display = "none";
+  });
+}
 
 // Обработка формы регистрации
-document
-  .getElementById("register-form")
-  .addEventListener("submit", function (e) {
+const registerForm = document.getElementById("register-form");
+if (registerForm) {
+  registerForm.addEventListener("submit", function (e) {
     e.preventDefault();
     const formData = {
       name: document.getElementById("reg-name").value,
@@ -93,8 +102,34 @@ document
       password: document.getElementById("reg-password").value,
     };
 
-    // Здесь должна быть логика регистрации
     console.log("Регистрация:", formData);
     alert("Регистрация прошла успешно!");
     authModal.style.display = "none";
   });
+}
+
+
+// Переключение между меню
+document.addEventListener('DOMContentLoaded', function() {
+  const switchButtons = document.querySelectorAll('.menu-switch-btn');
+  const menuContents = document.querySelectorAll('.menu-content');
+
+  switchButtons.forEach(button => {
+      button.addEventListener('click', function() {
+          // Удаляем активные классы
+          switchButtons.forEach(btn => btn.classList.remove('active'));
+          menuContents.forEach(content => content.classList.remove('active-content'));
+          
+          // Добавляем активный класс к выбранной кнопке
+          this.classList.add('active');
+          
+          // Показываем соответствующее меню
+          const menuType = this.getAttribute('data-menu');
+          document.getElementById(`${menuType}-menu`).classList.add('active-content');
+      });
+  });
+});
+
+// Остальной код скрипта остается без изменений
+
+
