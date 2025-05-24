@@ -2,9 +2,10 @@ package main
 
 import (
 	"catalog-restaurant/internal/handler"
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {

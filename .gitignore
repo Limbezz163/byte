@@ -1,0 +1,15 @@
+# Общие файлы
+.DS_Store
+.vscode/
+*.log
+
+# Бэкенд (Go)
+/backend/bin/
+*.exe
+*.test
+/backend/vendor/
+
+# Фронтенд (JavaScript)
+/frontend/node_modules/
+/frontend/dist/
+/frontend/.envgit push -u origin main
