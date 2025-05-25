@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
     <header>
@@ -33,14 +34,14 @@
                         <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.534.26l.2-3.004 5.59-5.043c.24-.213-.054-.334-.373-.12l-6.91 4.34-2.97-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.53-.21 1.002.13.832.942z"/>
                     </svg>
                 </a>
-                <a href="#" aria-label="Корзина" id="cart-icon">
-                    <svg width="35" height="35" viewBox="0 0 24 24" fill="#F4F2E5">
-                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
-                    </svg>
-                </a>
                 <a href="account.html" aria-label="Личный кабинет" id="auth-icon">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="#F4F2E5">
                         <path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                </a>
+                <a href="#" aria-label="Корзина" id="cart-icon">
+                    <svg width="35" height="35" viewBox="0 0 24 24" fill="#F4F2E5">
+                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
                     </svg>
                 </a>
             </div>
@@ -93,26 +94,103 @@
         </div>
     </footer>
 
-    <!-- Модальное окно корзины -->
     <div id="cart-modal" class="modal">
-        <div class="modal-content account-content">
-            <span class="close">&times;</span>
-            
-            <div class="account-info">
-                <h2>Ваша корзина</h2>
+    <div class="modal-content account-content" style="overflow-y: auto;">
+        <span class="close">&times;</span>
+        
+        <!-- Блок 1: Заголовок корзины -->
+        <div class="cart-header-block">
+            <div class="cart-title-wrapper">
+                <svg class="trash-icon" width="24" height="24" viewBox="0 0 24 24" fill="#F4F2E5">
+                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                </svg>
+                <h2>Ваш заказ</h2>
+            </div>
+            <div id="cart-items" class="cart-items-block scrollable">
+                <!-- Пример товара -->
+                <div class="cart-item">
+                    <div class="item-actions">
+                        <button class="quantity-btn">-</button>
+                        <span class="item-quantity">1</span>
+                        <button class="quantity-btn">+</button>
+                        <button class="remove-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="#5B120D">
+                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <p class="empty-cart">Ваша корзина пуста</p>
+            </div>
+        </div>
+        
+        <!-- Блок 2: Адрес доставки -->
+        <div class="delivery-address-block">
+            <h3>Выберите адрес доставки</h3>
+            <div class="address-table">
+                <table>
+                    <tr>
+                        <td>ул. Примерная, д. 1, кв. 2</td>
+                        <td class="address-checkbox">
+                            <input type="radio" name="address" id="address1" checked>
+                            <label for="address1"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>ул. Другая, д. 3, кв. 4</td>
+                        <td class="address-checkbox">
+                            <input type="radio" name="address" id="address2">
+                            <label for="address2"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>пр. Третий, д. 5, кв. 6</td>
+                        <td class="address-checkbox">
+                            <input type="radio" name="address" id="address3">
+                            <label for="address3"></label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Блок 3: Время доставки -->
+        <div class="delivery-time-block">
+            <h3>Время доставки</h3>
+            <div class="time-options">
+                <button class="time-option-btn active" id="asap-btn">Как можно быстрее</button>
+                <button class="time-option-btn" id="schedule-btn">Ко времени</button>
             </div>
             
-            <div class="cart-section">
-                <div id="cart-items">
-                    <p class="empty-cart">Ваша корзина пуста</p>
-                </div>
-                <div class="cart-total">
-                    <p>Итого: <span id="cart-total-price">0</span> ₽</p>
-                    <button class="submit-btn" id="checkout-btn">Оформить заказ</button>
-                </div>
+            <div class="time-selection" id="time-selection" style="display: none;">
+            <div class="time-input">
+            <input type="text" id="delivery-date" class="date-picker" placeholder="Выберите дату" readonly>
+            </div>
+            <div class="time-input">
+            <input type="text" id="delivery-time" class="time-picker" placeholder="Укажите время" readonly>
+  </div>
+</div>
+            
+            <div class="cart-total">
+                <p>Итого: <span id="cart-total-price">850</span> ₽</p>
+                <button class="submit-btn order-btn" id="checkout-btn">Заказать</button>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Календарь для выбора даты (скрытый по умолчанию) -->
+<div id="datepicker-container" class="datepicker-container"></div>
+
+<!-- Временной барабан (скрытый по умолчанию) -->
+<div id="timepicker-container" class="timepicker-container">
+    <div class="timepicker">
+        <div class="hours-wheel"></div>
+        <div class="minutes-wheel"></div>
+        <div class="center-dot"></div>
+    </div>
+    <button class="timepicker-confirm">Подтвердить</button>
+</div>
 
     <script src="script.js"></script>
 </body>
