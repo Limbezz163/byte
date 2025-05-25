@@ -813,3 +813,61 @@ footer nav ul li a {
     height: 24px;
     fill: #F4F2E5;
 }
+
+/* Стили для сообщений об ошибках */
+.error-message {
+    color: #ff0000;
+    font-size: 12px;
+    margin-top: 5px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Стили для невалидных полей */
+input.invalid {
+    border-color: #ff0000 !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+/* Стили для красивого уведомления */
+.custom-alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #5B120D;
+    color: #F4F2E5;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateX(150%);
+    transition: transform 0.3s ease-out;
+    font-family: 'Arial', sans-serif;
+}
+
+.custom-alert.error {
+    background-color: #941919;
+}
+
+.custom-alert.show {
+    transform: translateX(0);
+}
+
+.custom-alert svg {
+    width: 24px;
+    height: 24px;
+    fill: #F4F2E5;
+}
