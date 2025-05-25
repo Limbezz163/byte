@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Личный кабинет - BITE</title>
+    <!-- meta tags and title -->
     <link rel="stylesheet" href="styles.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -45,54 +44,18 @@
                     </svg>
                 </a>
             </div>
+=======
+</head>
+<body>
+    <div class="account-container">
+        <div class="account-header">
+            <button class="close-account-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#5B120D">
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+            </button>
+            <h1>Личный кабинет</h1>
         </div>
-    </header>
-    
-    <main class="account-page">
-        <section class="account-section">
-            <div class="container">
-                <h1>Личный кабинет</h1>
-                
-                <div class="account-info">
-                    <div class="user-info">
-                        <h2>Добро пожаловать, <span id="account-username">Гость</span>!</h2>
-                        <p>Email: <span id="account-email">Неизвестно</span></p>
-                        <div class="user-actions">
-                            <a href="index.html" class="home-btn">На главную</a>
-                        </div>
-                    </div>
-                    
-                    <div class="delivery-address">
-                        <h3>Адрес доставки</h3>
-                        <div class="address-form">
-                            <input type="text" id="delivery-address-input" placeholder="Введите ваш адрес">
-                            <button id="save-address-btn" class="submit-btn">Сохранить</button>
-                        </div>
-                    </div>
-                    
-                    <div class="order-history">
-                        <h3>История заказов</h3>
-                        <div class="no-orders">
-                            <p>У вас пока нет завершенных заказов</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-    
-    <footer>
-        <div class="container">
-            <nav>
-                <ul>
-                    <li><a href="menu.html">Меню</a></li>
-                    <li><a href="#delivery">Доставка</a></li>
-                    <li><a href="#about">О ресторане</a></li>
-                    <li><a href="#contacts">Справочная информация</a></li>
-                </ul>
-            </nav>
-        </div>
-    </footer>
 
     <div id="cart-modal" class="modal">
     <div class="modal-content account-content" style="overflow-y: auto;">
@@ -174,6 +137,105 @@
             <div class="cart-total">
                 <p>Итого: <span id="cart-total-price">850</span> ₽</p>
                 <button class="submit-btn order-btn" id="checkout-btn">Заказать</button>
+=======
+        <div class="account-content">
+            <div class="user-info-section">
+                <div class="user-avatar">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="#5B120D">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                </div>
+
+                <div class="user-details">
+                    <h2>Персональные данные</h2>
+                    <div class="detail-item">
+                        <span class="detail-label">Имя:</span>
+                        <span id="user-name" class="detail-value">Иван</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Фамилия:</span>
+                        <span id="user-surname" class="detail-value">Иванов</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Телефон:</span>
+                        <span id="user-phone" class="detail-value">+7 (900) 123-45-67</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Email:</span>
+                        <span id="user-email" class="detail-value">user@example.com</span>
+                    </div>
+
+                    <button class="logout-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4F2E5">
+                            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                        </svg>
+                        Выйти из аккаунта
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="delivery-section">
+        <!-- В секции delivery-addresses замените текущий код на: -->
+    <div class="delivery-addresses">
+        <div class="address-header">
+            <h2>Адреса доставки</h2>
+            <button id="add-address-btn" class="add-address-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4F2E5">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                </svg>
+                Добавить адрес
+            </button>
+        </div>
+        
+        <div id="addresses-list" class="addresses-list">
+            <!-- Адреса будут добавляться сюда динамически -->
+            <div class="no-addresses">
+                <p>У вас нет сохранённых адресов</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно добавления адреса -->
+    <div id="address-modal" class="modal">
+        <div class="modal-content address-modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Добавить новый адрес</h2>
+            <form id="address-form">
+                <div class="form-group">
+                    <input type="text" id="city" placeholder="Город" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="street" placeholder="Улица, дом" required>
+                </div>
+                <div class="address-details">
+                    <div class="form-group">
+                        <input type="text" id="entrance" placeholder="Подъезд">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="floor" placeholder="Этаж">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="apartment" placeholder="Квартира">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="default-address-label">
+                        <input type="checkbox" id="default-address">
+                        <span>Использовать по умолчанию</span>
+                    </label>
+                </div>
+                <button type="submit" class="save-address-btn">Сохранить адрес</button>
+            </form>
+        </div>
+    </div>
+    
+        <div class="order-history">
+            <h2>История заказов</h2>
+            <div class="no-orders">
+                <p>У вас пока нет завершенных заказов</p>
+>>>>>>> a7f0c241e3948efccc2a085e2890ec0e52c0cf2b
             </div>
         </div>
     </div>

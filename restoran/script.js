@@ -416,8 +416,256 @@ function checkoutOrder() {
 }
 
 // ===== ОБРАБОТЧИКИ СОБЫТИЙ =====
+
 document.addEventListener("DOMContentLoaded", function() {
   // Загрузка данных пользователя
+// Открытие модальных окон
+if (authBtn) {
+  authBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (currentUser) {
+      window.location.href = "account.html";
+    } else {
+      showModal("auth-modal");
+      document.querySelector('.tab-btn[data-tab="login"]').click();
+    }
+  });
+}
+
+if (cartIcon) {
+  cartIcon.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (!currentUser) {
+      showCustomAlert("Для доступа к корзине необходимо авторизоваться", false);
+      showModal("auth-modal");
+      return;
+    }
+    showModal("cart-modal");
+  });
+}
+
+// Закрытие модальных окон
+closeBtns.forEach((btn) => {
+  btn.addEventListener("click", function () {
+    hideModal(this.closest(".modal").id);
+  });
+});
+
+// Закрытие при клике вне окна
+window.addEventListener("click", (e) => {
+  if (e.target.classList.contains("modal")) {
+    hideModal(e.target.id);
+  }
+});
+
+// Переключение между вкладками
+if (tabBtns) {
+  tabBtns.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const tabId = this.getAttribute("data-tab");
+
+      tabBtns.forEach((b) => b.classList.remove("active"));
+      authTabs.forEach((tab) => tab.classList.remove("active"));
+
+      this.classList.add("active");
+      document.getElementById(`${tabId}-tab`).classList.add("active");
+    });
+  });
+}
+
+// Кнопка "Изменить данные" (переход на регистрацию)
+if (changeToRegisterBtn) {
+  changeToRegisterBtn.addEventListener("click", () => {
+    document.querySelector('.tab-btn[data-tab="register"]').click();
+  });
+}
+
+// Оформление заказа
+if (checkoutBtn) {
+  checkoutBtn.addEventListener("click", () => {
+    if (cartItems.length === 0) {
+      showCustomAlert("Ваша корзина пуста", false);
+      return;
+    }
+
+    if (!deliveryAddress) {
+      showCustomAlert("Пожалуйста, укажите адрес доставки", false);
+      return;
+    }
+
+    // Здесь можно добавить логику оформления заказа
+    showCustomAlert("Заказ успешно оформлен!");
+    clearCart();
+    hideModal("cart-modal");
+  });
+}
+
+// Сохранение адреса доставки
+if (saveAddressBtn && deliveryAddressInput) {
+  saveAddressBtn.addEventListener("click", () => {
+    deliveryAddress = deliveryAddressInput.value.trim();
+    if (currentUser) {
+      localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
+      showCustomAlert("Адрес доставки сохранен");
+    }
+  });
+}
+
+// Обработка формы входа
+if (loginForm) {
+  loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const username = document.getElementById("login-username").value.trim();
+    const password = document.getElementById("login-password").value.trim();
+
+    // Проверка длины логина и пароля
+    const loginError = validateLength(username, 4, 20, "Логин");
+    const passwordError = validateLength(password, 6, 20, "Пароль");
+
+    if (loginError) {
+      showError(document.getElementById("login-username"), loginError);
+      return;
+    }
+
+    if (passwordError) {
+      showError(document.getElementById("login-password"), passwordError);
+      return;
+    }
+
+    loginUser({
+      login: username,
+      email: username,
+    });
+
+    hideModal("auth-modal");
+    showCustomAlert("Вы успешно вошли!");
+    loadCart();
+    loadDeliveryAddress();
+    updateUserUI();
+  });
+
+  // Очистка ошибок при вводе
+  loginForm.querySelectorAll("input").forEach((input) => {
+    input.addEventListener("input", function () {
+      clearError(this);
+    });
+  });
+}
+
+// Обработка формы регистрации
+if (registerForm) {
+  registerForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    let hasErrors = false;
+
+    // Получаем значения полей
+    const formData = {
+      name: document.getElementById("reg-name").value.trim(),
+      surname: document.getElementById("reg-surname").value.trim(),
+      patronymic: document.getElementById("reg-patronymic").value.trim(),
+      phone: document.getElementById("reg-phone").value.trim(),
+      email: document.getElementById("reg-email").value.trim(),
+      login: document.getElementById("reg-login").value.trim(),
+      password: document.getElementById("reg-password").value.trim(),
+    };
+
+    // Очищаем предыдущие ошибки
+    document.querySelectorAll(".error-message").forEach((el) => el.remove());
+    document.querySelectorAll(".form-group input").forEach((input) => {
+      input.classList.remove("invalid");
+    });
+
+    // Проверка полей
+    const errors = {
+      name:
+        validateLength(formData.name, 2, 30, "Имя") ||
+        validateName(formData.name, "Имя"),
+      surname:
+        validateLength(formData.surname, 2, 30, "Фамилия") ||
+        validateName(formData.surname, "Фамилия"),
+      patronymic: formData.patronymic
+        ? validateLength(formData.patronymic, 2, 30, "Отчество") ||
+          validateName(formData.patronymic, "Отчество")
+        : null,
+      phone: validatePhone(formData.phone),
+      email: validateEmail(formData.email),
+      login: validateLength(formData.login, 4, 20, "Логин"),
+      password: validateLength(formData.password, 6, 20, "Пароль"),
+    };
+
+    // Показываем ошибки
+    Object.keys(errors).forEach((field) => {
+      if (errors[field]) {
+        showError(document.getElementById(`reg-${field}`), errors[field]);
+        hasErrors = true;
+      }
+    });
+
+    // Если есть ошибки - прерываем отправку формы
+    if (hasErrors) {
+      showCustomAlert("Пожалуйста, исправьте ошибки в форме", false);
+      return;
+    }
+
+    // Если проверки пройдены
+    loginUser(formData);
+    hideModal("auth-modal");
+    showCustomAlert("Регистрация прошла успешно!");
+    updateUserUI();
+  });
+
+  // Добавляем обработчики для валидации при вводе
+  registerForm.querySelectorAll("input").forEach((input) => {
+    input.addEventListener("input", function () {
+      clearError(this);
+
+      const field = this.id.replace("reg-", "");
+      const value = this.value.trim();
+
+      let error = null;
+      switch (field) {
+        case "name":
+          error = validateName(value, "Имя");
+          break;
+        case "surname":
+          error = validateName(value, "Фамилия");
+          break;
+        case "patronymic":
+          if (value) error = validateName(value, "Отчество");
+          break;
+        case "phone":
+          error = validatePhone(value);
+          break;
+        case "email":
+          error = validateEmail(value);
+          break;
+      }
+
+      if (error) {
+        showError(this, error);
+      }
+    });
+  });
+}
+
+
+// Закрытие личного кабинета
+document.querySelector('.close-account-btn').addEventListener('click', function() {
+  window.location.href = 'index.html';
+});
+
+// Выход из аккаунта
+document.querySelector('.logout-btn').addEventListener('click', function() {
+  localStorage.removeItem('currentUser');
+  localStorage.removeItem(`cart_${currentUser?.email}`);
+  localStorage.removeItem(`address_${currentUser?.email}`);
+  window.location.href = 'index.html';
+});
+
+// Инициализация при загрузке страницы
+document.addEventListener("DOMContentLoaded", function () {
+  // Загружаем данные пользователя из localStorage
+
   const savedUser = localStorage.getItem("currentUser");
   if (savedUser) {
     currentUser = JSON.parse(savedUser);
@@ -606,4 +854,125 @@ document.addEventListener("DOMContentLoaded", function() {
         .classList.add("active-content");
     });
   });
+
+});
+});
+
+// Глобальные переменные
+let userAddresses = [];
+let defaultAddressId = null;
+
+// Функция для отображения адресов
+function renderAddresses() {
+    const addressesList = document.getElementById('addresses-list');
+    
+    if (userAddresses.length === 0) {
+        addressesList.innerHTML = `
+            <div class="no-addresses">
+                <p>У вас нет сохранённых адресов</p>
+            </div>
+        `;
+        return;
+    }
+    
+    addressesList.innerHTML = '';
+    
+    userAddresses.forEach(address => {
+        const addressElement = document.createElement('div');
+        addressElement.className = `address-card ${address.id === defaultAddressId ? 'selected' : ''}`;
+        addressElement.dataset.id = address.id;
+        
+        let details = [];
+        if (address.entrance) details.push(`подъезд ${address.entrance}`);
+        if (address.floor) details.push(`этаж ${address.floor}`);
+        if (address.apartment) details.push(`кв. ${address.apartment}`);
+        
+        addressElement.innerHTML = `
+            <div class="address-text">${address.city}, ${address.street}</div>
+            ${details.length ? `<div class="address-details">${details.join(', ')}</div>` : ''}
+            ${address.id === defaultAddressId ? '<div class="default-badge">По умолчанию</div>' : ''}
+        `;
+        
+        addressElement.addEventListener('click', () => selectAddress(address.id));
+        addressesList.appendChild(addressElement);
+    });
+}
+
+// Функция выбора адреса
+function selectAddress(addressId) {
+    defaultAddressId = addressId;
+    if (currentUser) {
+        localStorage.setItem(`default_address_${currentUser.email}`, addressId);
+    }
+    renderAddresses();
+}
+
+// Функция добавления нового адреса
+function addNewAddress(addressData) {
+    const newAddress = {
+        id: Date.now().toString(),
+        ...addressData,
+        isDefault: document.getElementById('default-address').checked
+    };
+    
+    userAddresses.push(newAddress);
+    
+    if (newAddress.isDefault) {
+        selectAddress(newAddress.id);
+    }
+    
+    if (currentUser) {
+        localStorage.setItem(`addresses_${currentUser.email}`, JSON.stringify(userAddresses));
+    }
+    
+    renderAddresses();
+}
+
+// Обработчик формы добавления адреса
+document.getElementById('address-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const addressData = {
+        city: document.getElementById('city').value.trim(),
+        street: document.getElementById('street').value.trim(),
+        entrance: document.getElementById('entrance').value.trim(),
+        floor: document.getElementById('floor').value.trim(),
+        apartment: document.getElementById('apartment').value.trim()
+    };
+    
+    if (!addressData.city || !addressData.street) {
+        showCustomAlert('Заполните обязательные поля (город и адрес)', false);
+        return;
+    }
+    
+    addNewAddress(addressData);
+    document.getElementById('address-form').reset();
+    hideModal('address-modal');
+    showCustomAlert('Адрес успешно добавлен');
+});
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    if (currentUser) {
+        // Загрузка сохранённых адресов
+        const savedAddresses = localStorage.getItem(`addresses_${currentUser.email}`);
+        if (savedAddresses) {
+            userAddresses = JSON.parse(savedAddresses);
+        }
+        
+        // Загрузка адреса по умолчанию
+        const savedDefaultAddress = localStorage.getItem(`default_address_${currentUser.email}`);
+        if (savedDefaultAddress) {
+            defaultAddressId = savedDefaultAddress;
+        } else if (userAddresses.length > 0) {
+            defaultAddressId = userAddresses[0].id;
+        }
+        
+        renderAddresses();
+    }
+});
+
+// Открытие модального окна
+document.getElementById('add-address-btn').addEventListener('click', function() {
+    showModal('address-modal');
 });

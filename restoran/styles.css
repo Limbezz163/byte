@@ -1375,3 +1375,408 @@ input.invalid {
         text-align: center;
     }
 }
+
+/* Личный кабинет */
+.account-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: #F4F2E5;
+    min-height: 100vh;
+}
+
+.account-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.account-header h1 {
+    color: #5B120D;
+    font-size: 36px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.close-account-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.close-account-btn svg {
+    transition: transform 0.2s;
+}
+
+.close-account-btn:hover svg {
+    transform: scale(1.1);
+}
+
+.account-content {
+    display: flex;
+    gap: 40px;
+}
+
+.user-info-section {
+    flex: 1;
+    max-width: 350px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.user-avatar {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 25px;
+    background-color: rgba(244,242,229,0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #5B120D;
+}
+
+.user-details h2 {
+    color: #5B120D;
+    font-size: 22px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(91,18,13,0.1);
+}
+
+.detail-item {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #5B120D;
+}
+
+.detail-value {
+    color: #333;
+    text-align: right;
+    max-width: 60%;
+}
+
+.logout-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 30px;
+    background-color: #5B120D;
+    color: #F4F2E5;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+    background-color: #941919;
+}
+
+.delivery-section {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.delivery-addresses,
+.order-history {
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.delivery-addresses h2,
+.order-history h2 {
+    color: #5B120D;
+    font-size: 22px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(91,18,13,0.1);
+}
+
+.current-address {
+    background-color: #F4F2E5;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.add-address-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#new-address {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.save-btn {
+    padding: 12px 20px;
+    background-color: #394A92;
+    color: #F4F2E5;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.save-btn:hover {
+    background-color: #2d3a76;
+}
+
+.no-orders {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .account-content {
+        flex-direction: column;
+    }
+    
+    .user-info-section {
+        max-width: 100%;
+    }
+    
+    .add-address-form {
+        flex-direction: column;
+    }
+    
+    .save-btn {
+        width: 100%;
+    }
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.address-modal-content {
+    background-color: #F4F2E5;
+    padding: 30px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #5B120D;
+}
+
+.address-modal-content h2 {
+    color: #5B120D;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#address-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    color: #5B120D;
+    font-weight: 500;
+}
+
+.form-group input {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.address-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.save-address-btn {
+    background-color: #5B120D;
+    color: #F4F2E5;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+}
+
+.save-address-btn:hover {
+    background-color: #941919;
+}
+
+/* Обновлённые стили для личного кабинета */
+.account-header {
+    justify-content: flex-end;
+}
+
+.account-header h1 {
+    margin-right: 40px;
+}
+
+.user-info-section {
+    width: 45%;
+    min-width: 400px;
+}
+
+.delivery-section {
+    width: 55%;
+}
+
+.add-address-btn {
+    background-color: #394A92;
+    color: #F4F2E5;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.2s;
+}
+
+.add-address-btn:hover {
+    background-color: #2d3a76;
+}
+
+/* Стили для адресов доставки */
+.address-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.addresses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.address-card {
+    background-color: #F4F2E5;
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.address-card:hover {
+    border-color: #5B120D;
+}
+
+.address-card.selected {
+    border: 2px solid #5B120D;
+    background-color: rgba(91, 18, 13, 0.05);
+}
+
+.address-card .address-text {
+    margin-bottom: 5px;
+}
+
+.address-card .address-details {
+    color: #666;
+    font-size: 14px;
+}
+
+.address-card .default-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #5B120D;
+    color: #F4F2E5;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.address-card .select-address {
+    display: none;
+}
+
+.no-addresses {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+}
+
+.default-address-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.default-address-label input {
+    width: auto;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .address-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .add-address-btn {
+        width: 100%;
+    }
+}

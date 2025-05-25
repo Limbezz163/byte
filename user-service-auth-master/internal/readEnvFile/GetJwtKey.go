@@ -1,9 +1,10 @@
 package readEnvFile
 
 import (
-	"github.com/joho/godotenv"
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func GetJwtKey() []byte {
