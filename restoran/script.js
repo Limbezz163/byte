@@ -1,4 +1,7 @@
-// Плавная прокрутка при нажатии на ссылки меню
+// ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
+let currentUser = null;
+
+// ===== ПЛАВНАЯ ПРОКРУТКА =====
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
     e.preventDefault();
@@ -10,7 +13,7 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   });
 });
 
-// Изменение цвета header при прокрутке
+// ===== ИЗМЕНЕНИЕ HEADER ПРИ ПРОКРУТКЕ =====
 window.addEventListener("scroll", function () {
   const header = document.querySelector("header");
   if (window.scrollY > 50) {
@@ -20,34 +23,82 @@ window.addEventListener("scroll", function () {
   }
 });
 
-// Модальное окно авторизации
+// ===== ЭЛЕМЕНТЫ ДЛЯ РАБОТЫ С МОДАЛЬНЫМИ ОКНАМИ =====
 const authBtn = document.getElementById("auth-icon");
 const authModal = document.getElementById("auth-modal");
-const closeBtn = document.querySelector(".close");
+const accountModal = document.getElementById("account-modal");
+const closeBtns = document.querySelectorAll(".close");
 const tabBtns = document.querySelectorAll(".tab-btn");
 const authTabs = document.querySelectorAll(".auth-tab");
 const changeToRegisterBtn = document.getElementById("change-to-register");
+const loginForm = document.getElementById("login-form");
+const registerForm = document.getElementById("register-form");
 
+
+// ===== КРАСИВОЕ УВЕДОМЛЕНИЕ =====
+function showCustomAlert(message) {
+  const alertDiv = document.createElement("div");
+  alertDiv.className = "custom-alert";
+  alertDiv.innerHTML = `
+    <svg viewBox="0 0 24 24">
+      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+    </svg>
+    <span>${message}</span>
+  `;
+
+  document.body.appendChild(alertDiv);
+
+  setTimeout(() => {
+    alertDiv.classList.add("show");
+  }, 100);
+
+  setTimeout(() => {
+    alertDiv.classList.remove("show");
+    setTimeout(() => {
+      document.body.removeChild(alertDiv);
+    }, 300);
+  }, 3000);
+}
+
+// ===== ПОКАЗ МОДАЛЬНОГО ОКНА ЛИЧНОГО КАБИНЕТА =====
+function showAccountModal() {
+  if (!accountModal) return;
+
+  const userEmail = document.getElementById("user-email");
+  const cartItems = document.getElementById("cart-items");
+
+  userEmail.textContent = currentUser?.email || "Неизвестный пользователь";
+  cartItems.innerHTML = '<p class="empty-cart">Ваша корзина пуста</p>';
+
+  accountModal.style.display = "block";
+}
+
+// ===== ОБРАБОТЧИКИ СОБЫТИЙ =====
 // Открытие модального окна по клику на иконку
 if (authBtn) {
   authBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    authModal.style.display = "block";
-    document.querySelector('.tab-btn[data-tab="login"]').click();
+
+    if (currentUser) {
+      showAccountModal();
+    } else {
+      authModal.style.display = "block";
+      document.querySelector('.tab-btn[data-tab="login"]').click();
+    }
   });
 }
 
-// Закрытие модального окна
-if (closeBtn) {
-  closeBtn.addEventListener("click", () => {
-    authModal.style.display = "none";
+// Закрытие модальных окон
+closeBtns.forEach((btn) => {
+  btn.addEventListener("click", function () {
+    this.closest(".modal").style.display = "none";
   });
-}
+});
 
 // Закрытие при клике вне окна
 window.addEventListener("click", (e) => {
-  if (e.target === authModal) {
-    authModal.style.display = "none";
+  if (e.target.classList.contains("modal")) {
+    e.target.style.display = "none";
   }
 });
 
@@ -74,21 +125,24 @@ if (changeToRegisterBtn) {
 }
 
 // Обработка формы входа
-const loginForm = document.getElementById("login-form");
 if (loginForm) {
   loginForm.addEventListener("submit", function (e) {
     e.preventDefault();
     const username = document.getElementById("login-username").value;
     const password = document.getElementById("login-password").value;
 
-    console.log("Вход:", username, password);
-    alert("Вы успешно вошли!");
+    currentUser = {
+      email: username,
+      username: username,
+    };
+
     authModal.style.display = "none";
+    
+    showCustomAlert("Вы успешно вошли!");
   });
 }
 
 // Обработка формы регистрации
-const registerForm = document.getElementById("register-form");
 if (registerForm) {
   registerForm.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -102,34 +156,36 @@ if (registerForm) {
       password: document.getElementById("reg-password").value,
     };
 
-    console.log("Регистрация:", formData);
-    alert("Регистрация прошла успешно!");
+    currentUser = {
+      email: formData.email,
+      username: formData.login,
+    };
+
     authModal.style.display = "none";
+
+    showCustomAlert("Регистрация прошла успешно!");
   });
 }
 
+// Переключение между меню (если есть на странице)
+document.addEventListener("DOMContentLoaded", function () {
+  const switchButtons = document.querySelectorAll(".menu-switch-btn");
+  const menuContents = document.querySelectorAll(".menu-content");
 
-// Переключение между меню
-document.addEventListener('DOMContentLoaded', function() {
-  const switchButtons = document.querySelectorAll('.menu-switch-btn');
-  const menuContents = document.querySelectorAll('.menu-content');
+  switchButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      switchButtons.forEach((btn) => btn.classList.remove("active"));
+      menuContents.forEach((content) =>
+        content.classList.remove("active-content")
+      );
 
-  switchButtons.forEach(button => {
-      button.addEventListener('click', function() {
-          // Удаляем активные классы
-          switchButtons.forEach(btn => btn.classList.remove('active'));
-          menuContents.forEach(content => content.classList.remove('active-content'));
-          
-          // Добавляем активный класс к выбранной кнопке
-          this.classList.add('active');
-          
-          // Показываем соответствующее меню
-          const menuType = this.getAttribute('data-menu');
-          document.getElementById(`${menuType}-menu`).classList.add('active-content');
-      });
+      this.classList.add("active");
+      const menuType = this.getAttribute("data-menu");
+      document
+        .getElementById(`${menuType}-menu`)
+        .classList.add("active-content");
+    });
   });
+
+
 });
-
-// Остальной код скрипта остается без изменений
-
-
