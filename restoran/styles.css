@@ -348,6 +348,10 @@ footer nav ul li a {
     font-size: 16px;
     color: #F4F2E5;
 }
+.form-group input::placeholder {
+    color: #F4F2E5; /* Бежевый цвет подсказки */
+    opacity: 0.8; /* Легкая прозрачность */
+}
 
 .submit-btn {
     width: auto;
