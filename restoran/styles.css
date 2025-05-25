@@ -9,6 +9,8 @@
 body {
     background-color: #F4F2E5; /* Цвет фона страницы */
     color: #333; /* Основной цвет текста */
+    overflow-x: hidden;
+    font-family: 'Inter', sans-serif;
 }
 
 /* ===== ШАПКА САЙТА ===== */
@@ -434,19 +436,19 @@ footer nav ul li a {
 
 .menu-switch-btn {
     padding: 12px 24px;
-    background: none;
-    border: 2px solid #5B120D;
+    background: transparent;
+    border: none;
     border-radius: 33px;
     font-weight: bold;
     cursor: pointer;
-    font-size: 16px;
-    color: #5B120D;
-    transition: all 0.3s;
+    font-size: 26px;
+    color: #394A92;
 }
 
 .menu-switch-btn.active {
-    background-color: #5B120D;
-    color: #F4F2E5;
+    background: transparent;
+    border: 3px solid #394A92;
+    color: #394A92;
 }
 
 /* Контент меню */
@@ -467,29 +469,51 @@ footer nav ul li a {
 
 /* Карточка категории */
 .category-card {
-    background: white;
-    border-radius: 8px;
+    background: #F4F2E5;
+    border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     transition: transform 0.3s;
+    position: relative;
 }
 
 .category-card:hover {
     transform: translateY(-5px); /* Эффект поднятия */
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
 .category-card h2 {
-    padding: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #F4F2E5;
+    font-size: 28px;
+    font-weight: 700;
     text-align: center;
-    color: #5B120D;
-    font-size: 24px;
+    width: 100%;
+    padding: 0 20px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Тень для лучшей читаемости */
+    z-index: 1; /* Поверх затемнения */
     margin: 0;
 }
 
+.category-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4); /* Полупрозрачное затемнение */
+    border-radius: 12px 12px 0 0;
+}
+
 .category-image {
-    height: 200px;
+    height: 500px;
     background-size: cover;
     background-position: center;
+    position: relative;
 }
 
 /* Ссылка в карточке категории */
