@@ -50,25 +50,26 @@
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="delivery-section">
-                <div class="delivery-addresses">
-                    <h2>Адрес доставки</h2>
-                    <div class="current-address">
-                        <p id="current-address-text">ул. Примерная, д. 123, кв. 45</p>
-                    </div>
-                    <div class="add-address-form">
-                        <input type="text" id="new-address" placeholder="Введите новый адрес">
-                        <button id="save-address-btn" class="save-btn">Сохранить адрес</button>
-                    </div>
-                </div>
-
-                <div class="order-history">
-                    <h2>История заказов</h2>
-                    <div class="no-orders">
-                        <p>У вас пока нет завершенных заказов</p>
-                    </div>
-                </div>
+    <div class="delivery-section">
+        <!-- В секции delivery-addresses замените текущий код на: -->
+    <div class="delivery-addresses">
+        <div class="address-header">
+            <h2>Адреса доставки</h2>
+            <button id="add-address-btn" class="add-address-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4F2E5">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                </svg>
+                Добавить адрес
+            </button>
+        </div>
+        
+        <div id="addresses-list" class="addresses-list">
+            <!-- Адреса будут добавляться сюда динамически -->
+            <div class="no-addresses">
+                <p>У вас нет сохранённых адресов</p>
             </div>
         </div>
     </div>
@@ -80,45 +81,32 @@
             <h2>Добавить новый адрес</h2>
             <form id="address-form">
                 <div class="form-group">
-                    <label for="city">Город</label>
-                    <input type="text" id="city" required>
+                    <input type="text" id="city" placeholder="Город" required>
                 </div>
                 <div class="form-group">
-                    <label for="street">Адрес</label>
-                    <input type="text" id="street" required>
+                    <input type="text" id="street" placeholder="Улица, дом" required>
                 </div>
                 <div class="address-details">
                     <div class="form-group">
-                        <label for="entrance">Подъезд</label>
-                        <input type="text" id="entrance">
+                        <input type="text" id="entrance" placeholder="Подъезд">
                     </div>
                     <div class="form-group">
-                        <label for="floor">Этаж</label>
-                        <input type="text" id="floor">
+                        <input type="text" id="floor" placeholder="Этаж">
                     </div>
                     <div class="form-group">
-                        <label for="apartment">Квартира</label>
-                        <input type="text" id="apartment">
+                        <input type="text" id="apartment" placeholder="Квартира">
                     </div>
+                </div>
+                <div class="form-group">
+                    <label class="default-address-label">
+                        <input type="checkbox" id="default-address">
+                        <span>Использовать по умолчанию</span>
+                    </label>
                 </div>
                 <button type="submit" class="save-address-btn">Сохранить адрес</button>
             </form>
         </div>
     </div>
-
-    <div class="delivery-section">
-        <div class="delivery-addresses">
-            <h2>Адрес доставки</h2>
-            <div class="current-address">
-                <p id="current-address-text">Адрес не указан</p>
-            </div>
-            <button id="add-address-btn" class="add-address-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4F2E5">
-                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                </svg>
-                Добавить адрес
-            </button>
-        </div>
     
         <div class="order-history">
             <h2>История заказов</h2>

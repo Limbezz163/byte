@@ -529,40 +529,40 @@ document.querySelector('.logout-btn').addEventListener('click', function() {
   window.location.href = 'index.html';
 });
 
-// Сохранение нового адреса
-document.getElementById('save-address-btn').addEventListener('click', function() {
-  const newAddress = document.getElementById('new-address').value.trim();
-  if (newAddress) {
-      if (currentUser) {
-          localStorage.setItem(`address_${currentUser.email}`, newAddress);
-          document.getElementById('current-address-text').textContent = newAddress;
-          document.getElementById('new-address').value = '';
-          showCustomAlert('Адрес успешно сохранен');
-      }
-  } else {
-      showCustomAlert('Введите адрес', false);
-  }
-});
+// // Сохранение нового адреса
+// document.getElementById('save-address-btn').addEventListener('click', function() {
+//   const newAddress = document.getElementById('new-address').value.trim();
+//   if (newAddress) {
+//       if (currentUser) {
+//           localStorage.setItem(`address_${currentUser.email}`, newAddress);
+//           document.getElementById('current-address-text').textContent = newAddress;
+//           document.getElementById('new-address').value = '';
+//           showCustomAlert('Адрес успешно сохранен');
+//       }
+//   } else {
+//       showCustomAlert('Введите адрес', false);
+//   }
+// });
 
-// Загрузка данных пользователя при открытии страницы
-document.addEventListener('DOMContentLoaded', function() {
-  const savedUser = localStorage.getItem('currentUser');
-  if (savedUser) {
-      currentUser = JSON.parse(savedUser);
+// // Загрузка данных пользователя при открытии страницы
+// document.addEventListener('DOMContentLoaded', function() {
+//   const savedUser = localStorage.getItem('currentUser');
+//   if (savedUser) {
+//       currentUser = JSON.parse(savedUser);
       
-      // Заполняем данные пользователя
-      document.getElementById('user-name').textContent = currentUser.name || 'Не указано';
-      document.getElementById('user-surname').textContent = currentUser.surname || 'Не указано';
-      document.getElementById('user-phone').textContent = currentUser.phone || 'Не указано';
-      document.getElementById('user-email').textContent = currentUser.email || 'Не указано';
+//       // Заполняем данные пользователя
+//       document.getElementById('user-name').textContent = currentUser.name || 'Не указано';
+//       document.getElementById('user-surname').textContent = currentUser.surname || 'Не указано';
+//       document.getElementById('user-phone').textContent = currentUser.phone || 'Не указано';
+//       document.getElementById('user-email').textContent = currentUser.email || 'Не указано';
       
-      // Загружаем адрес доставки
-      const savedAddress = localStorage.getItem(`address_${currentUser.email}`);
-      if (savedAddress) {
-          document.getElementById('current-address-text').textContent = savedAddress;
-      }
-  }
-});
+//       // Загружаем адрес доставки
+//       const savedAddress = localStorage.getItem(`address_${currentUser.email}`);
+//       if (savedAddress) {
+//           document.getElementById('current-address-text').textContent = savedAddress;
+//       }
+//   }
+// });
 
 
 
@@ -599,4 +599,123 @@ document.addEventListener("DOMContentLoaded", function () {
         .classList.add("active-content");
     });
   });
+});
+
+// Глобальные переменные
+let userAddresses = [];
+let defaultAddressId = null;
+
+// Функция для отображения адресов
+function renderAddresses() {
+    const addressesList = document.getElementById('addresses-list');
+    
+    if (userAddresses.length === 0) {
+        addressesList.innerHTML = `
+            <div class="no-addresses">
+                <p>У вас нет сохранённых адресов</p>
+            </div>
+        `;
+        return;
+    }
+    
+    addressesList.innerHTML = '';
+    
+    userAddresses.forEach(address => {
+        const addressElement = document.createElement('div');
+        addressElement.className = `address-card ${address.id === defaultAddressId ? 'selected' : ''}`;
+        addressElement.dataset.id = address.id;
+        
+        let details = [];
+        if (address.entrance) details.push(`подъезд ${address.entrance}`);
+        if (address.floor) details.push(`этаж ${address.floor}`);
+        if (address.apartment) details.push(`кв. ${address.apartment}`);
+        
+        addressElement.innerHTML = `
+            <div class="address-text">${address.city}, ${address.street}</div>
+            ${details.length ? `<div class="address-details">${details.join(', ')}</div>` : ''}
+            ${address.id === defaultAddressId ? '<div class="default-badge">По умолчанию</div>' : ''}
+        `;
+        
+        addressElement.addEventListener('click', () => selectAddress(address.id));
+        addressesList.appendChild(addressElement);
+    });
+}
+
+// Функция выбора адреса
+function selectAddress(addressId) {
+    defaultAddressId = addressId;
+    if (currentUser) {
+        localStorage.setItem(`default_address_${currentUser.email}`, addressId);
+    }
+    renderAddresses();
+}
+
+// Функция добавления нового адреса
+function addNewAddress(addressData) {
+    const newAddress = {
+        id: Date.now().toString(),
+        ...addressData,
+        isDefault: document.getElementById('default-address').checked
+    };
+    
+    userAddresses.push(newAddress);
+    
+    if (newAddress.isDefault) {
+        selectAddress(newAddress.id);
+    }
+    
+    if (currentUser) {
+        localStorage.setItem(`addresses_${currentUser.email}`, JSON.stringify(userAddresses));
+    }
+    
+    renderAddresses();
+}
+
+// Обработчик формы добавления адреса
+document.getElementById('address-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const addressData = {
+        city: document.getElementById('city').value.trim(),
+        street: document.getElementById('street').value.trim(),
+        entrance: document.getElementById('entrance').value.trim(),
+        floor: document.getElementById('floor').value.trim(),
+        apartment: document.getElementById('apartment').value.trim()
+    };
+    
+    if (!addressData.city || !addressData.street) {
+        showCustomAlert('Заполните обязательные поля (город и адрес)', false);
+        return;
+    }
+    
+    addNewAddress(addressData);
+    document.getElementById('address-form').reset();
+    hideModal('address-modal');
+    showCustomAlert('Адрес успешно добавлен');
+});
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    if (currentUser) {
+        // Загрузка сохранённых адресов
+        const savedAddresses = localStorage.getItem(`addresses_${currentUser.email}`);
+        if (savedAddresses) {
+            userAddresses = JSON.parse(savedAddresses);
+        }
+        
+        // Загрузка адреса по умолчанию
+        const savedDefaultAddress = localStorage.getItem(`default_address_${currentUser.email}`);
+        if (savedDefaultAddress) {
+            defaultAddressId = savedDefaultAddress;
+        } else if (userAddresses.length > 0) {
+            defaultAddressId = userAddresses[0].id;
+        }
+        
+        renderAddresses();
+    }
+});
+
+// Открытие модального окна
+document.getElementById('add-address-btn').addEventListener('click', function() {
+    showModal('address-modal');
 });
