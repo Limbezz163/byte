@@ -1398,3 +1398,91 @@ input.invalid {
 .add-address-btn:hover {
     background-color: #2d3a76;
 }
+
+/* Стили для адресов доставки */
+.address-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.addresses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.address-card {
+    background-color: #F4F2E5;
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.address-card:hover {
+    border-color: #5B120D;
+}
+
+.address-card.selected {
+    border: 2px solid #5B120D;
+    background-color: rgba(91, 18, 13, 0.05);
+}
+
+.address-card .address-text {
+    margin-bottom: 5px;
+}
+
+.address-card .address-details {
+    color: #666;
+    font-size: 14px;
+}
+
+.address-card .default-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #5B120D;
+    color: #F4F2E5;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.address-card .select-address {
+    display: none;
+}
+
+.no-addresses {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+}
+
+.default-address-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.default-address-label input {
+    width: auto;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .address-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .add-address-btn {
+        width: 100%;
+    }
+}
