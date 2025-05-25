@@ -669,3 +669,143 @@ footer nav ul li a {
         padding: 20px;
     }
 }
+
+
+/* Стили для модального окна личного кабинета */
+.account-content {
+    max-width: 500px;
+    padding: 30px;
+}
+
+.account-info {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.account-info h2 {
+    color: #5B120D;
+    margin-bottom: 10px;
+}
+
+#user-email {
+    font-size: 18px;
+    color: #333;
+}
+
+.cart-section {
+    margin-top: 20px;
+}
+
+.cart-section h3 {
+    color: #5B120D;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+#cart-items {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.empty-cart {
+    text-align: center;
+    color: #777;
+    padding: 20px 0;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item-name {
+    flex-grow: 1;
+}
+
+.cart-item-price {
+    font-weight: bold;
+    color: #5B120D;
+    margin-left: 15px;
+}
+
+.cart-item-remove {
+    color: #ff0000;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+
+/* Обновленные стили для модального окна личного кабинета */
+#account-modal .modal-content {
+    margin: 0;
+    margin-right: auto;
+    height: 100vh;
+    border-radius: 0 8px 8px 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    transform: none;
+    width: 350px;
+    max-width: 90%;
+}
+
+#account-modal .modal-content .close {
+    right: 15px;
+    top: 15px;
+    color: #5B120D;
+}
+
+.account-info {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-section {
+    padding: 20px;
+}
+
+.empty-cart {
+    text-align: center;
+    color: #777;
+    padding: 20px 0;
+}
+
+/* Стили для красивого уведомления */
+.custom-alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #F4F2E5;
+    color: #5B120D;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateX(150%);
+    transition: transform 0.3s ease-out;
+    font-family: 'Arial', sans-serif;
+}
+
+.custom-alert.show {
+    transform: translateX(0);
+}
+
+.custom-alert svg {
+    width: 24px;
+    height: 24px;
+    fill: #F4F2E5;
+}

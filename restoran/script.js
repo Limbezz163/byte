@@ -34,7 +34,6 @@ const changeToRegisterBtn = document.getElementById("change-to-register");
 const loginForm = document.getElementById("login-form");
 const registerForm = document.getElementById("register-form");
 
-
 // ===== КРАСИВОЕ УВЕДОМЛЕНИЕ =====
 function showCustomAlert(message) {
   const alertDiv = document.createElement("div");
@@ -137,7 +136,7 @@ if (loginForm) {
     };
 
     authModal.style.display = "none";
-    
+
     showCustomAlert("Вы успешно вошли!");
   });
 }
@@ -186,6 +185,4 @@ document.addEventListener("DOMContentLoaded", function () {
         .classList.add("active-content");
     });
   });
-
-
 });
