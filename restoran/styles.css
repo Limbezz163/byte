@@ -382,12 +382,24 @@ footer nav ul li a {
 }
 
 #change-to-register {
-    background: none;
-    border: none;
-    color: #5B120D;
-    text-decoration: underline;
+    background: transparent; /* Прозрачный фон */
+    border: 2px solid #5B120D; /* Граница темно-красного цвета */
+    color: #5B120D; /* Цвет текста */
+    padding: 8px 20px; /* Отступы внутри кнопки */
+    border-radius: 33px; /* Скругленные углы как в других элементах */
     cursor: pointer;
     font-size: 14px;
+    font-weight: bold;
+    text-decoration: none; /* Убираем подчеркивание */
+    transition: all 0.3s ease; /* Плавные переходы */
+    display: inline-block; /* Для правильного отображения */
+    margin: 5px; /* Отступы вокруг кнопки */
+}
+
+/* Эффекты при наведении */
+#change-to-register:hover {
+    border-color: #941919; /* Новый цвет границы */
+    color: #941919; /* Новый цвет текста */
 }
 
 /* ===== СТРАНИЦА МЕНЮ ===== */
