@@ -92,7 +92,7 @@ nav ul li a:hover {
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: white;
+    color: #F4F2E5;
     position: relative;
     margin-top: 60px; /* Учет высоты фиксированной шапки */
 }
@@ -105,7 +105,6 @@ nav ul li a:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    /*background: rgba(0,0,0,0.5);*/
     z-index: 0;
 }
 
@@ -298,39 +297,37 @@ footer nav ul li a {
 .auth-tabs {
     display: flex;
     margin-bottom: 25px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid#F4F2E5 ;
+    color: #F4F2E5;
 }
 
 .tab-btn {
     flex: 1;
-    padding: 10px;
-    background: none;
-    border: none;
+    padding: 6px 10px;
+    background: transparent; /* Полностью прозрачный фон */
+    border: none; /* Убираем границу */
     font-size: 16px;
     font-weight: bold;
-    color: #777;
+    color: #394A92; /* Цвет текста по умолчанию */
     cursor: pointer;
     text-transform: uppercase;
-}
-
-.tab-btn.active {
-    color: #5B120D;
+    margin: 0 5px;
     position: relative;
+    outline: none; /* Убираем стандартное выделение */
 }
 
-.tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: #5B120D; /* Подчеркивание активной вкладки */
+/* Стиль для активной кнопки */
+.tab-btn.active {
+    color: #394A92; /* Синий цвет текста */
+    border: 3px solid #394A92; /* Синяя граница */
+    border-radius: 33px; /* Скругленные углы */
+    background: transparent; /* Остается прозрачной */
 }
 
 /* Формы в модальном окне */
 .auth-tab {
     display: none;
+    color: #F4F2E5;
 }
 
 .auth-tab.active {
@@ -339,28 +336,44 @@ footer nav ul li a {
 
 .form-group {
     margin-bottom: 20px;
+    color: #F4F2E5;
 }
 
 .form-group input {
     width: 100%;
     padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    border: 1px solid #394A92;
+    background-color: #394A92;
+    border-radius: 7px;
     font-size: 16px;
+    color: #F4F2E5;
 }
 
 .submit-btn {
-    width: 100%;
-    padding: 12px;
+    width: auto;
+    min-width: 200px;/* Минимальная ширина для сохранения пропорций */
+    padding: 10px 30px;
     background-color: #5B120D;
-    color: white;
+    color: #F4F2E5;
     border: none;
-    border-radius: 4px;
+    border-radius: 33px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     text-transform: uppercase;
     margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background-color: #941919;
+}
+
+#register-form {
+    text-align: center;
+}
+
+#login-form {
+    text-align: center;
 }
 
 .auth-footer {
@@ -417,7 +430,7 @@ footer nav ul li a {
 
 .menu-switch-btn.active {
     background-color: #5B120D;
-    color: white;
+    color: #F4F2E5;
 }
 
 /* Контент меню */
