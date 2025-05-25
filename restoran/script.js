@@ -515,6 +515,58 @@ if (registerForm) {
   });
 }
 
+
+// Закрытие личного кабинета
+document.querySelector('.close-account-btn').addEventListener('click', function() {
+  window.location.href = 'index.html';
+});
+
+// Выход из аккаунта
+document.querySelector('.logout-btn').addEventListener('click', function() {
+  localStorage.removeItem('currentUser');
+  localStorage.removeItem(`cart_${currentUser?.email}`);
+  localStorage.removeItem(`address_${currentUser?.email}`);
+  window.location.href = 'index.html';
+});
+
+// Сохранение нового адреса
+document.getElementById('save-address-btn').addEventListener('click', function() {
+  const newAddress = document.getElementById('new-address').value.trim();
+  if (newAddress) {
+      if (currentUser) {
+          localStorage.setItem(`address_${currentUser.email}`, newAddress);
+          document.getElementById('current-address-text').textContent = newAddress;
+          document.getElementById('new-address').value = '';
+          showCustomAlert('Адрес успешно сохранен');
+      }
+  } else {
+      showCustomAlert('Введите адрес', false);
+  }
+});
+
+// Загрузка данных пользователя при открытии страницы
+document.addEventListener('DOMContentLoaded', function() {
+  const savedUser = localStorage.getItem('currentUser');
+  if (savedUser) {
+      currentUser = JSON.parse(savedUser);
+      
+      // Заполняем данные пользователя
+      document.getElementById('user-name').textContent = currentUser.name || 'Не указано';
+      document.getElementById('user-surname').textContent = currentUser.surname || 'Не указано';
+      document.getElementById('user-phone').textContent = currentUser.phone || 'Не указано';
+      document.getElementById('user-email').textContent = currentUser.email || 'Не указано';
+      
+      // Загружаем адрес доставки
+      const savedAddress = localStorage.getItem(`address_${currentUser.email}`);
+      if (savedAddress) {
+          document.getElementById('current-address-text').textContent = savedAddress;
+      }
+  }
+});
+
+
+
+
 // Инициализация при загрузке страницы
 document.addEventListener("DOMContentLoaded", function () {
   // Загружаем данные пользователя из localStorage
