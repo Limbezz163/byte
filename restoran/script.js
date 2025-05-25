@@ -1,14 +1,30 @@
 // ===== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ =====
 let currentUser = null;
+let cartItems = [];
+let deliveryAddress = "";
+
+// ===== ПОКАЗАТЬ/СКРЫТЬ МОДАЛЬНЫЕ ОКНА =====
+function showModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.style.display = "block";
+}
+
+function hideModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.style.display = "none";
+}
 
 // ===== ПЛАВНАЯ ПРОКРУТКА =====
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
     e.preventDefault();
-    document.querySelector(this.getAttribute("href")).scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    const target = document.querySelector(this.getAttribute("href"));
+    if (target) {
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
   });
 });
 
@@ -24,14 +40,19 @@ window.addEventListener("scroll", function () {
 
 // ===== ЭЛЕМЕНТЫ ДЛЯ РАБОТЫ С МОДАЛЬНЫМИ ОКНАМИ =====
 const authBtn = document.getElementById("auth-icon");
+const cartIcon = document.getElementById("cart-icon");
 const authModal = document.getElementById("auth-modal");
 const accountModal = document.getElementById("account-modal");
+const cartModal = document.getElementById("cart-modal");
 const closeBtns = document.querySelectorAll(".close");
 const tabBtns = document.querySelectorAll(".tab-btn");
 const authTabs = document.querySelectorAll(".auth-tab");
 const changeToRegisterBtn = document.getElementById("change-to-register");
 const loginForm = document.getElementById("login-form");
 const registerForm = document.getElementById("register-form");
+const checkoutBtn = document.getElementById("checkout-btn");
+const saveAddressBtn = document.getElementById("save-address-btn");
+const deliveryAddressInput = document.getElementById("delivery-address-input");
 
 // ===== ФУНКЦИИ ДЛЯ ПРОВЕРКИ ВАЛИДАЦИИ =====
 function validateLength(value, min, max, fieldName) {
@@ -97,15 +118,15 @@ function showCustomAlert(message, isSuccess = true) {
   const alertDiv = document.createElement("div");
   alertDiv.className = `custom-alert ${isSuccess ? "" : "error"}`;
   alertDiv.innerHTML = `
-    <svg viewBox="0 0 24 24">
-      <path d="${
-        isSuccess
-          ? "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
-          : "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
-      }"/>
-    </svg>
-    <span>${message}</span>
-  `;
+        <svg viewBox="0 0 24 24">
+            <path d="${
+              isSuccess
+                ? "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
+                : "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+            }"/>
+        </svg>
+        <span>${message}</span>
+    `;
 
   document.body.appendChild(alertDiv);
 
@@ -121,47 +142,186 @@ function showCustomAlert(message, isSuccess = true) {
   }, 3000);
 }
 
+// ===== РАБОТА С ПОЛЬЗОВАТЕЛЕМ =====
+function loginUser(userData) {
+  currentUser = {
+    email: userData.email || userData.login,
+    username: userData.login,
+    name: userData.name,
+    surname: userData.surname,
+  };
+  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+  updateUserUI();
+}
 
+function logoutUser() {
+  currentUser = null;
+  localStorage.removeItem("currentUser");
+  updateUserUI();
+}
 
-// ===== ПОКАЗ МОДАЛЬНОГО ОКНА ЛИЧНОГО КАБИНЕТА =====
-function showAccountModal() {
-  if (!accountModal) return;
+function updateUserUI() {
+  // Обновляем информацию в личном кабинете
+  if (document.getElementById("account-username")) {
+    document.getElementById("account-username").textContent = currentUser
+      ? `${currentUser.name} ${currentUser.surname}`
+      : "Гость";
+    document.getElementById("account-email").textContent =
+      currentUser?.email || "Неизвестно";
+  }
 
-  const userEmail = document.getElementById("user-email");
-  const cartItems = document.getElementById("cart-items");
+  // Обновляем адрес доставки
+  if (deliveryAddressInput) {
+    deliveryAddressInput.value = deliveryAddress;
+  }
+}
 
-  userEmail.textContent = currentUser?.email || "Неизвестный пользователь";
-  cartItems.innerHTML = '<p class="empty-cart">Ваша корзина пуста</p>';
+// ===== РАБОТА С КОРЗИНОЙ =====
+function updateCartDisplay() {
+  const cartItemsContainer = document.getElementById("cart-items");
+  const cartTotalPrice = document.getElementById("cart-total-price");
 
-  accountModal.style.display = "block";
+  if (!cartItemsContainer) return;
+
+  if (cartItems.length === 0) {
+    cartItemsContainer.innerHTML =
+      '<p class="empty-cart">Ваша корзина пуста</p>';
+    if (cartTotalPrice) cartTotalPrice.textContent = "0";
+  } else {
+    let html = "";
+    let total = 0;
+
+    cartItems.forEach((item) => {
+      total += item.price * item.quantity;
+      html += `
+                <div class="cart-item">
+                    <div class="cart-item-name">${item.name} × ${
+        item.quantity
+      }</div>
+                    <div class="cart-item-price">${
+                      item.price * item.quantity
+                    } ₽</div>
+                    <div class="cart-item-remove" data-id="${item.id}">×</div>
+                </div>
+            `;
+    });
+
+    cartItemsContainer.innerHTML = html;
+    if (cartTotalPrice) cartTotalPrice.textContent = total;
+
+    // Добавляем обработчики для кнопок удаления
+    document.querySelectorAll(".cart-item-remove").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const itemId = this.getAttribute("data-id");
+        removeFromCart(itemId);
+      });
+    });
+  }
+}
+
+function addToCart(item) {
+  if (!currentUser) {
+    showCustomAlert(
+      "Для добавления в корзину необходимо авторизоваться",
+      false
+    );
+    showModal("auth-modal");
+    return;
+  }
+
+  const existingItem = cartItems.find((i) => i.id === item.id);
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    cartItems.push({
+      ...item,
+      quantity: 1,
+    });
+  }
+
+  saveCart();
+  showCustomAlert(`"${item.name}" добавлен в корзину`);
+  updateCartDisplay();
+}
+
+function removeFromCart(itemId) {
+  cartItems = cartItems.filter((item) => item.id !== itemId);
+  saveCart();
+  updateCartDisplay();
+  showCustomAlert("Товар удален из корзины");
+}
+
+function clearCart() {
+  cartItems = [];
+  saveCart();
+  updateCartDisplay();
+}
+
+function saveCart() {
+  if (currentUser) {
+    localStorage.setItem(
+      `cart_${currentUser.email}`,
+      JSON.stringify(cartItems)
+    );
+  }
+}
+
+function loadCart() {
+  if (currentUser) {
+    const savedCart = localStorage.getItem(`cart_${currentUser.email}`);
+    if (savedCart) {
+      cartItems = JSON.parse(savedCart);
+    }
+  }
+  updateCartDisplay();
+}
+
+function loadDeliveryAddress() {
+  if (currentUser) {
+    const savedAddress = localStorage.getItem(`address_${currentUser.email}`);
+    if (savedAddress) {
+      deliveryAddress = savedAddress;
+    }
+  }
 }
 
 // ===== ОБРАБОТЧИКИ СОБЫТИЙ =====
-// Открытие модального окна по клику на иконку
+// Открытие модальных окон
 if (authBtn) {
   authBtn.addEventListener("click", (e) => {
     e.preventDefault();
-
     if (currentUser) {
-      showAccountModal();
+      window.location.href = "account.html";
     } else {
-      authModal.style.display = "block";
+      showModal("auth-modal");
       document.querySelector('.tab-btn[data-tab="login"]').click();
     }
+  });
+}
+
+if (cartIcon) {
+  cartIcon.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (!currentUser) {
+      showCustomAlert("Для доступа к корзине необходимо авторизоваться", false);
+      showModal("auth-modal");
+      return;
+    }
+    showModal("cart-modal");
   });
 }
 
 // Закрытие модальных окон
 closeBtns.forEach((btn) => {
   btn.addEventListener("click", function () {
-    this.closest(".modal").style.display = "none";
+    hideModal(this.closest(".modal").id);
   });
 });
 
 // Закрытие при клике вне окна
 window.addEventListener("click", (e) => {
   if (e.target.classList.contains("modal")) {
-    e.target.style.display = "none";
+    hideModal(e.target.id);
   }
 });
 
@@ -187,6 +347,37 @@ if (changeToRegisterBtn) {
   });
 }
 
+// Оформление заказа
+if (checkoutBtn) {
+  checkoutBtn.addEventListener("click", () => {
+    if (cartItems.length === 0) {
+      showCustomAlert("Ваша корзина пуста", false);
+      return;
+    }
+
+    if (!deliveryAddress) {
+      showCustomAlert("Пожалуйста, укажите адрес доставки", false);
+      return;
+    }
+
+    // Здесь можно добавить логику оформления заказа
+    showCustomAlert("Заказ успешно оформлен!");
+    clearCart();
+    hideModal("cart-modal");
+  });
+}
+
+// Сохранение адреса доставки
+if (saveAddressBtn && deliveryAddressInput) {
+  saveAddressBtn.addEventListener("click", () => {
+    deliveryAddress = deliveryAddressInput.value.trim();
+    if (currentUser) {
+      localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
+      showCustomAlert("Адрес доставки сохранен");
+    }
+  });
+}
+
 // Обработка формы входа
 if (loginForm) {
   loginForm.addEventListener("submit", function (e) {
@@ -195,8 +386,8 @@ if (loginForm) {
     const password = document.getElementById("login-password").value.trim();
 
     // Проверка длины логина и пароля
-    const loginError = validateLength(username, 4, 10, "Логин");
-    const passwordError = validateLength(password, 4, 10, "Пароль");
+    const loginError = validateLength(username, 4, 20, "Логин");
+    const passwordError = validateLength(password, 6, 20, "Пароль");
 
     if (loginError) {
       showError(document.getElementById("login-username"), loginError);
@@ -208,14 +399,16 @@ if (loginForm) {
       return;
     }
 
-    currentUser = {
+    loginUser({
+      login: username,
       email: username,
-      username: username,
-    };
+    });
 
-    authModal.style.display = "none";
-    
+    hideModal("auth-modal");
     showCustomAlert("Вы успешно вошли!");
+    loadCart();
+    loadDeliveryAddress();
+    updateUserUI();
   });
 
   // Очистка ошибок при вводе
@@ -252,19 +445,19 @@ if (registerForm) {
     // Проверка полей
     const errors = {
       name:
-        validateLength(formData.name, 3, 15, "Имя") ||
+        validateLength(formData.name, 2, 30, "Имя") ||
         validateName(formData.name, "Имя"),
       surname:
-        validateLength(formData.surname, 3, 20, "Фамилия") ||
+        validateLength(formData.surname, 2, 30, "Фамилия") ||
         validateName(formData.surname, "Фамилия"),
       patronymic: formData.patronymic
-        ? validateLength(formData.patronymic, 6, 20, "Отчество") ||
+        ? validateLength(formData.patronymic, 2, 30, "Отчество") ||
           validateName(formData.patronymic, "Отчество")
         : null,
       phone: validatePhone(formData.phone),
       email: validateEmail(formData.email),
-      login: validateLength(formData.login, 4, 10, "Логин"),
-      password: validateLength(formData.password, 4, 10, "Пароль"),
+      login: validateLength(formData.login, 4, 20, "Логин"),
+      password: validateLength(formData.password, 6, 20, "Пароль"),
     };
 
     // Показываем ошибки
@@ -282,14 +475,10 @@ if (registerForm) {
     }
 
     // Если проверки пройдены
-    currentUser = {
-      email: formData.email,
-      username: formData.login,
-    };
-
-    authModal.style.display = "none";
-    
+    loginUser(formData);
+    hideModal("auth-modal");
     showCustomAlert("Регистрация прошла успешно!");
+    updateUserUI();
   });
 
   // Добавляем обработчики для валидации при вводе
@@ -326,8 +515,21 @@ if (registerForm) {
   });
 }
 
-// Переключение между меню (если есть на странице)
+// Инициализация при загрузке страницы
 document.addEventListener("DOMContentLoaded", function () {
+  // Загружаем данные пользователя из localStorage
+  const savedUser = localStorage.getItem("currentUser");
+  if (savedUser) {
+    currentUser = JSON.parse(savedUser);
+    loadCart();
+    loadDeliveryAddress();
+    updateUserUI();
+  }
+
+  // Инициализация корзины
+  updateCartDisplay();
+
+  // Переключение между меню (если есть на странице)
   const switchButtons = document.querySelectorAll(".menu-switch-btn");
   const menuContents = document.querySelectorAll(".menu-content");
 
@@ -345,6 +547,4 @@ document.addEventListener("DOMContentLoaded", function () {
         .classList.add("active-content");
     });
   });
-
-
 });

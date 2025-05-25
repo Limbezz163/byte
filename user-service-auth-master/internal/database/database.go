@@ -8,7 +8,7 @@ import (
 )
 
 func ConnectDataBase() *pgxpool.Pool {
-	connStr := "postgres://postgres:120703ar@localhost:5432/users"
+	connStr := "postgres://postgres:root@localhost:5432/users"
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -17,6 +17,5 @@ func ConnectDataBase() *pgxpool.Pool {
 		log.Printf("Failed to connect to database: %v\n", err)
 		return nil
 	}
-
 	return dbpool
 }

@@ -910,3 +910,174 @@ input.invalid {
     text-align: center;
     max-width: 80%;
 }
+
+/* Стили для корзины */
+#cart-modal .modal-content {
+    margin: 0;
+    margin-left: auto;
+    height: 100vh;
+    border-radius: 8px 0 0 8px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    transform: none;
+    width: 350px;
+    max-width: 90%;
+}
+
+.cart-total {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+.cart-total p {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+#checkout-btn {
+    width: 100%;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    #cart-modal .modal-content,
+    #account-modal .modal-content {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+    }
+}
+
+/* Стили для страницы личного кабинета */
+.account-page {
+    padding-top: 100px;
+    min-height: 100vh;
+}
+
+.account-section {
+    padding: 40px 0;
+}
+
+.account-section h1 {
+    color: #5B120D;
+    font-size: 36px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.account-info {
+    background: #F4F2E5;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.user-info h2 {
+    color: #5B120D;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.user-info p {
+    color: #333;
+    font-size: 18px;
+}
+
+.delivery-address {
+    margin: 30px 0;
+    padding: 20px 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.delivery-address h3 {
+    color: #5B120D;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.address-form {
+    display: flex;
+    gap: 10px;
+}
+
+#delivery-address-input {
+    flex-grow: 1;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.order-history h3 {
+    color: #5B120D;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.no-orders {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+    background: #f9f9f9;
+    border-radius: 4px;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .account-page {
+        padding-top: 80px;
+    }
+    
+    .account-info {
+        padding: 20px;
+    }
+    
+    .address-form {
+        flex-direction: column;
+    }
+    
+    #delivery-address-input {
+        width: 100%;
+    }
+}
+
+/* Стили для кнопки "На главную" */
+.user-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+.home-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #394A92;
+    color: #F4F2E5;
+    text-decoration: none;
+    border-radius: 33px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    border: 2px solid #394A92;
+}
+
+.home-btn:hover {
+    background-color: transparent;
+    color: #394A92;
+}
+
+/* Для мобильных устройств */
+@media (max-width: 768px) {
+    .user-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .home-btn {
+        text-align: center;
+    }
+}
