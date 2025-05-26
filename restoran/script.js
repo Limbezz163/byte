@@ -2,8 +2,9 @@
 let currentUser = null;
 let cartItems = [];
 let deliveryAddress = "";
-let deliveryDateTime = null; // Для хранения выбранного времени доставки
-let userAddresses = []; // Массив для хранения адресов доставки пользователя
+let deliveryDateTime = null;
+let userAddresses = [];
+let selectedAddressIndex = -1;
 
 // ===== ПОКАЗАТЬ/СКРЫТЬ МОДАЛЬНЫЕ ОКНА =====
 function showModal(modalId) {
@@ -135,15 +136,15 @@ function showCustomAlert(message, isSuccess = true) {
   const alertDiv = document.createElement("div");
   alertDiv.className = `custom-alert ${isSuccess ? "" : "error"}`;
   alertDiv.innerHTML = `
-        <svg viewBox="0 0 24 24">
-            <path d="${
-              isSuccess
-                ? "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
-                : "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
-            }"/>
-        </svg>
-        <span>${message}</span>
-    `;
+    <svg viewBox="0 0 24 24">
+      <path d="${
+        isSuccess
+          ? "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
+          : "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+      }"/>
+    </svg>
+    <span>${message}</span>
+  `;
 
   document.body.appendChild(alertDiv);
 
@@ -228,27 +229,77 @@ function renderAddresses() {
   userAddresses.forEach((address, index) => {
     const addressItem = document.createElement("div");
     addressItem.className = "address-item";
+
+    let addressText = `${address.city}, ${address.street}`;
+    if (address.apartment) addressText += `, кв. ${address.apartment}`;
+    if (address.entrance) addressText += `, подъезд ${address.entrance}`;
+    if (address.floor) addressText += `, этаж ${address.floor}`;
+
     addressItem.innerHTML = `
-      <p>${address.street}, ${address.house}${
-      address.apartment ? ", " + address.apartment : ""
-    }</p>
-      <button class="edit-address-btn" data-index="${index}">Редактировать</button>
+      <div class="address-select">
+        <input type="radio" name="delivery-address" id="address-${index}" value="${index}" 
+               ${selectedAddressIndex === index ? "checked" : ""}>
+        <label for="address-${index}">${addressText}</label>
+      </div>
+      <div class="address-actions">
+        <button class="edit-address-btn" data-index="${index}">Изменить</button>
+        <button class="delete-address-btn" data-index="${index}">Удалить</button>
+      </div>
     `;
+
     addressesList.appendChild(addressItem);
   });
 
-  // Добавляем обработчики для кнопок редактирования
+  // Добавляем обработчики для выбора адреса
+  document
+    .querySelectorAll('input[name="delivery-address"]')
+    .forEach((radio) => {
+      radio.addEventListener("change", function () {
+        selectedAddressIndex = parseInt(this.value);
+        if (userAddresses[selectedAddressIndex]) {
+          deliveryAddress = formatAddress(userAddresses[selectedAddressIndex]);
+          if (currentUser) {
+            localStorage.setItem(
+              `address_${currentUser.email}`,
+              deliveryAddress
+            );
+          }
+        }
+      });
+    });
+
+  // Добавляем обработчики для кнопок
   document.querySelectorAll(".edit-address-btn").forEach((btn) => {
     btn.addEventListener("click", function () {
       const index = parseInt(this.getAttribute("data-index"));
       editAddress(index);
     });
   });
+
+  document.querySelectorAll(".delete-address-btn").forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const index = parseInt(this.getAttribute("data-index"));
+      deleteAddress(index);
+    });
+  });
+}
+
+function formatAddress(address) {
+  let formatted = `${address.city}, ${address.street}`;
+  if (address.apartment) formatted += `, кв. ${address.apartment}`;
+  if (address.entrance) formatted += `, подъезд ${address.entrance}`;
+  if (address.floor) formatted += `, этаж ${address.floor}`;
+  return formatted;
 }
 
 function addNewAddress(addressData) {
   userAddresses.push(addressData);
   saveUserAddresses();
+  selectedAddressIndex = userAddresses.length - 1;
+  deliveryAddress = formatAddress(addressData);
+  if (currentUser) {
+    localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
+  }
   renderAddresses();
   hideModal("address-modal");
   showCustomAlert("Адрес успешно добавлен");
@@ -261,10 +312,11 @@ function editAddress(index) {
   const form = document.getElementById("address-form");
 
   // Заполняем форму данными адреса
+  document.getElementById("address-city").value = address.city;
   document.getElementById("address-street").value = address.street;
-  document.getElementById("address-house").value = address.house;
+  document.getElementById("address-entrance").value = address.entrance || "";
+  document.getElementById("address-floor").value = address.floor || "";
   document.getElementById("address-apartment").value = address.apartment || "";
-  document.getElementById("address-comment").value = address.comment || "";
 
   // Меняем заголовок
   document.querySelector("#address-modal h2").textContent =
@@ -281,14 +333,21 @@ function editAddress(index) {
     e.preventDefault();
 
     const updatedAddress = {
+      city: document.getElementById("address-city").value.trim(),
       street: document.getElementById("address-street").value.trim(),
-      house: document.getElementById("address-house").value.trim(),
+      entrance: document.getElementById("address-entrance").value.trim(),
+      floor: document.getElementById("address-floor").value.trim(),
       apartment: document.getElementById("address-apartment").value.trim(),
-      comment: document.getElementById("address-comment").value.trim(),
     };
 
     userAddresses[index] = updatedAddress;
     saveUserAddresses();
+    if (selectedAddressIndex === index) {
+      deliveryAddress = formatAddress(updatedAddress);
+      if (currentUser) {
+        localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
+      }
+    }
     renderAddresses();
     hideModal("address-modal");
     showCustomAlert("Адрес успешно обновлен");
@@ -300,10 +359,26 @@ function editAddress(index) {
   showModal("address-modal");
 }
 
+function deleteAddress(index) {
+  if (confirm("Вы уверены, что хотите удалить этот адрес?")) {
+    userAddresses.splice(index, 1);
+    if (selectedAddressIndex === index) {
+      selectedAddressIndex = -1;
+      deliveryAddress = "";
+      if (currentUser) {
+        localStorage.removeItem(`address_${currentUser.email}`);
+      }
+    } else if (selectedAddressIndex > index) {
+      selectedAddressIndex--;
+    }
+    saveUserAddresses();
+    renderAddresses();
+    showCustomAlert("Адрес успешно удален");
+  }
+}
+
 function showAddAddressModal() {
   const form = document.getElementById("address-form");
-
-  // Очищаем форму
   form.reset();
   document.querySelector("#address-modal h2").textContent =
     "Добавить адрес доставки";
@@ -319,10 +394,11 @@ function showAddAddressModal() {
     e.preventDefault();
 
     const newAddress = {
+      city: document.getElementById("address-city").value.trim(),
       street: document.getElementById("address-street").value.trim(),
-      house: document.getElementById("address-house").value.trim(),
+      entrance: document.getElementById("address-entrance").value.trim(),
+      floor: document.getElementById("address-floor").value.trim(),
       apartment: document.getElementById("address-apartment").value.trim(),
-      comment: document.getElementById("address-comment").value.trim(),
     };
 
     addNewAddress(newAddress);
@@ -427,7 +503,18 @@ function loadCart() {
 function loadDeliveryAddress() {
   if (currentUser) {
     const savedAddress = localStorage.getItem(`address_${currentUser.email}`);
-    if (savedAddress) deliveryAddress = savedAddress;
+    if (savedAddress) {
+      deliveryAddress = savedAddress;
+      // Находим индекс адреса в массиве
+      const addressParts = savedAddress.split(", ");
+      if (addressParts.length >= 2) {
+        const city = addressParts[0];
+        const street = addressParts[1];
+        selectedAddressIndex = userAddresses.findIndex(
+          (addr) => addr.city === city && addr.street === street
+        );
+      }
+    }
   }
 }
 
@@ -549,8 +636,8 @@ function checkoutOrder() {
     return false;
   }
 
-  if (!deliveryAddress) {
-    showCustomAlert("Пожалуйста, укажите адрес доставки", false);
+  if (selectedAddressIndex === -1 || !deliveryAddress) {
+    showCustomAlert("Пожалуйста, выберите адрес доставки", false);
     return false;
   }
 
@@ -562,7 +649,7 @@ function checkoutOrder() {
   const orderData = {
     user: currentUser,
     items: cartItems,
-    deliveryAddress,
+    deliveryAddress: userAddresses[selectedAddressIndex],
     deliveryTime: deliveryDateTime,
     total: cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
   };
@@ -581,8 +668,8 @@ document.addEventListener("DOMContentLoaded", function () {
   if (savedUser) {
     currentUser = JSON.parse(savedUser);
     loadCart();
-    loadDeliveryAddress();
     loadUserAddresses();
+    loadDeliveryAddress();
     updateUserUI();
   }
 
