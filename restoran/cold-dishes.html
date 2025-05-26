@@ -57,6 +57,104 @@
         <!-- Содержимое модального окна без изменений -->
     </div>
 
+    <div id="cart-modal" class="modal">
+    <div class="modal-content account-content" style="overflow-y: auto;">
+        <span class="close">&times;</span>
+        
+        <!-- Блок 1: Заголовок корзины -->
+        <div class="cart-header-block">
+            <div class="cart-title-wrapper">
+                <svg class="trash-icon" width="24" height="24" viewBox="0 0 24 24" fill="#F4F2E5">
+                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                </svg>
+                <h2>Ваш заказ</h2>
+            </div>
+            <div id="cart-items" class="cart-items-block scrollable">
+                <!-- Пример товара -->
+                <div class="cart-item">
+                    <div class="item-actions">
+                        <button class="quantity-btn">-</button>
+                        <span class="item-quantity">1</span>
+                        <button class="quantity-btn">+</button>
+                        <button class="remove-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="#5B120D">
+                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <p class="empty-cart">Ваша корзина пуста</p>
+            </div>
+        </div>
+        
+        <!-- Блок 2: Адрес доставки -->
+        <div class="delivery-address-block">
+            <h3>Выберите адрес доставки</h3>
+            <div class="address-table">
+                <table>
+                    <tr>
+                        <td>ул. Примерная, д. 1, кв. 2</td>
+                        <td class="address-checkbox">
+                            <input type="radio" name="address" id="address1" checked>
+                            <label for="address1"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>ул. Другая, д. 3, кв. 4</td>
+                        <td class="address-checkbox">
+                            <input type="radio" name="address" id="address2">
+                            <label for="address2"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>пр. Третий, д. 5, кв. 6</td>
+                        <td class="address-checkbox">
+                            <input type="radio" name="address" id="address3">
+                            <label for="address3"></label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Блок 3: Время доставки -->
+        <div class="delivery-time-block">
+            <h3>Время доставки</h3>
+            <div class="time-options">
+                <button class="time-option-btn active" id="asap-btn">Как можно быстрее</button>
+                <button class="time-option-btn" id="schedule-btn">Ко времени</button>
+            </div>
+            
+            <div class="time-selection" id="time-selection" style="display: none;">
+            <div class="time-input">
+            <input type="text" id="delivery-date" class="date-picker" placeholder="Выберите дату" readonly>
+            </div>
+            <div class="time-input">
+            <input type="text" id="delivery-time" class="time-picker" placeholder="Укажите время" readonly>
+  </div>
+</div>
+            
+            <div class="cart-total">
+                <p>Итого: <span id="cart-total-price">850</span> ₽</p>
+                <button class="submit-btn order-btn" id="checkout-btn">Заказать</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Календарь для выбора даты (скрытый по умолчанию) -->
+<div id="datepicker-container" class="datepicker-container"></div>
+
+<!-- Временной барабан (скрытый по умолчанию) -->
+<div id="timepicker-container" class="timepicker-container">
+    <div class="timepicker">
+        <div class="hours-wheel"></div>
+        <div class="minutes-wheel"></div>
+        <div class="center-dot"></div>
+    </div>
+    <button class="timepicker-confirm">Подтвердить</button>
+</div>
+
     <script src="script.js"></script>
 
     <script>
