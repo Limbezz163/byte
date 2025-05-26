@@ -2,10 +2,13 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 	"net/http"
 	"strconv"
+	"user-service/internal/JWTtokken"
+	"user-service/internal/config"
 	"user-service/internal/database"
 	"user-service/internal/logger"
 	"user-service/internal/model"
@@ -44,6 +47,16 @@ func PostRegisterUser(w http.ResponseWriter, r *http.Request) {
 		WriteError(w, http.StatusBadRequest, err.Error())
 		return
 	}
+
+	token := JWTtokken.CreateJwtTokken(user.Login, "", user.ID)
+
+	t, err := token.SignedString(config.JWTSecretKey)
+	if err != nil {
+		err = errors.New("failed to create token JWT")
+		return
+	}
+
+	json.NewEncoder(w).Encode(&model.RegisterResponse{*user, t})
 }
 
 func PostLogin(w http.ResponseWriter, r *http.Request) {
