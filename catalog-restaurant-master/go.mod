@@ -5,7 +5,7 @@ go 1.23
 toolchain go1.23.9
 
 require (
-	github.com/go-resty/resty/v2 v2.16.5
+	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/sessions v1.4.0
@@ -22,7 +22,6 @@ require (
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/crypto v0.31.0 // indirect
-	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
 )
