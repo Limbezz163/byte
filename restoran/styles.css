@@ -359,7 +359,7 @@ footer nav ul li a {
     width: auto;
     min-width: 200px;/* Минимальная ширина для сохранения пропорций */
     padding: 10px 30px;
-    background-color:#394A92;
+    background-color:#5B120D;
     color: #F4F2E5;
     border: none;
     border-radius: 33px;
@@ -371,7 +371,7 @@ footer nav ul li a {
 }
 
 .submit-btn:hover {
-    background-color: #2c3973;
+    background-color: #7a1a13;
 }
 
 #register-form {
@@ -656,10 +656,7 @@ footer nav ul li a {
         align-self: center;
     }
     
-    .modal-content {
-        margin: 20px auto;
-        padding: 20px;
-    }
+
 
     /* Адаптация страницы меню */
     .menu-header h1 {
@@ -1424,6 +1421,10 @@ header {
     margin-top: 20px;
 }
 
+
+
+
+
 /* Стили для модального окна */
 .modal {
     display: none;
@@ -1436,15 +1437,7 @@ header {
     background-color: rgba(0,0,0,0.5);
 }
 
-.modal-content {
-    background-color: white;
-    margin: 10% auto;
-    padding: 30px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 500px;
-    position: relative;
-}
+
 
 .close {
     position: absolute;
@@ -1460,9 +1453,6 @@ header {
     margin-top: 20px;
 }
 
-.form-group {
-    margin-bottom: 20px;
-}
 
 .form-group label {
     display: block;
@@ -1470,16 +1460,6 @@ header {
     color: #5B120D;
     font-weight: 500;
     font-size: 15px;
-}
-
-.form-group input, .form-group textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    background-color: #F4F2E5;
-    color: #5B120D;
 }
 
 .form-group textarea {
@@ -1496,22 +1476,9 @@ header {
     flex: 1;
 }
 
-.submit-btn {
-    background: #5B120D;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 100%;
-    transition: background 0.3s;
-    margin-top: 10px;
-}
 
-.submit-btn:hover {
-    background: #7a1a13;
-}
+
+
 
 /* Кнопка выхода */
 .logout-btn {
@@ -1529,8 +1496,8 @@ header {
     font-size: 16px;
     position: fixed;
     top: 90px;
-    right: 20px;
-    z-index: 1001;
+    left: 20px;
+    z-index: 100;
 }
 
 .logout-btn:hover {
@@ -1606,21 +1573,3 @@ header {
     }
 }
 
-@media (max-width: 480px) {
-    .modal-content {
-        padding: 20px;
-    }
-    
-    .user-details h3 {
-        font-size: 20px;
-    }
-    
-    .delivery-section h2 {
-        font-size: 22px;
-    }
-    
-    .edit-address-btn, .delete-address-btn {
-        padding: 5px 8px;
-        font-size: 13px;
-    }
-}

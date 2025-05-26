@@ -179,7 +179,7 @@ function logoutUser() {
     currentUser = null;
     localStorage.removeItem("currentUser");
     window.location.href = "index.html";
-  }   
+  }
 }
 
 function updateUserUI() {

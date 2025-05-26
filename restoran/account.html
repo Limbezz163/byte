@@ -51,12 +51,6 @@
     <main class="account-page">
         <div class="account-header">
             <h1>Личный кабинет</h1>
-            <!-- <button class="logout-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#5B120D">
-                    <path d="M16 17v-3H9v-4h7V7l5 5-5 5M14 2a2 2 0 0 1 2 2v2h-2V4H5v16h9v-2h2v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9z"/>
-                </svg>
-                Выйти
-            </button> -->
         </div>
         
         <div class="account-container">
@@ -105,25 +99,25 @@
             <h2>Добавить адрес доставки</h2>
             <form id="address-form" class="address-form">
                 <div class="form-group">
-                    <label for="address-city">Город</label>
-                    <input type="text" id="address-city" required>
+    
+                    <input type="text" id="address-city" placeholder="Город" required>
                 </div>
                 <div class="form-group">
-                    <label for="address-street">Адрес</label>
-                    <input type="text" id="address-street" required>
+            
+                    <input type="text" id="address-street" placeholder="Адрес" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="address-entrance">Подъезд</label>
-                        <input type="text" id="address-entrance">
+                        
+                        <input type="text" id="address-entrance" placeholder="Подъезд" required>
                     </div>
                     <div class="form-group">
-                        <label for="address-floor">Этаж</label>
-                        <input type="text" id="address-floor">
+                    
+                        <input type="text" id="address-floor" placeholder="Этаж" required>
                     </div>
                     <div class="form-group">
-                        <label for="address-apartment">Квартира</label>
-                        <input type="text" id="address-apartment">
+                    
+                        <input type="text" id="address-apartment" placeholder="Квартира" required>>
                     </div>
                 </div>
                 <button type="submit" class="submit-btn">Сохранить адрес</button>
