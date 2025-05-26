@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - BITE</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* Стили для курьера */
+        .courier-orders-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            display: none; /* Скрываем по умолчанию */
+        }
+        
+        .courier-status-container {
+            background: #5B120D;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 30px auto;
+            text-align: center;
+            color: #F4F2E5;
+        }
+        
+        .courier-status-notification {
+            display: none;
+            background: #5B120D;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: center;
+            color: #F4F2E5;
+        }
+        
+        .courier-status-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .courier-status-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 3px solid #F4F2E5;
+            color: #F4F2E5;
+            border-radius: 33px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .courier-status-btn:hover {
+            background-color: #394A92;
+        }
+        
+        .courier-orders-block {
+            flex: 1;
+            background: #5B120D;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .courier-orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .courier-orders-table th, 
+        .courier-orders-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            color: #F4F2E5;
+        }
+        
+        .courier-orders-table th {
+            background-color: #F4F2E5;
+            color: #5B120D;
+        }
+        
+        .courier-select-btn, 
+        .courier-delivered-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: 3px solid #F4F2E5;
+            color: #F4F2E5;
+            border-radius: 33px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .courier-select-btn:hover {
+            background-color: #394A92;
+        }
+        .courier-delivered-btn:hover {
+            background-color: #2c3973;
+        }
+        
+        .courier-delivered-btn {
+            display: none;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #394A92;
+            color: #F4F2E5;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .courier-status-pending {
+            color: #ff9966;
+        }
+        
+        .courier-status-delivering {
+            color: #66ff99;
+        }
+        
+        .courier-status-delivered {
+            color: #3399ff;
+        }
+        
+        /* Общие стили для личного кабинета */
+        .account-section .container h1 {
+            margin-left: 0;
+            font-size: 2.5rem;
+            color: #5B120D;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .back-to-home {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            background-color: #5B120D;
+            color: #F4F2E5;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        
+        .back-to-home:hover {
+            background-color: #941919;
+        }
+        
+        .title-container {
+            margin-bottom: 20px;
+        }
+        
+        .user-info h2 {
+            color: #5B120D;
+        }
+        
+        .user-info p {
+            color: #333;
+        }
+        
+        .back-button-container {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">ВIТЕ
+                <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
+            </div>
+            
+            <nav class="nav-center">
+                <ul>
+                    <li><a href="menu.html">Меню</a></li>
+                    <!-- <li><a href="#delivery">Доставка</a></li> -->
+                    <li><a href="#about">О ресторане</a></li>
+                </ul>
+            </nav>
+            
+            <div class="social-icons">
+                <a href="#" aria-label="ВКонтакте">
+                    <img src="https://pngicon.ru/file/uploads/vk.png" alt="VK" width="35" height="35">
+                </a>
+                <a href="#" aria-label="Телеграм">
+                    <svg width="35" height="35" viewBox="0 0 24 24" fill="#5B120D">
+                        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.534.26l.2-3.004 5.59-5.043c.24-.213-.054-.334-.373-.12l-6.91 4.34-2.97-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.53-.21 1.002.13.832.942z"/>
+                    </svg>
+                </a>
+                <a href="account.html" aria-label="Личный кабинет" id="auth-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="#5B120D">
+                        <path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                </a>
+                <a href="#" aria-label="Корзина" id="cart-icon">
+                    <svg width="35" height="35" viewBox="0 0 24 24" fill="#5B120D">
+                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <main class="account-page">
+        <section class="account-section">
+            <div class="container">
+                <div class="back-button-container">
+                    <a href="index.html" class="back-to-home">На главную</a>
+                </div>
+                
+                <div class="title-container">
+                    <h1>Личный кабинет</h1>
+                </div>
+                
+                <div class="account-info">
+                    <div class="user-info">
+                        <h2>Добро пожаловать, <span id="account-username">Курьер</span>!</h2>
+                        <p>Email: <span id="account-email">courier@example.com</span></p>
+                    </div>
+                    
+                    <!-- Блок подтверждения статуса -->
+                    <div class="courier-status-container" id="courier-status-container">
+                        <h3>Просим вас подтвердить ваш рабочий статус на текущий день</h3>
+                        <div class="courier-status-buttons">
+                            <button class="courier-status-btn" id="courier-working-btn">Работаю</button>
+                            <button class="courier-status-btn" id="courier-not-working-btn">Не работаю</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Уведомление о статусе "Не работаю" -->
+                    <div class="courier-status-notification" id="courier-not-working-notification">
+                        <h3>Ваш статус на рабочий день: <strong>Не работаю</strong></h3>
+                        <p>Хорошего дня!</p>
+                    </div>
+                    
+                    <!-- Блок с заказами -->
+                    <div class="courier-orders-container" id="courier-orders-container">
+                        <div class="courier-orders-block">
+                            <h3 style="color: #F4F2E5;">Активные заказы</h3>
+                            <table class="courier-orders-table">
+                                <thead>
+                                    <tr>
+                                        <th>Номер</th>
+                                        <th>Адрес</th>
+                                        <th>Статус</th>
+                                        <th>Действие</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#1001</td>
+                                        <td>ул. Примерная, д. 1, кв. 2</td>
+                                        <td class="courier-status-pending">Ожидается</td>
+                                        <td><button class="courier-select-btn" data-order="1001">Выбрать</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#1002</td>
+                                        <td>ул. Другая, д. 3, кв. 4</td>
+                                        <td class="courier-status-pending">Ожидается</td>
+                                        <td><button class="courier-select-btn" data-order="1002">Выбрать</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#1003</td>
+                                        <td>пр. Третий, д. 5, кв. 6</td>
+                                        <td class="courier-status-pending">Ожидается</td>
+                                        <td><button class="courier-select-btn" data-order="1003">Выбрать</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button id="courier-delivered-btn" class="courier-delivered-btn">Доставлено</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <nav>
+                <ul>
+                    <li><a href="menu.html">Меню</a></li>
+                    <!-- <li><a href="#delivery">Доставка</a></li> -->
+                    <li><a href="#about">О ресторане</a></li>
+                    <li><a href="#contacts">Справочная информация</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusContainer = document.getElementById('courier-status-container');
+            const notWorkingNotification = document.getElementById('courier-not-working-notification');
+            const ordersContainer = document.getElementById('courier-orders-container');
+            const workingBtn = document.getElementById('courier-working-btn');
+            const notWorkingBtn = document.getElementById('courier-not-working-btn');
+            const deliveredBtn = document.getElementById('courier-delivered-btn');
+            
+            let selectedOrder = null;
+            
+            // Обработчик кнопки "Работаю"
+            workingBtn.addEventListener('click', function() {
+                statusContainer.style.display = 'none';
+                notWorkingNotification.style.display = 'none';
+                ordersContainer.style.display = 'flex';
+            });
+            
+            // Обработчик кнопки "Не работаю"
+            notWorkingBtn.addEventListener('click', function() {
+                statusContainer.style.display = 'none';
+                ordersContainer.style.display = 'none';
+                notWorkingNotification.style.display = 'block';
+            });
+            
+            // Обработчики для кнопок "Выбрать" в таблице заказов
+            document.querySelectorAll('.courier-select-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (this.disabled) return;
+                    
+                    // Сбрасываем выделение у всех кнопок
+                    document.querySelectorAll('.courier-select-btn').forEach(b => {
+                        b.disabled = false;
+                        b.textContent = 'Выбрать';
+                    });
+                    
+                    // Выделяем текущую кнопку
+                    this.textContent = 'Выбран';
+                    this.disabled = true;
+                    
+                    selectedOrder = this.dataset.order;
+                    
+                    // Обновляем статус заказа
+                    const row = this.closest('tr');
+                    row.cells[2].textContent = 'В доставке';
+                    row.cells[2].className = 'courier-status-delivering';
+                    
+                    // Показываем кнопку "Доставлено"
+                    deliveredBtn.style.display = 'inline-block';
+                });
+            });
+            
+            // Обработчик кнопки "Доставлено"
+            deliveredBtn.addEventListener('click', function() {
+                if (selectedOrder) {
+                    // Находим строку заказа и обновляем статус
+                    const orderRows = document.querySelectorAll('.courier-orders-table tbody tr');
+                    orderRows.forEach(row => {
+                        if (row.cells[0].textContent === `#${selectedOrder}`) {
+                            row.cells[2].textContent = 'Доставлен';
+                            row.cells[2].className = 'courier-status-delivered';
+                            row.cells[3].querySelector('button').style.display = 'none';
+                            
+                            // Скрываем кнопку "Доставлено"
+                            deliveredBtn.style.display = 'none';
+                            
+                            alert(`Заказ #${selectedOrder} отмечен как доставленный`);
+                        }
+                    });
+                    
+                    // Сбрасываем выбор
+                    selectedOrder = null;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
