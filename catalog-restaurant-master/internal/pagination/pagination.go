@@ -22,11 +22,11 @@ func Paginate(limit, offset int, nameTable string) (int, int, int, error) {
 		return limit, offset, count, err
 	}
 
-	if limit < 0 {
+	if limit <= 0 {
 		limit = count
 	}
 
-	if count < offset || count < limit+offset {
+	if count < limit+offset && count <= offset {
 		err = fmt.Errorf("Offset или Limit привышает Total")
 		return limit, offset, count, err
 	}
