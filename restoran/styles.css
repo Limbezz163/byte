@@ -1421,10 +1421,6 @@ header {
     margin-top: 20px;
 }
 
-
-
-
-
 /* Стили для модального окна */
 .modal {
     display: none;
@@ -1436,8 +1432,6 @@ header {
     height: 100%;
     background-color: rgba(0,0,0,0.5);
 }
-
-
 
 .close {
     position: absolute;
@@ -1528,48 +1522,3 @@ header {
     justify-content: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 } */
-
-/* Адаптация для мобильных */
-@media (max-width: 768px) {
-    .account-page {
-        padding: 60px 15px 30px;
-    }
-    
-    .account-header h1 {
-        font-size: 28px;
-    }
-    
-    .account-container {
-        padding: 20px;
-    }
-    
-    .form-row {
-        flex-direction: column;
-        gap: 0;
-    }
-    
-    .address-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .address-actions {
-        width: 100%;
-        justify-content: flex-end;
-        margin-left: 0;
-    }
-    
-    .logout-btn, .account-close-btn {
-        top: 15px;
-    }
-    
-    .logout-btn {
-        left: 15px;
-    }
-    
-    .account-close-btn {
-        right: 15px;
-    }
-}
-
