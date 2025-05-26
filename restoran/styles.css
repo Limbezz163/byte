@@ -1246,28 +1246,43 @@ input.invalid {
     }
 }
 
-/* Стили для страницы личного кабинета */
+/* Основные стили для страницы личного кабинета */
 .account-page {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px;
+    padding: 120px 20px 40px; /* Увеличили верхний отступ */
     min-height: 100vh;
     background-color: #F4F2E5;
     position: relative;
+    margin-top: 80px; /* Добавили отступ сверху */
 }
 
+/* Шапка сайта - исправляем z-index */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    /* остальные ваши стили для header */
+}
+
+/* Заголовок личного кабинета */
 .account-header {
     text-align: center;
     margin-bottom: 30px;
     width: 100%;
     max-width: 800px;
+    position: relative;
+    z-index: 1;
 }
 
 .account-header h1 {
     color: #5B120D;
     font-size: 32px;
     margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
 }
 
 .account-container {
@@ -1504,28 +1519,35 @@ input.invalid {
     align-items: center;
     gap: 8px;
     background: #F4F2E5;
-    border: none;
+    border: 2px solid #5B120D;
     padding: 10px 15px;
     border-radius: 20px;
     cursor: pointer;
     font-weight: 500;
     color: #5B120D;
-    transition: background 0.3s;
+    transition: all 0.3s;
     font-size: 16px;
-    position: absolute;
-    top: 20px;
-    left: 20px;
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    z-index: 1001;
 }
 
 .logout-btn:hover {
-    background: #e8e6d9;
+    background: #5B120D;
+    color: #F4F2E5;
 }
 
 .logout-btn svg {
     flex-shrink: 0;
+    fill: #5B120D;
 }
 
-/* Кнопка закрытия личного кабинета */
+.logout-btn:hover svg {
+    fill: #F4F2E5;
+}
+
+/* Кнопка закрытия личного кабинета
 .account-close-btn {
     position: absolute;
     top: 20px;
@@ -1538,7 +1560,7 @@ input.invalid {
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
+} */
 
 /* Адаптация для мобильных */
 @media (max-width: 768px) {
