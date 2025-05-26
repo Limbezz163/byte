@@ -2,6 +2,7 @@
 let currentUser = null;
 let cartItems = [];
 let deliveryAddress = "";
+let deliveryDateTime = null; // Для хранения выбранного времени доставки
 
 // ===== ПОКАЗАТЬ/СКРЫТЬ МОДАЛЬНЫЕ ОКНА =====
 function showModal(modalId) {
@@ -53,6 +54,13 @@ const registerForm = document.getElementById("register-form");
 const checkoutBtn = document.getElementById("checkout-btn");
 const saveAddressBtn = document.getElementById("save-address-btn");
 const deliveryAddressInput = document.getElementById("delivery-address-input");
+
+// Элементы для выбора времени доставки
+const asapBtn = document.getElementById('asap-btn');
+const scheduleBtn = document.getElementById('schedule-btn');
+const timeSelection = document.getElementById('time-selection');
+const datePicker = document.getElementById('delivery-date');
+const timePicker = document.getElementById('delivery-time');
 
 // ===== ФУНКЦИИ ДЛЯ ПРОВЕРКИ ВАЛИДАЦИИ =====
 function validateLength(value, min, max, fieldName) {
@@ -161,7 +169,6 @@ function logoutUser() {
 }
 
 function updateUserUI() {
-  // Обновляем информацию в личном кабинете
   if (document.getElementById("account-username")) {
     document.getElementById("account-username").textContent = currentUser
       ? `${currentUser.name} ${currentUser.surname}`
@@ -170,7 +177,6 @@ function updateUserUI() {
       currentUser?.email || "Неизвестно";
   }
 
-  // Обновляем адрес доставки
   if (deliveryAddressInput) {
     deliveryAddressInput.value = deliveryAddress;
   }
@@ -184,8 +190,7 @@ function updateCartDisplay() {
   if (!cartItemsContainer) return;
 
   if (cartItems.length === 0) {
-    cartItemsContainer.innerHTML =
-      '<p class="empty-cart">Ваша корзина пуста</p>';
+    cartItemsContainer.innerHTML = '<p class="empty-cart">Ваша корзина пуста</p>';
     if (cartTotalPrice) cartTotalPrice.textContent = "0";
   } else {
     let html = "";
@@ -194,22 +199,17 @@ function updateCartDisplay() {
     cartItems.forEach((item) => {
       total += item.price * item.quantity;
       html += `
-                <div class="cart-item">
-                    <div class="cart-item-name">${item.name} × ${
-        item.quantity
-      }</div>
-                    <div class="cart-item-price">${
-                      item.price * item.quantity
-                    } ₽</div>
-                    <div class="cart-item-remove" data-id="${item.id}">×</div>
-                </div>
-            `;
+        <div class="cart-item">
+          <div class="cart-item-name">${item.name} × ${item.quantity}</div>
+          <div class="cart-item-price">${item.price * item.quantity} ₽</div>
+          <div class="cart-item-remove" data-id="${item.id}">×</div>
+        </div>
+      `;
     });
 
     cartItemsContainer.innerHTML = html;
     if (cartTotalPrice) cartTotalPrice.textContent = total;
 
-    // Добавляем обработчики для кнопок удаления
     document.querySelectorAll(".cart-item-remove").forEach((btn) => {
       btn.addEventListener("click", function () {
         const itemId = this.getAttribute("data-id");
@@ -221,10 +221,7 @@ function updateCartDisplay() {
 
 function addToCart(item) {
   if (!currentUser) {
-    showCustomAlert(
-      "Для добавления в корзину необходимо авторизоваться",
-      false
-    );
+    showCustomAlert("Для добавления в корзину необходимо авторизоваться", false);
     showModal("auth-modal");
     return;
   }
@@ -233,10 +230,7 @@ function addToCart(item) {
   if (existingItem) {
     existingItem.quantity += 1;
   } else {
-    cartItems.push({
-      ...item,
-      quantity: 1,
-    });
+    cartItems.push({ ...item, quantity: 1 });
   }
 
   saveCart();
@@ -259,19 +253,14 @@ function clearCart() {
 
 function saveCart() {
   if (currentUser) {
-    localStorage.setItem(
-      `cart_${currentUser.email}`,
-      JSON.stringify(cartItems)
-    );
+    localStorage.setItem(`cart_${currentUser.email}`, JSON.stringify(cartItems));
   }
 }
 
 function loadCart() {
   if (currentUser) {
     const savedCart = localStorage.getItem(`cart_${currentUser.email}`);
-    if (savedCart) {
-      cartItems = JSON.parse(savedCart);
-    }
+    if (savedCart) cartItems = JSON.parse(savedCart);
   }
   updateCartDisplay();
 }
@@ -279,245 +268,159 @@ function loadCart() {
 function loadDeliveryAddress() {
   if (currentUser) {
     const savedAddress = localStorage.getItem(`address_${currentUser.email}`);
-    if (savedAddress) {
-      deliveryAddress = savedAddress;
-    }
+    if (savedAddress) deliveryAddress = savedAddress;
   }
+}
+
+// ===== РАБОТА С ДАТОЙ И ВРЕМЕНЕМ ДОСТАВКИ =====
+function initDateTimePickers() {
+  if (!datePicker || !timePicker) return;
+
+  // Инициализация календаря
+  const datePickerInstance = flatpickr(datePicker, {
+    minDate: "today",
+    dateFormat: "d.m.Y",
+    locale: "ru",
+    disableMobile: true,
+    onChange: function(selectedDates) {
+
+      if (selectedDates[0]) {
+        deliveryDateTime = selectedDates[0];
+        // Сохраняем часы и минуты если время уже было выбрано
+        if (deliveryDateTime) {
+          const hours = deliveryDateTime.getHours();
+          const minutes = deliveryDateTime.getMinutes();
+          selectedDates[0].setHours(hours, minutes);
+        }
+      }
+    },
+  });
+
+  // Инициализация времени
+  const timePickerInstance = flatpickr(timePicker, {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    minuteIncrement: 5,
+    time_24hr: true,
+    disableMobile: true,
+
+    onChange: function (selectedDates) {
+      if (selectedDates[0] && deliveryDateTime) {
+        const hours = selectedDates[0].getHours();
+        const minutes = selectedDates[0].getMinutes();
+        deliveryDateTime.setHours(hours, minutes);
+      }
+    }
+  });
+
+  // Стилизация
+  const style = document.createElement("style");
+  style.textContent = `
+    .flatpickr-calendar {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      font-family: inherit;
+    }
+    .flatpickr-day.selected {
+      background: #5B120D;
+      border-color: #5B120D;
+    }
+    .flatpickr-day.today.selected {
+      background: #7a1a13;
+      border-color: #7a1a13;
+    }
+    .flatpickr-time input:hover {
+      background: rgba(91, 18, 13, 0.1);
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function loadFlatpickr() {
+  return new Promise((resolve) => {
+    if (typeof flatpickr !== "undefined") {
+      resolve();
+      return;
+    }
+
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css";
+    document.head.appendChild(link);
+
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/flatpickr";
+    script.onload = () => {
+      const localeScript = document.createElement("script");
+      localeScript.src = "https://npmcdn.com/flatpickr/dist/l10n/ru.js";
+      localeScript.onload = resolve;
+      document.head.appendChild(localeScript);
+    };
+    document.head.appendChild(script);
+  });
+}
+
+function initDeliveryTimeSelection() {
+  if (!asapBtn || !scheduleBtn || !timeSelection) return;
+
+  scheduleBtn.addEventListener("click", function () {
+    this.classList.add("active");
+    asapBtn.classList.remove("active");
+    timeSelection.style.display = "block";
+    deliveryDateTime = null;
+  });
+
+  asapBtn.addEventListener("click", function () {
+    this.classList.add("active");
+    scheduleBtn.classList.remove("active");
+    timeSelection.style.display = "none";
+    deliveryDateTime = new Date();
+  });
+
+  // По умолчанию выбираем "Как можно быстрее"
+  if (asapBtn) {
+    asapBtn.classList.add("active");
+    deliveryDateTime = new Date();
+  }
+}
+
+// ===== ОФОРМЛЕНИЕ ЗАКАЗА =====
+function checkoutOrder() {
+  if (cartItems.length === 0) {
+    showCustomAlert("Ваша корзина пуста", false);
+    return false;
+  }
+
+  if (!deliveryAddress) {
+    showCustomAlert("Пожалуйста, укажите адрес доставки", false);
+    return false;
+  }
+
+
+  if (scheduleBtn.classList.contains("active") && !deliveryDateTime) {
+    showCustomAlert("Пожалуйста, укажите дату и время доставки", false);
+    return false;
+  }
+
+  const orderData = {
+    user: currentUser,
+    items: cartItems,
+    deliveryAddress,
+    deliveryTime: deliveryDateTime,
+    total: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+  };
+
+  console.log("Order data:", orderData);
+  showCustomAlert("Заказ успешно оформлен!");
+  clearCart();
+  hideModal("cart-modal");
+  return true;
 }
 
 // ===== ОБРАБОТЧИКИ СОБЫТИЙ =====
-// Открытие модальных окон
-if (authBtn) {
-  authBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (currentUser) {
-      window.location.href = "account.html";
-    } else {
-      showModal("auth-modal");
-      document.querySelector('.tab-btn[data-tab="login"]').click();
-    }
-  });
-}
-
-if (cartIcon) {
-  cartIcon.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (!currentUser) {
-      showCustomAlert("Для доступа к корзине необходимо авторизоваться", false);
-      showModal("auth-modal");
-      return;
-    }
-    showModal("cart-modal");
-  });
-}
-
-// Закрытие модальных окон
-closeBtns.forEach((btn) => {
-  btn.addEventListener("click", function () {
-    hideModal(this.closest(".modal").id);
-  });
-});
-
-// Закрытие при клике вне окна
-window.addEventListener("click", (e) => {
-  if (e.target.classList.contains("modal")) {
-    hideModal(e.target.id);
-  }
-});
-
-// Переключение между вкладками
-if (tabBtns) {
-  tabBtns.forEach((btn) => {
-    btn.addEventListener("click", function () {
-      const tabId = this.getAttribute("data-tab");
-
-      tabBtns.forEach((b) => b.classList.remove("active"));
-      authTabs.forEach((tab) => tab.classList.remove("active"));
-
-      this.classList.add("active");
-      document.getElementById(`${tabId}-tab`).classList.add("active");
-    });
-  });
-}
-
-// Кнопка "Изменить данные" (переход на регистрацию)
-if (changeToRegisterBtn) {
-  changeToRegisterBtn.addEventListener("click", () => {
-    document.querySelector('.tab-btn[data-tab="register"]').click();
-  });
-}
-
-// Оформление заказа
-if (checkoutBtn) {
-  checkoutBtn.addEventListener("click", () => {
-    if (cartItems.length === 0) {
-      showCustomAlert("Ваша корзина пуста", false);
-      return;
-    }
-
-    if (!deliveryAddress) {
-      showCustomAlert("Пожалуйста, укажите адрес доставки", false);
-      return;
-    }
-
-    // Здесь можно добавить логику оформления заказа
-    showCustomAlert("Заказ успешно оформлен!");
-    clearCart();
-    hideModal("cart-modal");
-  });
-}
-
-// Сохранение адреса доставки
-if (saveAddressBtn && deliveryAddressInput) {
-  saveAddressBtn.addEventListener("click", () => {
-    deliveryAddress = deliveryAddressInput.value.trim();
-    if (currentUser) {
-      localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
-      showCustomAlert("Адрес доставки сохранен");
-    }
-  });
-}
-
-// Обработка формы входа
-if (loginForm) {
-  loginForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const username = document.getElementById("login-username").value.trim();
-    const password = document.getElementById("login-password").value.trim();
-
-    // Проверка длины логина и пароля
-    const loginError = validateLength(username, 4, 20, "Логин");
-    const passwordError = validateLength(password, 6, 20, "Пароль");
-
-    if (loginError) {
-      showError(document.getElementById("login-username"), loginError);
-      return;
-    }
-
-    if (passwordError) {
-      showError(document.getElementById("login-password"), passwordError);
-      return;
-    }
-
-    loginUser({
-      login: username,
-      email: username,
-    });
-
-    hideModal("auth-modal");
-    showCustomAlert("Вы успешно вошли!");
-    loadCart();
-    loadDeliveryAddress();
-    updateUserUI();
-  });
-
-  // Очистка ошибок при вводе
-  loginForm.querySelectorAll("input").forEach((input) => {
-    input.addEventListener("input", function () {
-      clearError(this);
-    });
-  });
-}
-
-// Обработка формы регистрации
-if (registerForm) {
-  registerForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    let hasErrors = false;
-
-    // Получаем значения полей
-    const formData = {
-      name: document.getElementById("reg-name").value.trim(),
-      surname: document.getElementById("reg-surname").value.trim(),
-      patronymic: document.getElementById("reg-patronymic").value.trim(),
-      phone: document.getElementById("reg-phone").value.trim(),
-      email: document.getElementById("reg-email").value.trim(),
-      login: document.getElementById("reg-login").value.trim(),
-      password: document.getElementById("reg-password").value.trim(),
-    };
-
-    // Очищаем предыдущие ошибки
-    document.querySelectorAll(".error-message").forEach((el) => el.remove());
-    document.querySelectorAll(".form-group input").forEach((input) => {
-      input.classList.remove("invalid");
-    });
-
-    // Проверка полей
-    const errors = {
-      name:
-        validateLength(formData.name, 2, 30, "Имя") ||
-        validateName(formData.name, "Имя"),
-      surname:
-        validateLength(formData.surname, 2, 30, "Фамилия") ||
-        validateName(formData.surname, "Фамилия"),
-      patronymic: formData.patronymic
-        ? validateLength(formData.patronymic, 2, 30, "Отчество") ||
-          validateName(formData.patronymic, "Отчество")
-        : null,
-      phone: validatePhone(formData.phone),
-      email: validateEmail(formData.email),
-      login: validateLength(formData.login, 4, 20, "Логин"),
-      password: validateLength(formData.password, 6, 20, "Пароль"),
-    };
-
-    // Показываем ошибки
-    Object.keys(errors).forEach((field) => {
-      if (errors[field]) {
-        showError(document.getElementById(`reg-${field}`), errors[field]);
-        hasErrors = true;
-      }
-    });
-
-    // Если есть ошибки - прерываем отправку формы
-    if (hasErrors) {
-      showCustomAlert("Пожалуйста, исправьте ошибки в форме", false);
-      return;
-    }
-
-    // Если проверки пройдены
-    loginUser(formData);
-    hideModal("auth-modal");
-    showCustomAlert("Регистрация прошла успешно!");
-    updateUserUI();
-  });
-
-  // Добавляем обработчики для валидации при вводе
-  registerForm.querySelectorAll("input").forEach((input) => {
-    input.addEventListener("input", function () {
-      clearError(this);
-
-      const field = this.id.replace("reg-", "");
-      const value = this.value.trim();
-
-      let error = null;
-      switch (field) {
-        case "name":
-          error = validateName(value, "Имя");
-          break;
-        case "surname":
-          error = validateName(value, "Фамилия");
-          break;
-        case "patronymic":
-          if (value) error = validateName(value, "Отчество");
-          break;
-        case "phone":
-          error = validatePhone(value);
-          break;
-        case "email":
-          error = validateEmail(value);
-          break;
-      }
-
-      if (error) {
-        showError(this, error);
-      }
-    });
-  });
-}
-
-// Инициализация при загрузке страницы
 document.addEventListener("DOMContentLoaded", function () {
-  // Загружаем данные пользователя из localStorage
+  // Загрузка данных пользователя
   const savedUser = localStorage.getItem("currentUser");
   if (savedUser) {
     currentUser = JSON.parse(savedUser);
@@ -526,24 +429,189 @@ document.addEventListener("DOMContentLoaded", function () {
     updateUserUI();
   }
 
-  // Инициализация корзины
+  // Инициализация интерфейсов
   updateCartDisplay();
+  initDeliveryTimeSelection();
 
-  // Переключение между меню (если есть на странице)
+  // Загрузка Flatpickr
+  loadFlatpickr().then(initDateTimePickers);
+
+  // Обработчики
+  if (authBtn) {
+    authBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (currentUser) window.location.href = "account.html";
+      else {
+        showModal("auth-modal");
+        document.querySelector('.tab-btn[data-tab="login"]').click();
+      }
+    });
+  }
+
+  if (cartIcon) {
+    cartIcon.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (!currentUser) {
+        showCustomAlert(
+          "Для доступа к корзине необходимо авторизоваться",
+          false
+        );
+        showModal("auth-modal");
+        return;
+      }
+      showModal("cart-modal");
+    });
+  }
+
+  closeBtns.forEach((btn) => {
+    btn.addEventListener("click", function() {
+
+      hideModal(this.closest(".modal").id);
+    });
+  });
+
+  window.addEventListener("click", (e) => {
+    if (e.target.classList.contains("modal")) {
+      hideModal(e.target.id);
+    }
+  });
+
+  if (tabBtns) {
+    tabBtns.forEach((btn) => {
+      btn.addEventListener("click", function() {
+        const tabId = this.getAttribute("data-tab");
+        tabBtns.forEach(b => b.classList.remove("active"));
+        authTabs.forEach(tab => tab.classList.remove("active"));
+        this.classList.add("active");
+        document.getElementById(`${tabId}-tab`).classList.add("active");
+      });
+    });
+  }
+
+  if (changeToRegisterBtn) {
+    changeToRegisterBtn.addEventListener("click", () => {
+      document.querySelector('.tab-btn[data-tab="register"]').click();
+    });
+  }
+
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", checkoutOrder);
+  }
+
+  if (saveAddressBtn && deliveryAddressInput) {
+    saveAddressBtn.addEventListener("click", () => {
+      deliveryAddress = deliveryAddressInput.value.trim();
+      if (currentUser) {
+        localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
+        showCustomAlert("Адрес доставки сохранен");
+      }
+    });
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const username = document.getElementById("login-username").value.trim();
+      const password = document.getElementById("login-password").value.trim();
+
+      const loginError = validateLength(username, 4, 20, "Логин");
+      const passwordError = validateLength(password, 6, 20, "Пароль");
+
+      if (loginError) showError(document.getElementById("login-username"), loginError);
+      if (passwordError) showError(document.getElementById("login-password"), passwordError);
+      if (loginError || passwordError) return;
+
+      loginUser({ login: username, email: username });
+      hideModal("auth-modal");
+      showCustomAlert("Вы успешно вошли!");
+      loadCart();
+      loadDeliveryAddress();
+    });
+
+    loginForm.querySelectorAll("input").forEach((input) => {
+      input.addEventListener("input", function() { clearError(this); });
+    });
+  }
+
+  if (registerForm) {
+    registerForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      let hasErrors = false;
+      const formData = {
+        name: document.getElementById("reg-name").value.trim(),
+        surname: document.getElementById("reg-surname").value.trim(),
+        patronymic: document.getElementById("reg-patronymic").value.trim(),
+        phone: document.getElementById("reg-phone").value.trim(),
+        email: document.getElementById("reg-email").value.trim(),
+        login: document.getElementById("reg-login").value.trim(),
+        password: document.getElementById("reg-password").value.trim(),
+      };
+
+      document.querySelectorAll(".error-message").forEach(el => el.remove());
+      document.querySelectorAll(".form-group input").forEach(input => {
+        input.classList.remove("invalid");
+      });
+
+      const errors = {
+        name: validateLength(formData.name, 2, 30, "Имя") || validateName(formData.name, "Имя"),
+        surname: validateLength(formData.surname, 2, 30, "Фамилия") || validateName(formData.surname, "Фамилия"),
+        patronymic: formData.patronymic ? 
+          validateLength(formData.patronymic, 2, 30, "Отчество") || validateName(formData.patronymic, "Отчество") : null,
+        phone: validatePhone(formData.phone),
+        email: validateEmail(formData.email),
+        login: validateLength(formData.login, 4, 20, "Логин"),
+        password: validateLength(formData.password, 6, 20, "Пароль"),
+      };
+
+      Object.keys(errors).forEach(field => {
+        if (errors[field]) {
+          showError(document.getElementById(`reg-${field}`), errors[field]);
+          hasErrors = true;
+        }
+      });
+
+      if (hasErrors) {
+        showCustomAlert("Пожалуйста, исправьте ошибки в форме", false);
+        return;
+      }
+
+      loginUser(formData);
+      hideModal("auth-modal");
+      showCustomAlert("Регистрация прошла успешно!");
+    });
+
+    registerForm.querySelectorAll("input").forEach((input) => {
+
+      input.addEventListener("input", function() {
+
+        clearError(this);
+        const field = this.id.replace("reg-", "");
+        const value = this.value.trim();
+        let error = null;
+
+        switch (field) {
+          case "name": error = validateName(value, "Имя"); break;
+          case "surname": error = validateName(value, "Фамилия"); break;
+          case "patronymic": if (value) error = validateName(value, "Отчество"); break;
+          case "phone": error = validatePhone(value); break;
+          case "email": error = validateEmail(value); break;
+        }
+
+        if (error) showError(this, error);
+      });
+    });
+  }
+
+  // Переключение между меню (если есть)
   const switchButtons = document.querySelectorAll(".menu-switch-btn");
   const menuContents = document.querySelectorAll(".menu-content");
 
   switchButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      switchButtons.forEach((btn) => btn.classList.remove("active"));
-      menuContents.forEach((content) =>
-        content.classList.remove("active-content")
-      );
-
+    button.addEventListener("click", function() {
+      switchButtons.forEach(btn => btn.classList.remove("active"));
+      menuContents.forEach(content => content.classList.remove("active-content"));
       this.classList.add("active");
-      const menuType = this.getAttribute("data-menu");
-      document
-        .getElementById(`${menuType}-menu`)
+      document.getElementById(`${this.getAttribute("data-menu")}-menu`)
         .classList.add("active-content");
     });
   });

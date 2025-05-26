@@ -14,3 +14,5 @@
 /frontend/dist/
 /frontend/.envgit push -u origin main
 .idea/
+
+*.env
