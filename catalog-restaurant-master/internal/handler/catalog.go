@@ -55,11 +55,13 @@ func GetDishsOfMenu(w http.ResponseWriter, r *http.Request) {
 	limit, offset, total, err := pagination.Paginate(limit, offset, "menu")
 	if err != nil {
 		json.NewEncoder(w).Encode(model.ErrorMessage{ErrorMessage: err.Error(), Error: err.Error()})
+		return
 	}
 
 	rows, err := dbpool.Query(context.Background(), `SELECT * FROM get_paginated_data_menu($1,$2)`, limit, offset)
 	if err != nil {
 		json.NewEncoder(w).Encode(model.ErrorMessage{ErrorMessage: err.Error(), Error: err.Error()})
+		return
 	}
 	categoryMapSlice := <-ch
 	defer rows.Close()

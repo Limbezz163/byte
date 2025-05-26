@@ -3,10 +3,9 @@ package repository
 import (
 	"context"
 	"errors"
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
-	"time"
+	"user-service/internal/JWTtokken"
 	"user-service/internal/auth"
 	"user-service/internal/config"
 	"user-service/internal/model"
@@ -53,15 +52,8 @@ func (repo *loginRepository) Authenticate(login *model.LoginRequest) (model.Logi
 		return authInfo, err
 	}
 
-	payload := jwt.MapClaims{
-		"sub":  login.Login,
-		"exp":  time.Now().Add(time.Hour * 72).Unix(),
-		"iat":  time.Now().Unix(),
-		"role": role,
-	}
-
 	// Создаем новый JWT-токен и подписываем его по алгоритму HS256
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, payload)
+	token := JWTtokken.CreateJwtTokken(login.Login, role, id)
 
 	t, err := token.SignedString(config.JWTSecretKey)
 	if err != nil {

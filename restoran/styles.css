@@ -1248,19 +1248,50 @@ input.invalid {
 
 /* Стили для страницы личного кабинета */
 .account-page {
-    padding-top: 100px;
+    padding-top: 80px;
     min-height: 100vh;
+    position: relative;
+}
+
+.account-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    margin-bottom: 30px;
+}
+
+.account-header h1 {
+    color: #5B120D;
+    font-size: 36px;
+    margin: 0;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #F4F2E5;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #5B120D;
+    transition: background 0.3s;
+    font-size: 16px;
+}
+
+.logout-btn:hover {
+    background: #e8e6d9;
+}
+
+.logout-btn svg {
+    flex-shrink: 0;
 }
 
 .account-section {
-    padding: 40px 0;
-}
-
-.account-section h1 {
-    color: #5B120D;
-    font-size: 36px;
-    margin-bottom: 30px;
-    text-align: center;
+    padding: 20px 0;
 }
 
 .account-info {
@@ -1270,47 +1301,133 @@ input.invalid {
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-.user-info h2 {
+.account-columns {
+    display: flex;
+    gap: 30px;
+}
+
+.account-left-column {
+    flex: 2;
+}
+
+.account-right-column {
+    flex: 1;
+}
+
+.user-profile {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.user-profile h2 {
     color: #5B120D;
-    margin-bottom: 10px;
     font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-.user-info p {
-    color: #333;
-    font-size: 18px;
+.user-avatar {
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-.delivery-address {
-    margin: 30px 0;
-    padding: 20px 0;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
+.user-avatar svg {
+    background: #F4F2E5;
+    border-radius: 50%;
+    padding: 10px;
 }
 
-.delivery-address h3 {
+.user-details h3 {
     color: #5B120D;
     margin-bottom: 15px;
-    font-size: 20px;
+    font-size: 22px;
+    text-align: center;
 }
 
-.address-form {
-    display: flex;
-    gap: 10px;
-}
-
-#delivery-address-input {
-    flex-grow: 1;
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.user-details p {
+    color: #333;
+    margin-bottom: 12px;
     font-size: 16px;
 }
 
-.order-history h3 {
+.user-details strong {
     color: #5B120D;
-    margin-bottom: 15px;
-    font-size: 20px;
+}
+
+.delivery-addresses, .order-history {
+    margin-bottom: 30px;
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    color: #5B120D;
+    font-size: 22px;
+    margin: 0;
+}
+
+.add-address-btn {
+    background: #5B120D;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.add-address-btn:hover {
+    background: #7a1a13;
+}
+
+.addresses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.address-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 4px;
+    border-left: 3px solid #5B120D;
+}
+
+.address-item p {
+    margin: 0;
+    font-size: 15px;
+}
+
+.edit-address-btn {
+    background: none;
+    border: 1px solid #5B120D;
+    color: #5B120D;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s;
+}
+
+.edit-address-btn:hover {
+    background: #5B120D;
+    color: white;
 }
 
 .no-orders {
@@ -1321,57 +1438,92 @@ input.invalid {
     border-radius: 4px;
 }
 
+/* Модальное окно адреса */
+.address-modal-content {
+    max-width: 500px;
+    width: 100%;
+    padding: 30px;
+}
+
+.address-modal-content h2 {
+    color: #5B120D;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#address-form .form-group {
+    margin-bottom: 15px;
+}
+
+#address-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: 500;
+}
+
+#address-form input,
+#address-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 15px;
+}
+
+#address-form textarea {
+    resize: vertical;
+}
+
+/* Кнопка закрытия */
+.account-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    padding: 10px;
+    background: #F4F2E5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
 /* Адаптация для мобильных */
 @media (max-width: 768px) {
-    .account-page {
-        padding-top: 80px;
+    .account-header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 0 15px;
+    }
+    
+    .account-columns {
+        flex-direction: column-reverse;
     }
     
     .account-info {
         padding: 20px;
     }
     
-    .address-form {
+    .section-header {
         flex-direction: column;
-    }
-    
-    #delivery-address-input {
-        width: 100%;
-    }
-}
-
-/* Стили для кнопки "На главную" */
-.user-actions {
-    margin-top: 20px;
-    display: flex;
-    gap: 15px;
-}
-
-.home-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #394A92;
-    color: #F4F2E5;
-    text-decoration: none;
-    border-radius: 33px;
-    font-weight: bold;
-    transition: background-color 0.3s;
-    border: 2px solid #394A92;
-}
-
-.home-btn:hover {
-    background-color: transparent;
-    color: #394A92;
-}
-
-/* Для мобильных устройств */
-@media (max-width: 768px) {
-    .user-actions {
-        flex-direction: column;
+        align-items: flex-start;
         gap: 10px;
     }
     
-    .home-btn {
-        text-align: center;
+    .address-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .edit-address-btn {
+        align-self: flex-end;
+    }
+    
+    .account-close-btn {
+        top: 15px;
+        right: 15px;
     }
 }

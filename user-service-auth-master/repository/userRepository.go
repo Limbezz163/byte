@@ -30,26 +30,33 @@ func NewUserRepository(dbpool *pgxpool.Pool, logger *zap.Logger) UserRepository 
 func (u *userRepository) CreateUser(user *model.User) (*model.User, error) {
 	defer u.dbpool.Close()
 	defer u.logger.Sync()
+
 	var patronymic string
 	var err error
+
 	err = nil
 	if &user.Patronymic == nil {
 		patronymic = ""
 	} else {
 		patronymic = user.Patronymic
 	}
+
 	password, err := auth.HashPassword(&user.Password)
+
 	if err != nil {
 		u.logger.Error("Failed to hash password", zap.Error(err))
 		return nil, err
 	}
+
 	user.Email, err = auth.IsValidEmail(user.Email)
+
 	if err != nil {
 		return nil, err
 	}
 	err = u.dbpool.QueryRow(context.Background(),
 		`INSERT INTO "user" (name, patronymic, surname, email, phone_number, login, password) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
 		&user.Name, patronymic, &user.Surname, &user.Email, &user.PhoneNumber, &user.Login, &password).Scan(&user.ID)
+
 	if err != nil {
 		return nil, err
 	}
