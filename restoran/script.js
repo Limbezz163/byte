@@ -283,6 +283,7 @@ function initDateTimePickers() {
     locale: "ru",
     disableMobile: true,
     onChange: function(selectedDates) {
+
       if (selectedDates[0]) {
         deliveryDateTime = selectedDates[0];
         // Сохраняем часы и минуты если время уже было выбрано
@@ -292,7 +293,7 @@ function initDateTimePickers() {
           selectedDates[0].setHours(hours, minutes);
         }
       }
-    }
+    },
   });
 
   // Инициализация времени
@@ -303,7 +304,8 @@ function initDateTimePickers() {
     minuteIncrement: 5,
     time_24hr: true,
     disableMobile: true,
-    onChange: function(selectedDates) {
+
+    onChange: function (selectedDates) {
       if (selectedDates[0] && deliveryDateTime) {
         const hours = selectedDates[0].getHours();
         const minutes = selectedDates[0].getMinutes();
@@ -313,7 +315,7 @@ function initDateTimePickers() {
   });
 
   // Стилизация
-  const style = document.createElement('style');
+  const style = document.createElement("style");
   style.textContent = `
     .flatpickr-calendar {
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
@@ -337,21 +339,21 @@ function initDateTimePickers() {
 
 function loadFlatpickr() {
   return new Promise((resolve) => {
-    if (typeof flatpickr !== 'undefined') {
+    if (typeof flatpickr !== "undefined") {
       resolve();
       return;
     }
 
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css';
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css";
     document.head.appendChild(link);
 
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/flatpickr';
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/flatpickr";
     script.onload = () => {
-      const localeScript = document.createElement('script');
-      localeScript.src = 'https://npmcdn.com/flatpickr/dist/l10n/ru.js';
+      const localeScript = document.createElement("script");
+      localeScript.src = "https://npmcdn.com/flatpickr/dist/l10n/ru.js";
       localeScript.onload = resolve;
       document.head.appendChild(localeScript);
     };
@@ -362,23 +364,23 @@ function loadFlatpickr() {
 function initDeliveryTimeSelection() {
   if (!asapBtn || !scheduleBtn || !timeSelection) return;
 
-  scheduleBtn.addEventListener('click', function() {
-    this.classList.add('active');
-    asapBtn.classList.remove('active');
-    timeSelection.style.display = 'block';
+  scheduleBtn.addEventListener("click", function () {
+    this.classList.add("active");
+    asapBtn.classList.remove("active");
+    timeSelection.style.display = "block";
     deliveryDateTime = null;
   });
-  
-  asapBtn.addEventListener('click', function() {
-    this.classList.add('active');
-    scheduleBtn.classList.remove('active');
-    timeSelection.style.display = 'none';
+
+  asapBtn.addEventListener("click", function () {
+    this.classList.add("active");
+    scheduleBtn.classList.remove("active");
+    timeSelection.style.display = "none";
     deliveryDateTime = new Date();
   });
 
   // По умолчанию выбираем "Как можно быстрее"
   if (asapBtn) {
-    asapBtn.classList.add('active');
+    asapBtn.classList.add("active");
     deliveryDateTime = new Date();
   }
 }
@@ -395,7 +397,8 @@ function checkoutOrder() {
     return false;
   }
 
-  if (scheduleBtn.classList.contains('active') && !deliveryDateTime) {
+
+  if (scheduleBtn.classList.contains("active") && !deliveryDateTime) {
     showCustomAlert("Пожалуйста, укажите дату и время доставки", false);
     return false;
   }
@@ -416,7 +419,7 @@ function checkoutOrder() {
 }
 
 // ===== ОБРАБОТЧИКИ СОБЫТИЙ =====
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   // Загрузка данных пользователя
   const savedUser = localStorage.getItem("currentUser");
   if (savedUser) {
@@ -449,7 +452,10 @@ document.addEventListener("DOMContentLoaded", function() {
     cartIcon.addEventListener("click", (e) => {
       e.preventDefault();
       if (!currentUser) {
-        showCustomAlert("Для доступа к корзине необходимо авторизоваться", false);
+        showCustomAlert(
+          "Для доступа к корзине необходимо авторизоваться",
+          false
+        );
         showModal("auth-modal");
         return;
       }
@@ -459,6 +465,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   closeBtns.forEach((btn) => {
     btn.addEventListener("click", function() {
+
       hideModal(this.closest(".modal").id);
     });
   });
@@ -502,7 +509,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   if (loginForm) {
-    loginForm.addEventListener("submit", function(e) {
+    loginForm.addEventListener("submit", function (e) {
       e.preventDefault();
       const username = document.getElementById("login-username").value.trim();
       const password = document.getElementById("login-password").value.trim();
@@ -527,7 +534,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   if (registerForm) {
-    registerForm.addEventListener("submit", function(e) {
+    registerForm.addEventListener("submit", function (e) {
       e.preventDefault();
       let hasErrors = false;
       const formData = {
@@ -574,7 +581,9 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     registerForm.querySelectorAll("input").forEach((input) => {
+
       input.addEventListener("input", function() {
+
         clearError(this);
         const field = this.id.replace("reg-", "");
         const value = this.value.trim();
