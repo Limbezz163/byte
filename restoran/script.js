@@ -166,7 +166,7 @@ function loginUser(userData) {
     username: userData.login,
     name: userData.name,
     surname: userData.surname,
-    phone: userData.phone || "",
+    phone_number: userData.phone_number || "",
   };
   sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
   updateUserUI();
@@ -188,15 +188,15 @@ function logoutUser() {
       'userRole',
       'userSurname'
     ];
-    
+
     // Удаляем каждый указанный ключ из sessionStorage
     keysToRemove.forEach(key => {
       sessionStorage.removeItem(key);
     });
-    
+
     // Альтернативный вариант - полная очистка sessionStorage
     // sessionStorage.clear();
-    
+
     // Перенаправляем на главную страницу
     window.location.href = "index.html";
   }
@@ -211,7 +211,7 @@ function updateUserUI() {
       currentUser?.email || "Неизвестно";
     if (document.getElementById("account-phone")) {
       document.getElementById("account-phone").textContent =
-        currentUser?.phone || "Не указан";
+        currentUser?.phone_number || "Не указан";
     }
   }
 
@@ -705,7 +705,10 @@ document.addEventListener("DOMContentLoaded", function () {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", logoutUser);
   }
-
+  const logoutBtn1 = document.querySelector(".logout-btn1");
+  if (logoutBtn1) {
+    logoutBtn1.addEventListener("click", logoutUser);
+  }
   const accountCloseBtn = document.querySelector(".account-close-btn");
   if (accountCloseBtn) {
     accountCloseBtn.addEventListener("click", function () {
@@ -721,36 +724,35 @@ document.addEventListener("DOMContentLoaded", function () {
   // Обработчики для модальных окон
   if (authBtn) {
     authBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        const currentUser = sessionStorage.getItem('userLogin');
-        const userRole = sessionStorage.getItem('userRole');
-        
-        if (currentUser) {
-            // Перенаправляем в зависимости от роли
-            switch(userRole) {
-                case 'client':
-                    window.location.href = "account.html";
-                    break;
-                case 'manager':
-                    window.location.href = "manager.html";
-                    break;
-                case 'administrator':
-                    window.location.href = "admin.html";
-                    break;
-                case 'courier':
-                    window.location.href = "courier.html";
-                    break;
-                default:
-                    
-                    window.location.href = "account.html";
-            }
-        } else {
-            // Если пользователь не авторизован, показываем модальное окно авторизации
-            showModal("auth-modal");
-            document.querySelector('.tab-btn[data-tab="login"]').click();
+      e.preventDefault();
+      const currentUser = sessionStorage.getItem('userLogin');
+      const userRole = sessionStorage.getItem('userRole');
+
+      if (currentUser) {
+        // Перенаправляем в зависимости от роли
+        switch (userRole) {
+          case 'client':
+            window.location.href = "account.html";
+            break;
+          case 'manager':
+            window.location.href = "manager.html";
+            break;
+          case 'administrator':
+            window.location.href = "admin.html";
+            break;
+          case 'courier':
+            window.location.href = "courier.html";
+            break;
+          default:
+            window.location.href = "account.html";
         }
+      } else {
+        // Если пользователь не авторизован, показываем модальное окно авторизации
+        showModal("auth-modal");
+        document.querySelector('.tab-btn[data-tab="login"]').click();
+      }
     });
-}
+  }
 
   if (cartIcon) {
     cartIcon.addEventListener("click", (e) => {
@@ -885,7 +887,7 @@ document.addEventListener("DOMContentLoaded", function () {
           sessionStorage.setItem('userPatronymic', data.user.patronymic);
         }
         if (data.user.phone_number) {
-          sessionStorage.setItem('userPhineNumber', data.user.phone_number);
+          sessionStorage.setItem('userPhoneNumber', data.user.phone_number);
         }
         if (data.user.login) {
           sessionStorage.setItem('userLogin', data.user.login);
@@ -896,10 +898,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (data.user.job_title) {
           sessionStorage.setItem('userRole', data.user.job_title);
         }
-        else{
+        else {
           sessionStorage.setItem('userRole', "Client");
         }
-       
+
 
         hideModal("auth-modal");
         showCustomAlert("Вы успешно вошли!");
@@ -913,7 +915,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (data.user.job_title === "administrator") {
           window.location.href = 'admin.html';
         }
-        else{
+        else {
           window.location.href = 'account.html';
         }
         // Перенаправляем в личный кабинет
@@ -943,7 +945,7 @@ document.addEventListener("DOMContentLoaded", function () {
         name: document.getElementById("reg-name").value.trim(),
         surname: document.getElementById("reg-surname").value.trim(),
         patronymic: document.getElementById("reg-patronymic").value.trim(),
-        phone: document.getElementById("reg-phone").value.trim(),
+        phone_number: document.getElementById("reg-phone").value.trim(),
         email: document.getElementById("reg-email").value.trim(),
         login: document.getElementById("reg-login").value.trim(),
         password: document.getElementById("reg-password").value.trim(),
@@ -960,7 +962,7 @@ document.addEventListener("DOMContentLoaded", function () {
         patronymic: formData.patronymic
           ? validateLength(formData.patronymic, 2, 30, "Отчество") || validateName(formData.patronymic, "Отчество")
           : null,
-        phone: validatePhone(formData.phone),
+        phone_number: validatePhone(formData.phone_number),
         email: validateEmail(formData.email),
         login: validateLength(formData.login, 4, 20, "Логин"),
         password: validateLength(formData.password, 5, 20, "Пароль"),
