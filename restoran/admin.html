@@ -487,6 +487,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+                
+
+
             // Данные пользователей
             const users = {
                 'admin': {
@@ -821,5 +825,179 @@
             });
         });
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // ===== ФУНКЦИИ ДЛЯ ПРОВЕРКИ ВАЛИДАЦИИ =====
+        function validateLength(value, min, max, fieldName) {
+            if (!value) return `${fieldName} обязателен для заполнения`;
+            if (value.length < min) {
+                return `${fieldName} должен содержать минимум ${min} символов`;
+            }
+            if (value.length > max) {
+                return `${fieldName} должен содержать максимум ${max} символов`;
+            }
+            return null;
+        }
+
+        function validateName(value, fieldName) {
+            if (/[0-9!@#$%^&*()_+=\[\]{};':"\\|,.<>\/?]/.test(value)) {
+                return `${fieldName} должен содержать только буквы`;
+            }
+            return null;
+        }
+
+        function validatePhone(value) {
+            if (!/^[\d\s()+-\s]+$/.test(value)) {
+                return "Телефон должен содержать только цифры и символы +-()";
+            }
+            return null;
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!re.test(email)) {
+                return "Введите корректный email адрес";
+            }
+            return null;
+        }
+
+        function showError(inputElement, message) {
+            const formGroup = inputElement.closest(".form-group");
+            let errorElement = formGroup.querySelector(".error-message");
+
+            if (!errorElement) {
+                errorElement = document.createElement("div");
+                errorElement.className = "error-message";
+                formGroup.appendChild(errorElement);
+            }
+
+            errorElement.textContent = message;
+            inputElement.classList.add("invalid");
+        }
+
+        function clearError(inputElement) {
+            const formGroup = inputElement.closest(".form-group");
+            const errorElement = formGroup.querySelector(".error-message");
+
+            if (errorElement) {
+                errorElement.remove();
+            }
+
+            inputElement.classList.remove("invalid");
+        }
+
+        // ===== КРАСИВОЕ УВЕДОМЛЕНИЕ =====
+        function showCustomAlert(message, isSuccess = true) {
+            const alertDiv = document.createElement("div");
+            alertDiv.className = `custom-alert ${isSuccess ? "" : "error"}`;
+            alertDiv.innerHTML = `
+                <svg viewBox="0 0 24 24">
+                    <path d="${
+                        isSuccess
+                            ? "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
+                            : "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+                    }"/>
+                </svg>
+                <span>${message}</span>
+            `;
+
+            document.body.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.classList.add("show");
+            }, 100);
+
+            setTimeout(() => {
+                alertDiv.classList.remove("show");
+                setTimeout(() => {
+                    document.body.removeChild(alertDiv);
+                }, 300);
+            }, 3000);
+        }
+
+        // Обработчик формы регистрации
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let hasErrors = false;
+            const formData = {
+                name: document.getElementById("reg-name").value.trim(),
+                surname: document.getElementById("reg-surname").value.trim(),
+                patronymic: document.getElementById("reg-patronymic").value.trim(),
+                phone: document.getElementById("reg-phone").value.trim(),
+                email: document.getElementById("reg-email").value.trim(),
+                login: document.getElementById("reg-login").value.trim(),
+                password: document.getElementById("reg-password").value.trim(),
+            };
+
+            // Очищаем предыдущие ошибки
+            document.querySelectorAll(".error-message").forEach((el) => el.remove());
+            document.querySelectorAll(".form-group input").forEach((input) => {
+                input.classList.remove("invalid");
+            });
+
+            // Валидация полей
+            const errors = {
+                name: validateLength(formData.name, 2, 30, "Имя") || validateName(formData.name, "Имя"),
+                surname: validateLength(formData.surname, 2, 30, "Фамилия") || validateName(formData.surname, "Фамилия"),
+                patronymic: formData.patronymic
+                    ? validateLength(formData.patronymic, 2, 30, "Отчество") || validateName(formData.patronymic, "Отчество")
+                    : null,
+                phone: validatePhone(formData.phone),
+                email: validateEmail(formData.email),
+                login: validateLength(formData.login, 4, 20, "Логин"),
+                password: validateLength(formData.password, 6, 20, "Пароль"),
+            };
+
+            // Показываем ошибки
+            Object.keys(errors).forEach((field) => {
+                if (errors[field]) {
+                    showError(document.getElementById(`reg-${field}`), errors[field]);
+                    hasErrors = true;
+                }
+            });
+
+            if (hasErrors) {
+                showCustomAlert("Пожалуйста, исправьте ошибки в форме", false);
+                return;
+            }
+
+            // Если валидация прошла успешно
+            showCustomAlert("Регистрация прошла успешно!");
+            this.reset();
+        });
+
+        // Обработчики для очистки ошибок при вводе
+        document.getElementById('register-form').querySelectorAll("input").forEach((input) => {
+            input.addEventListener("input", function () {
+                clearError(this);
+                const field = this.id.replace("reg-", "");
+                const value = this.value.trim();
+                let error = null;
+
+                switch (field) {
+                    case "name":
+                        error = validateName(value, "Имя");
+                        break;
+                    case "surname":
+                        error = validateName(value, "Фамилия");
+                        break;
+                    case "patronymic":
+                        if (value) error = validateName(value, "Отчество");
+                        break;
+                    case "phone":
+                        error = validatePhone(value);
+                        break;
+                    case "email":
+                        error = validateEmail(value);
+                        break;
+                }
+
+                if (error) showError(this, error);
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
