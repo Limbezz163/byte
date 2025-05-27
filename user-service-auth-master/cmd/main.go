@@ -25,11 +25,13 @@ func main() {
 	logger.Info("Launch user handlers")
 	r := mux.NewRouter()
 
-	ports, err := myCors.CreateArrOfPorts("3000", "8000")
+	ports, err := myCors.CreateArrOfPorts("5500", "8000")
 	if err != nil {
 		logger.Error("Ошибка создание портов для cors")
 		return
 	}
+
+	ports= append (ports, "http://127.0.0.1:5500")
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   ports,
