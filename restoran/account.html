@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +11,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
+
 <body>
     <header>
         <div class="container">
             <div class="logo">ВIТЕ
                 <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
             </div>
-            
+
             <nav class="nav-center">
                 <ul>
                     <li><a href="menu.html">Меню</a></li>
@@ -24,49 +26,96 @@
                     <li><a href="#about">О ресторане</a></li>
                 </ul>
             </nav>
-            
+
             <div class="social-icons">
                 <a href="#" aria-label="ВКонтакте">
                     <img src="https://pngicon.ru/file/uploads/vk.png" alt="VK" width="35" height="35">
                 </a>
                 <a href="#" aria-label="Телеграм">
                     <svg width="35" height="35" viewBox="0 0 24 24" fill="#F4F2E5">
-                        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.534.26l.2-3.004 5.59-5.043c.24-.213-.054-.334-.373-.12l-6.91 4.34-2.97-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.53-.21 1.002.13.832.942z"/>
+                        <path
+                            d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.534.26l.2-3.004 5.59-5.043c.24-.213-.054-.334-.373-.12l-6.91 4.34-2.97-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.53-.21 1.002.13.832.942z" />
                     </svg>
                 </a>
                 <a href="account.html" aria-label="Личный кабинет" id="auth-icon">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="#F4F2E5">
-                        <path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                        <path
+                            d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
                     </svg>
                 </a>
                 <a href="#" aria-label="Корзина" id="cart-icon">
                     <svg width="35" height="35" viewBox="0 0 24 24" fill="#F4F2E5">
-                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                        <path
+                            d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
                     </svg>
                 </a>
             </div>
         </div>
     </header>
-    
+
     <main class="account-page">
         <div class="account-header">
             <h1>Личный кабинет</h1>
         </div>
-        
+
         <div class="account-container">
             <div class="user-profile">
                 <div class="user-avatar">
                     <svg width="80" height="80" viewBox="0 0 24 24" fill="#5B120D">
-                        <path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                        <path
+                            d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
                     </svg>
                 </div>
                 <div class="user-details">
                     <h3 id="account-username">Иван Иванов</h3>
+
+                    <script>
+                        // Получаем имя и фамилию из sessionStorage
+                        const userName = sessionStorage.getItem('userName');
+                        const userSurname = sessionStorage.getItem('userSurname');
+
+                        // Если оба значения существуют, объединяем их
+                        if (userName && userSurname) {
+                            document.getElementById('account-username').textContent = `${userName} ${userSurname}`;
+                        }
+                        // Можно добавить дополнительные условия для случаев, когда есть только имя или только фамилия
+                        else if (userName) {
+                            document.getElementById('account-username').textContent = userName;
+                        }
+                        else if (userSurname) {
+                            document.getElementById('account-username').textContent = userSurname;
+                        }
+                    </script>
                     <p><strong>Email:</strong> <span id="account-email">user@example.com</span></p>
+
+                    <script>
+                        // Получаем email из sessionStorage
+                        const userEmail = sessionStorage.getItem('userEmail');
+
+                        // Если email существует, подставляем его
+                        if (userEmail) {
+                            document.getElementById('account-email').textContent = userEmail;
+                        } else {
+                            // Можно добавить обработку случая, когда email отсутствует
+                            console.log('Email не найден в sessionStorage');
+                            // Или, например, скрыть блок:
+                            // document.querySelector('p strong:contains("Email:")').parentElement.style.display = 'none';
+                        }
+                    </script>
                     <p><strong>Телефон:</strong> <span id="account-phone">+7 (123) 456-78-90</span></p>
+
+                    <script>
+                        // Получаем значение userPhoneNumber из sessionStorage
+                        const userPhoneNumber = sessionStorage.getItem('userPhoneNumber');
+
+                        // Если значение существует, подставляем его в span
+                        if (userPhoneNumber) {
+                            document.getElementById('account-phone').textContent = userPhoneNumber;
+                        }
+                    </script>
                 </div>
             </div>
-            
+
             <div class="delivery-section">
                 <h2>Адреса доставки</h2>
                 <div class="addresses-list">
@@ -87,267 +136,321 @@
     <!-- Кнопка выхода добавлена отдельно -->
     <button class="logout-btn">
         <svg width="20" height="20" viewBox="0 0 24 24">
-            <path d="M16 17v-3H9v-4h7V7l5 5-5 5M14 2a2 2 0 0 1 2 2v2h-2V4H5v16h9v-2h2v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9z"/>
+            <path
+                d="M16 17v-3H9v-4h7V7l5 5-5 5M14 2a2 2 0 0 1 2 2v2h-2V4H5v16h9v-2h2v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9z" />
         </svg>
         Выйти
     </button>
 
     <!-- Модальное окно добавления адреса -->
-<div id="address-modal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Добавить адрес доставки</h2>
-        <form id="address-form" class="address-form">
-            <div class="form-group">
-                <input type="text" id="address-city" placeholder="Город" required>
-                <div class="error-message" id="city-error"></div>
-            </div>
-            <div class="form-group">
-                <input type="text" id="address-street" placeholder="Улица" required>
-                <div class="error-message" id="street-error"></div>
-            </div>
-            <div class="form-row">
-        
+    <div id="address-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Добавить адрес доставки</h2>
+            <form id="address-form" class="address-form">
                 <div class="form-group">
-                    <input type="text" id="address-entrance" placeholder="Подъезд">
+                    <input type="text" id="address-city" placeholder="Город" required>
+                    <div class="error-message" id="city-error"></div>
                 </div>
                 <div class="form-group">
-                    <input type="text" id="address-floor" placeholder="Этаж">
+                    <input type="text" id="address-street" placeholder="Улица" required>
+                    <div class="error-message" id="street-error"></div>
                 </div>
-                <div class="form-group">
-                    <input type="text" id="address-apartment" placeholder="Квартира" required>
-                    <div class="error-message" id="apartment-error"></div>
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <input type="text" id="address-entrance" placeholder="Подъезд">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="address-floor" placeholder="Этаж">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="address-apartment" placeholder="Квартира" required>
+                        <div class="error-message" id="apartment-error"></div>
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="submit-btn">Сохранить адрес</button>
-        </form>
+                <button type="submit" class="submit-btn">Сохранить адрес</button>
+            </form>
+        </div>
     </div>
-</div>
 
-<script>
-// Функции валидации (из вашего кода)
-function validateLength(value, min, max, fieldName) {
-    if (!value) return `${fieldName} обязателен для заполнения`;
-    if (value.length < min) return `${fieldName} должен содержать минимум ${min} символов`;
-    if (value.length > max) return `${fieldName} должен содержать максимум ${max} символов`;
-    return null;
-}
-
-function validateName(value, fieldName) {
-    if (/[0-9!@#$%^&*()_+=\[\]{};':"\\|,.<>\/?]/.test(value)) {
-        return `${fieldName} должен содержать только буквы`;
-    }
-    return null;
-}
-
-function validateNumbersOnly(value, fieldName) {
-    if (!/^\d+$/.test(value)) {
-        return `${fieldName} должен содержать только цифры`;
-    }
-    return null;
-}
-
-function showError(inputElement, message) {
-    const formGroup = inputElement.closest(".form-group");
-    let errorElement = formGroup.querySelector(".error-message");
-    if (!errorElement) {
-        errorElement = document.createElement("div");
-        errorElement.className = "error-message";
-        formGroup.appendChild(errorElement);
-    }
-    errorElement.textContent = message;
-    inputElement.classList.add("invalid");
-}
-
-function clearError(inputElement) {
-    const formGroup = inputElement.closest(".form-group");
-    const errorElement = formGroup.querySelector(".error-message");
-    if (errorElement) {
-        errorElement.textContent = "";
-    }
-    inputElement.classList.remove("invalid");
-}
-
-// Валидация полей адреса
-function validateAddressFields() {
-    let isValid = true;
-    
-    // Город
-    const city = document.getElementById("address-city").value.trim();
-    const cityLengthError = validateLength(city, 3, 30, "Город");
-    const cityCharsError = validateName(city, "Город");
-    
-    if (cityLengthError) {
-        showError(document.getElementById("address-city"), cityLengthError);
-        isValid = false;
-    } else if (cityCharsError) {
-        showError(document.getElementById("address-city"), cityCharsError);
-        isValid = false;
-    }
-    
-    // Улица (3-30 символов)
-    const street = document.getElementById("address-street").value.trim();
-    const streetError = validateLength(street, 3, 30, "Улица");
-    if (streetError) {
-        showError(document.getElementById("address-street"), streetError);
-        isValid = false;
-    }
-    
-    // Квартира (1-3 символа, только цифры)
-    const apartment = document.getElementById("address-apartment").value.trim();
-    const apartmentLengthError = validateLength(apartment, 1, 3, "Номер квартиры");
-    const apartmentNumbersError = validateNumbersOnly(apartment, "Номер квартиры");
-    
-    if (apartmentLengthError) {
-        showError(document.getElementById("address-apartment"), apartmentLengthError);
-        isValid = false;
-    } else if (apartmentNumbersError) {
-        showError(document.getElementById("address-apartment"), apartmentNumbersError);
-        isValid = false;
-    }
-
-    // Подъезд (1-3 символа, только цифры)
-    const entrance = document.getElementById("address-entrance").value.trim();
-    if (entrance) { // Проверяем только если поле заполнено
-        const entranceLengthError = validateLength(entrance, 1, 3, "Номер подъезда");
-        const entranceNumbersError = validateNumbersOnly(entrance, "Номер подъезда");
-        
-        if (entranceLengthError) {
-            showError(document.getElementById("address-entrance"), entranceLengthError);
-            isValid = false;
-        } else if (entranceNumbersError) {
-            showError(document.getElementById("address-entrance"), entranceNumbersError);
-            isValid = false;
+    <script>
+        // Функции валидации (из вашего кода)
+        function validateLength(value, min, max, fieldName) {
+            if (!value) return `${fieldName} обязателен для заполнения`;
+            if (value.length < min) return `${fieldName} должен содержать минимум ${min} символов`;
+            if (value.length > max) return `${fieldName} должен содержать максимум ${max} символов`;
+            return null;
         }
-    }
 
-    // Этаж (1-3 символа, только цифры)
-    const floor = document.getElementById("address-floor").value.trim();
-    if (floor) { // Проверяем только если поле заполнено
-        const floorLengthError = validateLength(floor, 1, 3, "Номер этажа");
-        const floorNumbersError = validateNumbersOnly(floor, "Номер этажа");
-        
-        if (floorLengthError) {
-            showError(document.getElementById("address-floor"), floorLengthError);
-            isValid = false;
-        } else if (floorNumbersError) {
-            showError(document.getElementById("address-floor"), floorNumbersError);
-            isValid = false;
+        function validateName(value, fieldName) {
+            if (/[0-9!@#$%^&*()_+=\[\]{};':"\\|,.<>\/?]/.test(value)) {
+                return `${fieldName} должен содержать только буквы`;
+            }
+            return null;
         }
-    }
 
-    return isValid;
-}
-
-// Обработчики событий для полей адреса
-document.getElementById("address-city").addEventListener("input", function() {
-    clearError(this);
-    const city = this.value.trim();
-    const lengthError = validateLength(city, 3, 30, "Город");
-    const charsError = validateName(city, "Город");
-    
-    if (lengthError) {
-        showError(this, lengthError);
-    } else if (charsError) {
-        showError(this, charsError);
-    }
-});
-
-document.getElementById("address-street").addEventListener("input", function() {
-    clearError(this);
-    const street = this.value.trim();
-    if (street.length < 3 || street.length > 30) {
-        showError(this, "Улица должна быть от 3 до 30 символов");
-    }
-});
-
-document.getElementById("address-apartment").addEventListener("input", function() {
-    clearError(this);
-    const apartment = this.value.trim();
-    const lengthError = validateLength(apartment, 1, 3, "Номер квартиры");
-    const numbersError = validateNumbersOnly(apartment, "Номер квартиры");
-    
-    if (lengthError) {
-        showError(this, lengthError);
-    } else if (numbersError) {
-        showError(this, numbersError);
-    }
-});
-
-// Подъезд
-document.getElementById("address-entrance").addEventListener("input", function() {
-    clearError(this);
-    const entrance = this.value.trim();
-    if (entrance) { // Проверяем только если поле заполнено
-        const lengthError = validateLength(entrance, 1, 3, "Номер подъезда");
-        const numbersError = validateNumbersOnly(entrance, "Номер подъезда");
-        
-        if (lengthError) {
-            showError(this, lengthError);
-        } else if (numbersError) {
-            showError(this, numbersError);
+        function validateNumbersOnly(value, fieldName) {
+            if (!/^\d+$/.test(value)) {
+                return `${fieldName} должен содержать только цифры`;
+            }
+            return null;
         }
-    }
-});
 
-// Этаж
-document.getElementById("address-floor").addEventListener("input", function() {
-    clearError(this);
-    const floor = this.value.trim();
-    if (floor) { // Проверяем только если поле заполнено
-        const lengthError = validateLength(floor, 1, 3, "Номер этажа");
-        const numbersError = validateNumbersOnly(floor, "Номер этажа");
-        
-        if (lengthError) {
-            showError(this, lengthError);
-        } else if (numbersError) {
-            showError(this, numbersError);
+        function showError(inputElement, message) {
+            const formGroup = inputElement.closest(".form-group");
+            let errorElement = formGroup.querySelector(".error-message");
+            if (!errorElement) {
+                errorElement = document.createElement("div");
+                errorElement.className = "error-message";
+                formGroup.appendChild(errorElement);
+            }
+            errorElement.textContent = message;
+            inputElement.classList.add("invalid");
         }
-    }
-});
 
-
-// Обработчик отправки формы адреса
-document.getElementById("address-form").addEventListener("submit", function(e) {
-    e.preventDefault();
-    
-    if (validateAddressFields()) {
-        // Форма валидна, можно сохранять адрес
-        const newAddress = {
-            city: document.getElementById("address-city").value.trim(),
-            street: document.getElementById("address-street").value.trim(),
-            house: document.getElementById("address-house").value.trim(),
-            entrance: document.getElementById("address-entrance").value.trim(),
-            floor: document.getElementById("address-floor").value.trim(),
-            apartment: document.getElementById("address-apartment").value.trim()
-        };
-        
-        // Здесь код для сохранения адреса
-        addNewAddress(newAddress);
-        hideModal("address-modal");
-        showCustomAlert("Адрес успешно сохранен");
-    } else {
-        // Прокрутка к первой ошибке
-        const firstError = document.querySelector(".invalid");
-        if (firstError) {
-            firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+        function clearError(inputElement) {
+            const formGroup = inputElement.closest(".form-group");
+            const errorElement = formGroup.querySelector(".error-message");
+            if (errorElement) {
+                errorElement.textContent = "";
+            }
+            inputElement.classList.remove("invalid");
         }
-    }
-});
 
-// Функция для добавления нового адреса (из вашего кода)
-function addNewAddress(addressData) {
-    userAddresses.push(addressData);
-    saveUserAddresses();
-    selectedAddressIndex = userAddresses.length - 1;
-    deliveryAddress = formatAddress(addressData);
-    if (currentUser) {
-        localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
-    }
-    renderAddresses();
-}
-</script>
+        // Валидация полей адреса
+        function validateAddressFields() {
+            let isValid = true;
 
+            // Город
+            const city = document.getElementById("address-city").value.trim();
+            const cityLengthError = validateLength(city, 3, 30, "Город");
+            const cityCharsError = validateName(city, "Город");
+
+            if (cityLengthError) {
+                showError(document.getElementById("address-city"), cityLengthError);
+                isValid = false;
+            } else if (cityCharsError) {
+                showError(document.getElementById("address-city"), cityCharsError);
+                isValid = false;
+            }
+
+            // Улица (3-30 символов)
+            const street = document.getElementById("address-street").value.trim();
+            const streetError = validateLength(street, 3, 30, "Улица");
+            if (streetError) {
+                showError(document.getElementById("address-street"), streetError);
+                isValid = false;
+            }
+
+            // Квартира (1-3 символа, только цифры)
+            const apartment = document.getElementById("address-apartment").value.trim();
+            const apartmentLengthError = validateLength(apartment, 1, 3, "Номер квартиры");
+            const apartmentNumbersError = validateNumbersOnly(apartment, "Номер квартиры");
+
+            if (apartmentLengthError) {
+                showError(document.getElementById("address-apartment"), apartmentLengthError);
+                isValid = false;
+            } else if (apartmentNumbersError) {
+                showError(document.getElementById("address-apartment"), apartmentNumbersError);
+                isValid = false;
+            }
+
+            // Подъезд (1-3 символа, только цифры)
+            const entrance = document.getElementById("address-entrance").value.trim();
+            if (entrance) { // Проверяем только если поле заполнено
+                const entranceLengthError = validateLength(entrance, 1, 3, "Номер подъезда");
+                const entranceNumbersError = validateNumbersOnly(entrance, "Номер подъезда");
+
+                if (entranceLengthError) {
+                    showError(document.getElementById("address-entrance"), entranceLengthError);
+                    isValid = false;
+                } else if (entranceNumbersError) {
+                    showError(document.getElementById("address-entrance"), entranceNumbersError);
+                    isValid = false;
+                }
+            }
+
+            // Этаж (1-3 символа, только цифры)
+            const floor = document.getElementById("address-floor").value.trim();
+            if (floor) { // Проверяем только если поле заполнено
+                const floorLengthError = validateLength(floor, 1, 3, "Номер этажа");
+                const floorNumbersError = validateNumbersOnly(floor, "Номер этажа");
+
+                if (floorLengthError) {
+                    showError(document.getElementById("address-floor"), floorLengthError);
+                    isValid = false;
+                } else if (floorNumbersError) {
+                    showError(document.getElementById("address-floor"), floorNumbersError);
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        // Обработчики событий для полей адреса
+        document.getElementById("address-city").addEventListener("input", function () {
+            clearError(this);
+            const city = this.value.trim();
+            const lengthError = validateLength(city, 3, 30, "Город");
+            const charsError = validateName(city, "Город");
+
+            if (lengthError) {
+                showError(this, lengthError);
+            } else if (charsError) {
+                showError(this, charsError);
+            }
+        });
+
+        document.getElementById("address-street").addEventListener("input", function () {
+            clearError(this);
+            const street = this.value.trim();
+            if (street.length < 3 || street.length > 30) {
+                showError(this, "Улица должна быть от 3 до 30 символов");
+            }
+        });
+
+        document.getElementById("address-apartment").addEventListener("input", function () {
+            clearError(this);
+            const apartment = this.value.trim();
+            const lengthError = validateLength(apartment, 1, 3, "Номер квартиры");
+            const numbersError = validateNumbersOnly(apartment, "Номер квартиры");
+
+            if (lengthError) {
+                showError(this, lengthError);
+            } else if (numbersError) {
+                showError(this, numbersError);
+            }
+        });
+
+        // Подъезд
+        document.getElementById("address-entrance").addEventListener("input", function () {
+            clearError(this);
+            const entrance = this.value.trim();
+            if (entrance) { // Проверяем только если поле заполнено
+                const lengthError = validateLength(entrance, 1, 3, "Номер подъезда");
+                const numbersError = validateNumbersOnly(entrance, "Номер подъезда");
+
+                if (lengthError) {
+                    showError(this, lengthError);
+                } else if (numbersError) {
+                    showError(this, numbersError);
+                }
+            }
+        });
+
+        // Этаж
+        document.getElementById("address-floor").addEventListener("input", function () {
+            clearError(this);
+            const floor = this.value.trim();
+            if (floor) { // Проверяем только если поле заполнено
+                const lengthError = validateLength(floor, 1, 3, "Номер этажа");
+                const numbersError = validateNumbersOnly(floor, "Номер этажа");
+
+                if (lengthError) {
+                    showError(this, lengthError);
+                } else if (numbersError) {
+                    showError(this, numbersError);
+                }
+            }
+        });
+
+
+        // Обработчик отправки формы адреса
+        document.getElementById("address-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            if (validateAddressFields()) {
+                // Форма валидна, можно сохранять адрес
+                const newAddress = {
+                    city: document.getElementById("address-city").value.trim(),
+                    street: document.getElementById("address-street").value.trim(),
+                    house: document.getElementById("address-house").value.trim(),
+                    entrance: document.getElementById("address-entrance").value.trim(),
+                    floor: document.getElementById("address-floor").value.trim(),
+                    apartment: document.getElementById("address-apartment").value.trim()
+                };
+
+                // Здесь код для сохранения адреса
+                addNewAddress(newAddress);
+                hideModal("address-modal");
+                showCustomAlert("Адрес успешно сохранен");
+            } else {
+                // Прокрутка к первой ошибке
+                const firstError = document.querySelector(".invalid");
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+            }
+        });
+
+        // Функция для добавления нового адреса (из вашего кода)
+        function addNewAddress(addressData) {
+            userAddresses.push(addressData);
+            saveUserAddresses();
+            selectedAddressIndex = userAddresses.length - 1;
+            deliveryAddress = formatAddress(addressData);
+            if (currentUser) {
+                localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
+            }
+            renderAddresses();
+        }
+    </script>
+    <script>
+        document.getElementById('address-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Получаем текущее количество сохраненных адресов
+            let addressCount = sessionStorage.getItem('addressCount') || 0;
+            addressCount = parseInt(addressCount) + 1;
+
+            // Получаем значения из формы
+            const city = document.getElementById('address-city').value;
+            const street = document.getElementById('address-street').value;
+            const entrance = document.getElementById('address-entrance').value;
+            const floor = document.getElementById('address-floor').value;
+            const apartment = document.getElementById('address-apartment').value;
+
+            // Сохраняем данные в sessionStorage
+            sessionStorage.setItem(`userCity${addressCount}`, city);
+            sessionStorage.setItem(`userStreet${addressCount}`, street);
+            sessionStorage.setItem(`userPod${addressCount}`, entrance);
+            sessionStorage.setItem(`userFloor${addressCount}`, floor);
+            sessionStorage.setItem(`userDoor${addressCount}`, apartment);
+
+            // Обновляем счетчик адресов
+            sessionStorage.setItem('addressCount', addressCount);
+
+            // Закрываем модальное окно (если нужно)
+            document.getElementById('address-modal').style.display = 'none';
+
+            // Оповещаем пользователя
+            alert(`Адрес №${addressCount} успешно сохранен!`);
+
+            // Очищаем форму (опционально)
+            this.reset();
+
+            // Можно вызвать функцию для обновления отображения адресов
+            updateAddressDisplay();
+        });
+
+        // Функция для отображения сохраненных адресов (пример)
+        function updateAddressDisplay() {
+            const count = sessionStorage.getItem('addressCount') || 0;
+            console.log(`Всего сохранено адресов: ${count}`);
+
+            for (let i = 1; i <= count; i++) {
+                console.log(`Адрес ${i}:`, {
+                    city: sessionStorage.getItem(`userCity${i}`),
+                    street: sessionStorage.getItem(`userStreet${i}`),
+                    entrance: sessionStorage.getItem(`userPod${i}`),
+                    floor: sessionStorage.getItem(`userFloor${i}`),
+                    apartment: sessionStorage.getItem(`userDoor${i}`)
+                });
+            }
+        }
+    </script>
     <footer>
         <div class="container">
             <nav>
@@ -362,103 +465,105 @@ function addNewAddress(addressData) {
     </footer>
 
     <div id="cart-modal" class="modal">
-    <div class="modal-content account-content" style="overflow-y: auto;">
-        <span class="close">&times;</span>
-        
-        <!-- Блок 1: Заголовок корзины -->
-        <div class="cart-header-block">
-            <div class="cart-title-wrapper">
-                <svg class="trash-icon" width="24" height="24" viewBox="0 0 24 24" fill="#F4F2E5">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                </svg>
-                <h2>Ваш заказ</h2>
+        <div class="modal-content account-content" style="overflow-y: auto;">
+            <span class="close">&times;</span>
+
+            <!-- Блок 1: Заголовок корзины -->
+            <div class="cart-header-block">
+                <div class="cart-title-wrapper">
+                    <svg class="trash-icon" width="24" height="24" viewBox="0 0 24 24" fill="#F4F2E5">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                    </svg>
+                    <h2>Ваш заказ</h2>
+                </div>
+                <div id="cart-items" class="cart-items-block scrollable">
+                    <!-- Пример товара -->
+                    <div class="cart-item">
+                        <div class="item-actions">
+                            <button class="quantity-btn">-</button>
+                            <span class="item-quantity">1</span>
+                            <button class="quantity-btn">+</button>
+                            <button class="remove-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#5B120D">
+                                    <path
+                                        d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="empty-cart">Ваша корзина пуста</p>
+                </div>
             </div>
-            <div id="cart-items" class="cart-items-block scrollable">
-                <!-- Пример товара -->
-                <div class="cart-item">
-                    <div class="item-actions">
-                        <button class="quantity-btn">-</button>
-                        <span class="item-quantity">1</span>
-                        <button class="quantity-btn">+</button>
-                        <button class="remove-btn">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="#5B120D">
-                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                            </svg>
-                        </button>
+
+            <!-- Блок 2: Адрес доставки -->
+            <div class="delivery-address-block">
+                <h3>Выберите адрес доставки</h3>
+                <div class="address-table">
+                    <table>
+                        <tr>
+                            <td>ул. Примерная, д. 1, кв. 2</td>
+                            <td class="address-checkbox">
+                                <input type="radio" name="address" id="address1" checked>
+                                <label for="address1"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>ул. Другая, д. 3, кв. 4</td>
+                            <td class="address-checkbox">
+                                <input type="radio" name="address" id="address2">
+                                <label for="address2"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>пр. Третий, д. 5, кв. 6</td>
+                            <td class="address-checkbox">
+                                <input type="radio" name="address" id="address3">
+                                <label for="address3"></label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Блок 3: Время доставки -->
+            <div class="delivery-time-block">
+                <h3>Время доставки</h3>
+                <div class="time-options">
+                    <button class="time-option-btn active" id="asap-btn">Как можно быстрее</button>
+                    <button class="time-option-btn" id="schedule-btn">Ко времени</button>
+                </div>
+
+                <div class="time-selection" id="time-selection" style="display: none;">
+                    <div class="time-input">
+                        <input type="text" id="delivery-date" class="date-picker" placeholder="Выберите дату" readonly>
+                    </div>
+                    <div class="time-input">
+                        <input type="text" id="delivery-time" class="time-picker" placeholder="Укажите время" readonly>
                     </div>
                 </div>
-                <p class="empty-cart">Ваша корзина пуста</p>
-            </div>
-        </div>
-        
-        <!-- Блок 2: Адрес доставки -->
-        <div class="delivery-address-block">
-            <h3>Выберите адрес доставки</h3>
-            <div class="address-table">
-                <table>
-                    <tr>
-                        <td>ул. Примерная, д. 1, кв. 2</td>
-                        <td class="address-checkbox">
-                            <input type="radio" name="address" id="address1" checked>
-                            <label for="address1"></label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>ул. Другая, д. 3, кв. 4</td>
-                        <td class="address-checkbox">
-                            <input type="radio" name="address" id="address2">
-                            <label for="address2"></label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>пр. Третий, д. 5, кв. 6</td>
-                        <td class="address-checkbox">
-                            <input type="radio" name="address" id="address3">
-                            <label for="address3"></label>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        
-        <!-- Блок 3: Время доставки -->
-        <div class="delivery-time-block">
-            <h3>Время доставки</h3>
-            <div class="time-options">
-                <button class="time-option-btn active" id="asap-btn">Как можно быстрее</button>
-                <button class="time-option-btn" id="schedule-btn">Ко времени</button>
-            </div>
-            
-            <div class="time-selection" id="time-selection" style="display: none;">
-            <div class="time-input">
-            <input type="text" id="delivery-date" class="date-picker" placeholder="Выберите дату" readonly>
-            </div>
-            <div class="time-input">
-            <input type="text" id="delivery-time" class="time-picker" placeholder="Укажите время" readonly>
-  </div>
-</div>
-            
-            <div class="cart-total">
-                <p>Итого: <span id="cart-total-price">850</span> ₽</p>
-                <button class="submit-btn order-btn" id="checkout-btn">Заказать</button>
+
+                <div class="cart-total">
+                    <p>Итого: <span id="cart-total-price">850</span> ₽</p>
+                    <button class="submit-btn order-btn" id="checkout-btn">Заказать</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Календарь для выбора даты (скрытый по умолчанию) -->
-<div id="datepicker-container" class="datepicker-container"></div>
+    <!-- Календарь для выбора даты (скрытый по умолчанию) -->
+    <div id="datepicker-container" class="datepicker-container"></div>
 
-<!-- Временной барабан (скрытый по умолчанию) -->
-<div id="timepicker-container" class="timepicker-container">
-    <div class="timepicker">
-        <div class="hours-wheel"></div>
-        <div class="minutes-wheel"></div>
-        <div class="center-dot"></div>
+    <!-- Временной барабан (скрытый по умолчанию) -->
+    <div id="timepicker-container" class="timepicker-container">
+        <div class="timepicker">
+            <div class="hours-wheel"></div>
+            <div class="minutes-wheel"></div>
+            <div class="center-dot"></div>
+        </div>
+        <button class="timepicker-confirm">Подтвердить</button>
     </div>
-    <button class="timepicker-confirm">Подтвердить</button>
-</div>
 
     <script src="script.js"></script>
 </body>
+
 </html>

@@ -283,6 +283,31 @@
             text-decoration: underline;
             cursor: pointer;
         }
+
+        .error-message {
+    color: #941919;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    height: 16px;
+}
+
+.invalid {
+    border-color: #941919 !important;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #5B120D;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
     </style>
 </head>
 <body>
@@ -298,7 +323,6 @@
                     <li><a href="#about">О ресторане</a></li>
                 </ul>
             </nav>
-            
             <div class="social-icons">
                 <a href="#" aria-label="ВКонтакте">
                     <img src="https://pngicon.ru/file/uploads/vk.png" alt="VK" width="35" height="35">
@@ -487,6 +511,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+                
+
+
             // Данные пользователей
             const users = {
                 'admin': {

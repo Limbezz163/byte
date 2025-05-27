@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>BITE - Холодные блюда</title>
+        <title>BITE - Холодные Напитки</title>
         <link rel="stylesheet" href="styles.css" />
         <style>
             body {
@@ -395,7 +395,7 @@
                     </div>
                 </div>
                 <main class="dishes-container" style="margin-top: 0px; padding: 0px 40px 60px;">
-                    <h1 class="dishes-title">Холодные блюда</h1>
+                    <h1 class="dishes-title">Холодные Напитки</h1>
                     <div class="dish-cards-container" id="dishCardsContainer">
                         <!-- Здесь будут отображаться карточки блюд -->
                     </div>
@@ -563,7 +563,7 @@
                 const fetchDishes = async () => {
                     try {
                         const res = await fetch(
-                            "http://localhost:8080/api/menu?limit=20&category=Холодные"
+                            "http://localhost:8080/api/menu?limit=20&category=ХолодныеНапитки"
                         );
 
                         if (!res.ok) {
