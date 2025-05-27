@@ -169,7 +169,7 @@ function loginUser(userData) {
     surname: userData.surname,
     phone: userData.phone || "",
   };
-  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+  sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
   updateUserUI();
   loadUserAddresses();
 }
@@ -177,7 +177,7 @@ function loginUser(userData) {
 function logoutUser() {
   if (confirm("Вы уверены, что хотите выйти из аккаунта?")) {
     currentUser = null;
-    localStorage.removeItem("currentUser");
+    sessionStorage.removeItem("currentUser");
     window.location.href = "index.html";
   }
 }
@@ -204,7 +204,7 @@ function updateUserUI() {
 function loadUserAddresses() {
   if (!currentUser) return;
 
-  const savedAddresses = localStorage.getItem(`addresses_${currentUser.email}`);
+  const savedAddresses = sessionStorage.getItem(`addresses_${currentUser.email}`);
   if (savedAddresses) {
     userAddresses = JSON.parse(savedAddresses);
     renderAddresses();
@@ -213,7 +213,7 @@ function loadUserAddresses() {
 
 function saveUserAddresses() {
   if (currentUser) {
-    localStorage.setItem(
+    sessionStorage.setItem(
       `addresses_${currentUser.email}`,
       JSON.stringify(userAddresses)
     );
@@ -259,7 +259,7 @@ function renderAddresses() {
         if (userAddresses[selectedAddressIndex]) {
           deliveryAddress = formatAddress(userAddresses[selectedAddressIndex]);
           if (currentUser) {
-            localStorage.setItem(
+            sessionStorage.setItem(
               `address_${currentUser.email}`,
               deliveryAddress
             );
@@ -298,7 +298,7 @@ function addNewAddress(addressData) {
   selectedAddressIndex = userAddresses.length - 1;
   deliveryAddress = formatAddress(addressData);
   if (currentUser) {
-    localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
+    sessionStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
   }
   renderAddresses();
   hideModal("address-modal");
@@ -345,7 +345,7 @@ function editAddress(index) {
     if (selectedAddressIndex === index) {
       deliveryAddress = formatAddress(updatedAddress);
       if (currentUser) {
-        localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
+        sessionStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
       }
     }
     renderAddresses();
@@ -366,7 +366,7 @@ function deleteAddress(index) {
       selectedAddressIndex = -1;
       deliveryAddress = "";
       if (currentUser) {
-        localStorage.removeItem(`address_${currentUser.email}`);
+        sessionStorage.removeItem(`address_${currentUser.email}`);
       }
     } else if (selectedAddressIndex > index) {
       selectedAddressIndex--;
@@ -485,7 +485,7 @@ function clearCart() {
 
 function saveCart() {
   if (currentUser) {
-    localStorage.setItem(
+    sessionStorage.setItem(
       `cart_${currentUser.email}`,
       JSON.stringify(cartItems)
     );
@@ -494,7 +494,7 @@ function saveCart() {
 
 function loadCart() {
   if (currentUser) {
-    const savedCart = localStorage.getItem(`cart_${currentUser.email}`);
+    const savedCart = sessionStorage.getItem(`cart_${currentUser.email}`);
     if (savedCart) cartItems = JSON.parse(savedCart);
   }
   updateCartDisplay();
@@ -502,7 +502,7 @@ function loadCart() {
 
 function loadDeliveryAddress() {
   if (currentUser) {
-    const savedAddress = localStorage.getItem(`address_${currentUser.email}`);
+    const savedAddress = sessionStorage.getItem(`address_${currentUser.email}`);
     if (savedAddress) {
       deliveryAddress = savedAddress;
       // Находим индекс адреса в массиве
@@ -664,7 +664,7 @@ function checkoutOrder() {
 // ===== ОБРАБОТЧИКИ СОБЫТИЙ =====
 document.addEventListener("DOMContentLoaded", function () {
   // Загрузка данных пользователя
-  const savedUser = localStorage.getItem("currentUser");
+  const savedUser = sessionStorage.getItem("currentUser");
   if (savedUser) {
     currentUser = JSON.parse(savedUser);
     loadCart();
@@ -763,7 +763,7 @@ document.addEventListener("DOMContentLoaded", function () {
     saveAddressBtn.addEventListener("click", () => {
       deliveryAddress = deliveryAddressInput.value.trim();
       if (currentUser) {
-        localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
+        sessionStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
         showCustomAlert("Адрес доставки сохранен");
       }
     });
@@ -817,12 +817,12 @@ document.addEventListener("DOMContentLoaded", function () {
             
             // Сохраняем токен (если используется JWT)
             if (data.token) {
-                localStorage.setItem('authToken', data.token);
+                sessionStorage.setItem('authToken', data.token);
             }
             
             // Сохраняем данные пользователя
             if (data.user) {
-                localStorage.setItem('userData', JSON.stringify(data.user));
+                sessionStorage.setItem('userData', JSON.stringify(data.user));
             }
 
             hideModal("auth-modal");
@@ -908,15 +908,34 @@ document.addEventListener("DOMContentLoaded", function () {
             
             // Сохраняем токен, если он пришел в ответе
             if (data.access_token) {
-                localStorage.setItem('authToken', data.access_token);
+                sessionStorage.setItem('authToken', data.access_token);
             }
             if (data.user.id) {
-                localStorage.setItem('user.Id', data.user.id);
+                sessionStorage.setItem('user.Id', data.user.id);
             }
-            if (data.access_token) {
-                localStorage.setItem('authToken', data.access_token);
+            if (data.user.email) {
+                sessionStorage.setItem('authToken', data.user.email);
             }
-            localStorage.setItem('userRole', "Клиент");
+             if (data.user.name) {
+                sessionStorage.setItem('authToken', data.user.name);
+            }
+            if (data.user.surname) {
+                sessionStorage.setItem('authToken', data.user.surname);
+            }
+            if (data.user.patronymic) {
+                sessionStorage.setItem('authToken', data.user.patronymic);
+            }
+            if (data.user.phone_number) {
+                sessionStorage.setItem('authToken', data.user.phone_number);
+            }
+            if (data.user.login) {
+                sessionStorage.setItem('authToken', data.user.login);
+            }
+            if (data.user.password) {
+                sessionStorage.setItem('authToken', data.user.password);
+            }
+
+            sessionStorage.setItem('userRole', "Клиент");
             hideModal("auth-modal");
             showCustomAlert("Регистрация прошла успешно!");
             
