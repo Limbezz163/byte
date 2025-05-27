@@ -92,220 +92,216 @@
         Выйти
     </button>
 
-        <!-- Модальное окно добавления адреса -->
-    <div id="address-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Добавить адрес доставки</h2>
-            <form id="address-form" class="address-form">
+    <!-- Модальное окно добавления адреса -->
+<div id="address-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Добавить адрес доставки</h2>
+        <form id="address-form" class="address-form">
+            <div class="form-group">
+                <input type="text" id="address-city" placeholder="Город" required>
+                <div class="error-message" id="city-error"></div>
+            </div>
+            <div class="form-group">
+                <input type="text" id="address-street" placeholder="Улица" required>
+                <div class="error-message" id="street-error"></div>
+            </div>
+            <div class="form-row">
+        
                 <div class="form-group">
-                    <input type="text" id="address-city" placeholder="Город" required>
-                    <div class="error-message" id="city-error"></div>
+                    <input type="text" id="address-entrance" placeholder="Подъезд">
                 </div>
                 <div class="form-group">
-                    <input type="text" id="address-street" placeholder="Улица" required>
-                    <div class="error-message" id="street-error"></div>
+                    <input type="text" id="address-floor" placeholder="Этаж">
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <input type="text" id="address-house" placeholder="Дом" required>
-                        <div class="error-message" id="house-error"></div>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="address-entrance" placeholder="Подъезд">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="address-floor" placeholder="Этаж">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="address-apartment" placeholder="Квартира" required>
-                        <div class="error-message" id="apartment-error"></div>
-                    </div>
+                <div class="form-group">
+                    <input type="text" id="address-apartment" placeholder="Квартира" required>
+                    <div class="error-message" id="apartment-error"></div>
                 </div>
-                <button type="submit" class="submit-btn">Сохранить адрес</button>
-            </form>
-        </div>
+            </div>
+            <button type="submit" class="submit-btn">Сохранить адрес</button>
+        </form>
     </div>
+</div>
 
-    <script>
-    // Функции валидации (из вашего кода)
-    function validateLength(value, min, max, fieldName) {
-        if (!value) return `${fieldName} обязателен для заполнения`;
-        if (value.length < min) return `${fieldName} должен содержать минимум ${min} символов`;
-        if (value.length > max) return `${fieldName} должен содержать максимум ${max} символов`;
-        return null;
+<script>
+// Функции валидации (из вашего кода)
+function validateLength(value, min, max, fieldName) {
+    if (!value) return `${fieldName} обязателен для заполнения`;
+    if (value.length < min) return `${fieldName} должен содержать минимум ${min} символов`;
+    if (value.length > max) return `${fieldName} должен содержать максимум ${max} символов`;
+    return null;
+}
+
+function validateName(value, fieldName) {
+    if (/[0-9!@#$%^&*()_+=\[\]{};':"\\|,.<>\/?]/.test(value)) {
+        return `${fieldName} должен содержать только буквы`;
+    }
+    return null;
+}
+
+function showError(inputElement, message) {
+    const formGroup = inputElement.closest(".form-group");
+    let errorElement = formGroup.querySelector(".error-message");
+    if (!errorElement) {
+        errorElement = document.createElement("div");
+        errorElement.className = "error-message";
+        formGroup.appendChild(errorElement);
+    }
+    errorElement.textContent = message;
+    inputElement.classList.add("invalid");
+}
+
+function clearError(inputElement) {
+    const formGroup = inputElement.closest(".form-group");
+    const errorElement = formGroup.querySelector(".error-message");
+    if (errorElement) {
+        errorElement.textContent = "";
+    }
+    inputElement.classList.remove("invalid");
+}
+
+// Валидация полей адреса
+function validateAddressFields() {
+    let isValid = true;
+    
+    // Город
+    const city = document.getElementById("address-city").value.trim();
+    const cityLengthError = validateLength(city, 3, 30, "Город");
+    const cityCharsError = validateName(city, "Город");
+    
+    if (cityLengthError) {
+        showError(document.getElementById("address-city"), cityLengthError);
+        isValid = false;
+    } else if (cityCharsError) {
+        showError(document.getElementById("address-city"), cityCharsError);
+        isValid = false;
+    }
+    
+    // Улица (3-30 символов)
+    const street = document.getElementById("address-street").value.trim();
+    const streetError = validateLength(street, 3, 30, "Улица");
+    if (streetError) {
+        showError(document.getElementById("address-street"), streetError);
+        isValid = false;
+    }
+    
+    
+    // Квартира (1-3 символа)
+    const apartment = document.getElementById("address-apartment").value.trim();
+    const apartmentError = validateLength(apartment, 1, 3, "Номер квартиры");
+    if (apartmentError) {
+        showError(document.getElementById("address-apartment"), apartmentError);
+        isValid = false;
     }
 
-    function showError(inputElement, message) {
-        const formGroup = inputElement.closest(".form-group");
-        let errorElement = formGroup.querySelector(".error-message");
-        if (!errorElement) {
-            errorElement = document.createElement("div");
-            errorElement.className = "error-message";
-            formGroup.appendChild(errorElement);
-        }
-        errorElement.textContent = message;
-        inputElement.classList.add("invalid");
+    // подьезд (1-3 символа)
+    const entrance = document.getElementById("address-entrance").value.trim();
+    const entranceError = validateLength(entrance, 1, 3, "Номер подъезда");
+    if (entranceError) {
+        showError(document.getElementById("address-entrance"), entranceError);
+        isValid = false;
+    }
+    // этаж (1-3 символа)
+    const floor = document.getElementById("address-floor").value.trim();
+    const floorError = validateLength(floor, 1, 3, "Номер этажа");
+    if (floorError) {
+        showError(document.getElementById("address-floor"), floorError);
+        isValid = false;
     }
 
-    function clearError(inputElement) {
-        const formGroup = inputElement.closest(".form-group");
-        const errorElement = formGroup.querySelector(".error-message");
-        if (errorElement) {
-            errorElement.textContent = "";
-        }
-        inputElement.classList.remove("invalid");
+    return isValid;
+}
+
+// Обработчики событий для полей адреса
+document.getElementById("address-city").addEventListener("input", function() {
+    clearError(this);
+    const city = this.value.trim();
+    const lengthError = validateLength(city, 3, 30, "Город");
+    const charsError = validateName(city, "Город");
+    
+    if (lengthError) {
+        showError(this, lengthError);
+    } else if (charsError) {
+        showError(this, charsError);
     }
+});
 
-    // Валидация полей адреса
-    function validateAddressFields() {
-        let isValid = true;
-        
-        // Город
-        const city = document.getElementById("address-city").value.trim();
-        const cityError = validateLength(city, 2, 30, "Город");
-        if (cityError) {
-            showError(document.getElementById("address-city"), cityError);
-            isValid = false;
-        }
-        
-        // Улица (3-30 символов)
-        const street = document.getElementById("address-street").value.trim();
-        const streetError = validateLength(street, 3, 30, "Улица");
-        if (streetError) {
-            showError(document.getElementById("address-street"), streetError);
-            isValid = false;
-        }
-        
-        // Дом (1-5 символов)
-        const house = document.getElementById("address-house").value.trim();
-        const houseError = validateLength(house, 1, 5, "Номер дома");
-        if (houseError) {
-            showError(document.getElementById("address-house"), houseError);
-            isValid = false;
-        }
-        
-        // Квартира (1-3 символа)
-        const apartment = document.getElementById("address-apartment").value.trim();
-        const apartmentError = validateLength(apartment, 1, 3, "Номер квартиры");
-        if (apartmentError) {
-            showError(document.getElementById("address-apartment"), apartmentError);
-            isValid = false;
-        }
-
-        // подьезд (1-3 символа)
-        const entrance = document.getElementById("address-entrance").value.trim();
-        const entranceError = validateLength(entrance, 1, 3, "Номер подъезда");
-        if (entranceError) {
-            showError(document.getElementById("address-entrance"), entranceError);
-            isValid = false;
-        }
-        // этаж (1-3 символа)
-        const floor = document.getElementById("address-floor").value.trim();
-        const floorError = validateLength(floor, 1, 3, "Номер этажа");
-        if (floorError) {
-            showError(document.getElementById("address-floor"), floorError);
-            isValid = false;
-        }
-
-
-
-        
-        return isValid;
+document.getElementById("address-street").addEventListener("input", function() {
+    clearError(this);
+    const street = this.value.trim();
+    if (street.length < 3 || street.length > 30) {
+        showError(this, "Улица должна быть от 3 до 30 символов");
     }
+});
 
-    // Обработчики событий для полей адреса
-    document.getElementById("address-city").addEventListener("input", function() {
-        clearError(this);
-        const city = this.value.trim();
-        if (city.length < 3 || city.length > 30) {
-            showError(this, "Город должна быть от 3 до 30 символов");
-        }
-    });
-
-    document.getElementById("address-street").addEventListener("input", function() {
-        clearError(this);
-        const street = this.value.trim();
-        if (street.length < 3 || street.length > 30) {
-            showError(this, "Улица должна быть от 3 до 30 символов");
-        }
-    });
-
-    document.getElementById("address-house").addEventListener("input", function() {
-        clearError(this);
-        const house = this.value.trim();
-        if (house.length < 1 || house.length > 5) {
-            showError(this, "Номер дома должен быть от 1 до 5 символов");
-        }
-    });
-
-    document.getElementById("address-apartment").addEventListener("input", function() {
-        clearError(this);
-        const apartment = this.value.trim();
-        if (apartment.length < 1 || apartment.length > 3) {
-            showError(this, "Номер квартиры должен быть от 1 до 3 символов");
-        }
-    });
-
-    // подьезд
-    document.getElementById("address-entrance").addEventListener("input", function() {
-        clearError(this);
-        const entrance = this.value.trim();
-        if (entrance.length < 1 || entrance.length > 3) {
-            showError(this, "Номер подъезда должен быть от 1 до 3 символов");
-        }
-    });
-
-    // подьезд
-    document.getElementById("address-floor").addEventListener("input", function() {
-        clearError(this);
-        const floor = this.value.trim();
-        if (floor.length < 1 || floor.length > 3) {
-            showError(this, "Номер этажа должен быть от 1 до 3 символов");
-        }
-    });
-
-
-    // Обработчик отправки формы адреса
-    document.getElementById("address-form").addEventListener("submit", function(e) {
-        e.preventDefault();
-        
-        if (validateAddressFields()) {
-            // Форма валидна, можно сохранять адрес
-            const newAddress = {
-                city: document.getElementById("address-city").value.trim(),
-                street: document.getElementById("address-street").value.trim(),
-                house: document.getElementById("address-house").value.trim(),
-                entrance: document.getElementById("address-entrance").value.trim(),
-                floor: document.getElementById("address-floor").value.trim(),
-                apartment: document.getElementById("address-apartment").value.trim()
-            };
-            
-            // Здесь код для сохранения адреса
-            addNewAddress(newAddress);
-            hideModal("address-modal");
-            showCustomAlert("Адрес успешно сохранен");
-        } else {
-            // Прокрутка к первой ошибке
-            const firstError = document.querySelector(".invalid");
-            if (firstError) {
-                firstError.scrollIntoView({ behavior: "smooth", block: "center" });
-            }
-        }
-    });
-
-    // Функция для добавления нового адреса (из вашего кода)
-    function addNewAddress(addressData) {
-        userAddresses.push(addressData);
-        saveUserAddresses();
-        selectedAddressIndex = userAddresses.length - 1;
-        deliveryAddress = formatAddress(addressData);
-        if (currentUser) {
-            localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
-        }
-        renderAddresses();
+document.getElementById("address-apartment").addEventListener("input", function() {
+    clearError(this);
+    const apartment = this.value.trim();
+    if (apartment.length < 1 || apartment.length > 3) {
+        showError(this, "Номер квартиры должен быть от 1 до 3 символов");
     }
-    </script>
+});
+
+// подьезд
+document.getElementById("address-entrance").addEventListener("input", function() {
+    clearError(this);
+    const entrance = this.value.trim();
+    if (entrance.length < 1 || entrance.length > 3) {
+        showError(this, "Номер подъезда должен быть от 1 до 3 символов");
+    }
+});
+
+// подьезд
+document.getElementById("address-floor").addEventListener("input", function() {
+    clearError(this);
+    const floor = this.value.trim();
+    if (floor.length < 1 || floor.length > 3) {
+        showError(this, "Номер этажа должен быть от 1 до 3 символов");
+    }
+});
+
+
+// Обработчик отправки формы адреса
+document.getElementById("address-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    
+    if (validateAddressFields()) {
+        // Форма валидна, можно сохранять адрес
+        const newAddress = {
+            city: document.getElementById("address-city").value.trim(),
+            street: document.getElementById("address-street").value.trim(),
+            house: document.getElementById("address-house").value.trim(),
+            entrance: document.getElementById("address-entrance").value.trim(),
+            floor: document.getElementById("address-floor").value.trim(),
+            apartment: document.getElementById("address-apartment").value.trim()
+        };
+        
+        // Здесь код для сохранения адреса
+        addNewAddress(newAddress);
+        hideModal("address-modal");
+        showCustomAlert("Адрес успешно сохранен");
+    } else {
+        // Прокрутка к первой ошибке
+        const firstError = document.querySelector(".invalid");
+        if (firstError) {
+            firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+    }
+});
+
+// Функция для добавления нового адреса (из вашего кода)
+function addNewAddress(addressData) {
+    userAddresses.push(addressData);
+    saveUserAddresses();
+    selectedAddressIndex = userAddresses.length - 1;
+    deliveryAddress = formatAddress(addressData);
+    if (currentUser) {
+        localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
+    }
+    renderAddresses();
+}
+</script>
 
     <footer>
         <div class="container">
