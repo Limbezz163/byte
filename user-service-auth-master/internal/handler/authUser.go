@@ -36,6 +36,7 @@ func GetInfoUser(w http.ResponseWriter, r *http.Request) {
 // Добавляем нового юзера, при введение корректных данных
 func PostRegisterUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "http://127.0.0.1:5500")
 
 	var user *model.User
 
