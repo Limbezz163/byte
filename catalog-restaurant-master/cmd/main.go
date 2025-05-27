@@ -23,11 +23,13 @@ func main() {
 	logger.Info("Запуск сервера")
 	r := mux.NewRouter()
 
-	ports, err := myCors.CreateArrOfPorts("3000", "8000")
+	ports, err := myCors.CreateArrOfPorts("5500", "8000")
 	if err != nil {
 		logger.Error("Ошибка создание портов для cors")
 		return
 	}
+
+	ports= append(ports,"http://127.0.0.1:5500" )
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   ports,
@@ -45,6 +47,6 @@ func main() {
 	// Обертываем роутер в CORS middleware
 	handler := c.Handler(r)
 
-	log.Fatal(http.ListenAndServe(":8001", handler))
+	log.Fatal(http.ListenAndServe(":8080", handler))
 	logger.Info("Сервер запущен")
 }
