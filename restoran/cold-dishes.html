@@ -180,45 +180,47 @@
         </div>
     </header>
 
-    <main class="dishes-container">
-        <h1 class="dishes-title">Холодные блюда</h1>
-        <div class="dish-cards-container">
-        </div>
-    </main>
-
-    <div class="search-filter-container">
-        <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" placeholder="Поиск...">
-        </div>
-        
-        <button class="filter-button" onclick="toggleFilterPanel()">
-            <span class="filter-icon">⚙️</span>
-            Фильтр
-        </button>
-    </div>
-    
-    <!-- Панель фильтров (точно как на скриншоте) -->
-    <div class="filter-panel" id="filterPanel">
-        <div class="filter-section">
-            <div class="filter-title">Тип кухни</div>
-            <ul class="cuisine-list">
-                <li class="cuisine-item">Французская</li>
-                <li class="cuisine-item">Средиземноморская</li>
-                <li class="cuisine-item">Азиатская</li>
-            </ul>
+    <div class="container">
+        <!-- Перемещенный блок поиска и фильтра наверх -->
+        <div class="search-filter-container">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Поиск...">
+            </div>
+            
+            <button class="filter-button" onclick="toggleFilterPanel()">
+                <span class="filter-icon">⚙️</span>
+                Фильтр
+            </button>
         </div>
         
-        <div class="filter-section">
-            <div class="filter-title">Фильтровать по цене</div>
-            <div class="price-filter">
-                <input type="text" class="price-input" placeholder="300">
-                <span class="price-separator">-</span>
-                <input type="text" class="price-input" placeholder="800">
+        <!-- Панель фильтров (точно как на скриншоте) -->
+        <div class="filter-panel" id="filterPanel">
+            <div class="filter-section">
+                <div class="filter-title">Тип кухни</div>
+                <ul class="cuisine-list">
+                    <li class="cuisine-item">Французская</li>
+                    <li class="cuisine-item">Средиземноморская</li>
+                    <li class="cuisine-item">Азиатская</li>
+                </ul>
+            </div>
+            
+            <div class="filter-section">
+                <div class="filter-title">Фильтровать по цене</div>
+                <div class="price-filter">
+                    <input type="text" class="price-input" placeholder="300">
+                    <span class="price-separator">-</span>
+                    <input type="text" class="price-input" placeholder="800">
+                </div>
             </div>
         </div>
-    </div>
 
+        <main class="dishes-container">
+            <h1 class="dishes-title">Холодные блюда</h1>
+            <div class="dish-cards-container">
+            </div>
+        </main>
+    </div>
 
     <!-- Модальное окно авторизации -->
     <div id="auth-modal" class="modal">
@@ -329,7 +331,7 @@
         document.addEventListener("DOMContentLoaded", async () => {
             const fetchFunction = async () => {
                 try {
-                    const res = await fetch("http://localhost:8080/api/menu?limit=3");
+                    const res = await fetch("http://localhost:8080/api/menu?limit=20&category=Холодные");
 
                     if (!res.ok) {
                         throw new Error(`HTTP error! status: ${res.status}`);
@@ -394,7 +396,5 @@
 </script>
 
 </body>
-
-
 
 </html>
