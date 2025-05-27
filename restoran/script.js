@@ -237,10 +237,10 @@ function renderAddresses() {
 
     addressItem.innerHTML = `
       <div class="address-select">
-        <input type="radio" name="delivery-address" id="address-${index}" value="${index}" 
-               ${selectedAddressIndex === index ? "checked" : ""}>
-        <label for="address-${index}">${addressText}</label>
-      </div>
+  <input type="radio" name="delivery-address" id="address-${index}" value="${index}" 
+         ${selectedAddressIndex === index ? "checked" : ""} class="custom-radio">
+  <label for="address-${index}">${addressText}</label>
+</div>
       <div class="address-actions">
         <button class="edit-address-btn" data-index="${index}">Изменить</button>
         <button class="delete-address-btn" data-index="${index}">Удалить</button>
@@ -799,87 +799,110 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (registerForm) {
-    registerForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      let hasErrors = false;
-      const formData = {
-        name: document.getElementById("reg-name").value.trim(),
-        surname: document.getElementById("reg-surname").value.trim(),
-        patronymic: document.getElementById("reg-patronymic").value.trim(),
-        phone: document.getElementById("reg-phone").value.trim(),
-        email: document.getElementById("reg-email").value.trim(),
-        login: document.getElementById("reg-login").value.trim(),
-        password: document.getElementById("reg-password").value.trim(),
-      };
+    registerForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        let hasErrors = false;
+        const formData = {
+            name: document.getElementById("reg-name").value.trim(),
+            surname: document.getElementById("reg-surname").value.trim(),
+            patronymic: document.getElementById("reg-patronymic").value.trim(),
+            phone: document.getElementById("reg-phone").value.trim(),
+            email: document.getElementById("reg-email").value.trim(),
+            login: document.getElementById("reg-login").value.trim(),
+            password: document.getElementById("reg-password").value.trim(),
+        };
 
-      document.querySelectorAll(".error-message").forEach((el) => el.remove());
-      document.querySelectorAll(".form-group input").forEach((input) => {
-        input.classList.remove("invalid");
-      });
+        document.querySelectorAll(".error-message").forEach((el) => el.remove());
+        document.querySelectorAll(".form-group input").forEach((input) => {
+            input.classList.remove("invalid");
+        });
 
-      const errors = {
-        name:
-          validateLength(formData.name, 2, 30, "Имя") ||
-          validateName(formData.name, "Имя"),
-        surname:
-          validateLength(formData.surname, 2, 30, "Фамилия") ||
-          validateName(formData.surname, "Фамилия"),
-        patronymic: formData.patronymic
-          ? validateLength(formData.patronymic, 2, 30, "Отчество") ||
-            validateName(formData.patronymic, "Отчество")
-          : null,
-        phone: validatePhone(formData.phone),
-        email: validateEmail(formData.email),
-        login: validateLength(formData.login, 4, 20, "Логин"),
-        password: validateLength(formData.password, 6, 20, "Пароль"),
-      };
+        const errors = {
+            name: validateLength(formData.name, 2, 30, "Имя") || validateName(formData.name, "Имя"),
+            surname: validateLength(formData.surname, 2, 30, "Фамилия") || validateName(formData.surname, "Фамилия"),
+            patronymic: formData.patronymic
+                ? validateLength(formData.patronymic, 2, 30, "Отчество") || validateName(formData.patronymic, "Отчество")
+                : null,
+            phone: validatePhone(formData.phone),
+            email: validateEmail(formData.email),
+            login: validateLength(formData.login, 4, 20, "Логин"),
+            password: validateLength(formData.password, 6, 20, "Пароль"),
+        };
 
-      Object.keys(errors).forEach((field) => {
-        if (errors[field]) {
-          showError(document.getElementById(`reg-${field}`), errors[field]);
-          hasErrors = true;
+        Object.keys(errors).forEach((field) => {
+            if (errors[field]) {
+                showError(document.getElementById(`reg-${field}`), errors[field]);
+                hasErrors = true;
+            }
+        });
+
+        if (hasErrors) {
+            showCustomAlert("Пожалуйста, исправьте ошибки в форме", false);
+            return;
         }
-      });
 
-      if (hasErrors) {
-        showCustomAlert("Пожалуйста, исправьте ошибки в форме", false);
-        return;
-      }
+        try {
+            const response = await fetch('http://localhost:8000/users/register', { // Укажите правильный endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
 
-      loginUser(formData);
-      hideModal("auth-modal");
-      showCustomAlert("Регистрация прошла успешно!");
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Ошибка регистрации');
+            }
+
+            const data = await response.json();
+            
+            // Сохраняем токен, если он пришел в ответе
+            if (data.access_token) {
+                localStorage.setItem('authToken', data.access_token);
+            }
+            
+            hideModal("auth-modal");
+            showCustomAlert("Регистрация прошла успешно!");
+            
+            // Обновляем состояние приложения или перенаправляем пользователя
+            // Например: window.location.href = '/profile';
+            
+        } catch (error) {
+            console.error('Ошибка регистрации:', error);
+            showCustomAlert(error.message || 'Произошла ошибка при регистрации', false);
+        }
     });
 
     registerForm.querySelectorAll("input").forEach((input) => {
-      input.addEventListener("input", function () {
-        clearError(this);
-        const field = this.id.replace("reg-", "");
-        const value = this.value.trim();
-        let error = null;
+        input.addEventListener("input", function () {
+            clearError(this);
+            const field = this.id.replace("reg-", "");
+            const value = this.value.trim();
+            let error = null;
 
-        switch (field) {
-          case "name":
-            error = validateName(value, "Имя");
-            break;
-          case "surname":
-            error = validateName(value, "Фамилия");
-            break;
-          case "patronymic":
-            if (value) error = validateName(value, "Отчество");
-            break;
-          case "phone":
-            error = validatePhone(value);
-            break;
-          case "email":
-            error = validateEmail(value);
-            break;
-        }
+            switch (field) {
+                case "name":
+                    error = validateName(value, "Имя");
+                    break;
+                case "surname":
+                    error = validateName(value, "Фамилия");
+                    break;
+                case "patronymic":
+                    if (value) error = validateName(value, "Отчество");
+                    break;
+                case "phone":
+                    error = validatePhone(value);
+                    break;
+                case "email":
+                    error = validateEmail(value);
+                    break;
+            }
 
-        if (error) showError(this, error);
-      });
+            if (error) showError(this, error);
+        });
     });
-  }
+}
 
   // Переключение между меню (если есть)
   const switchButtons = document.querySelectorAll(".menu-switch-btn");

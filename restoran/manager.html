@@ -3,14 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Личный кабинет - BITE</title>
+    <title>Личный кабинет менеджера - BITE</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
-        /* Дополнительные стили для новых блоков */
+        .header-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .header-row h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #5B120D;
+            white-space: nowrap;
+        }
+        
+        .back-to-home {
+            padding: 8px 16px;
+            background-color: #5B120D;
+            color: #F4F2E5;
+            text-decoration: none;
+            border-radius: 33px;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        .back-to-home:hover {
+            background-color: #941919;
+        }
+
+        /* Основные стили */
         .orders-container {
             display: flex;
             gap: 20px;
@@ -26,7 +55,7 @@
         }
         
         .couriers-block {
-            display: none; /* Скрываем блок курьеров по умолчанию */
+            display: none;
         }
         
         .orders-table, .couriers-table {
@@ -55,7 +84,6 @@
             color: #F4F2E5;
             border-radius: 33px;
             cursor: pointer;
-            transition: all 0.3s;
             font-weight: bold;
         }
         
@@ -73,6 +101,16 @@
         .select-btn.selected {
             background-color: #394A92;
             border: none;
+        }
+        
+        .select-btn.busy {
+            background-color: #941919;
+            border-color: #941919;
+            cursor: not-allowed;
+        }
+        
+        .select-btn.busy:hover {
+            background-color: #941919;
         }
         
         .confirm-assign {
@@ -95,35 +133,6 @@
             color: #66ff99;
         }
         
-        /* Новые стили для заголовка и кнопки "На главную" */
-        .account-section .container h1 {
-            margin-left: 0;
-            font-size: 2.5rem;
-            color: #5B120D;
-            margin-bottom: 10px;
-            display: block;
-        }
-        
-        .back-to-home {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 8px 16px;
-            background-color: #5B120D;
-            color: #F4F2E5;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-            font-weight: bold;
-        }
-        
-        .back-to-home:hover {
-            background-color: #941919;
-        }
-        
-        .title-container {
-            margin-bottom: 20px;
-        }
-        
         .user-info h2 {
             color: #5B120D;
         }
@@ -131,14 +140,9 @@
         .user-info p {
             color: #333;
         }
-        
-        .back-button-container {
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
-    <!-- Header остается без изменений -->
     <header>
         <div class="container">
             <div class="logo">ВIТЕ
@@ -148,7 +152,6 @@
             <nav class="nav-center">
                 <ul>
                     <li><a href="menu.html">Меню</a></li>
-                    <!-- <li><a href="#delivery">Доставка</a></li> -->
                     <li><a href="#about">О ресторане</a></li>
                 </ul>
             </nav>
@@ -178,12 +181,9 @@
     
     <main class="account-page">
         <section class="account-section">
-            <div class="container">
-                <div class="back-button-container">
+            <div style="display: flex; width: 100%; justify-content: center; gap: 20px;">
+                <div class="header-row">
                     <a href="index.html" class="back-to-home">На главную</a>
-                </div>
-                
-                <div class="title-container">
                     <h1>Личный кабинет</h1>
                 </div>
                 
@@ -193,7 +193,6 @@
                         <p>Email: <span id="account-email">Неизвестно</span></p>
                     </div>
                     
-                    <!-- Новые блоки для заказов и курьеров -->
                     <div class="orders-container">
                         <div class="orders-block">
                             <h3 style="color: #F4F2E5;">Активные заказы</h3>
@@ -236,11 +235,12 @@
                                     <tr>
                                         <th>Логин</th>
                                         <th>Пароль</th>
+                                        <th>Статус</th>
                                         <th>Действие</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Содержимое будет заполнено через JS -->
+                                    <!-- Содержимое заполняется через JS -->
                                 </tbody>
                             </table>
                             <button id="confirm-assign" class="confirm-assign">Подтвердить назначение</button>
@@ -256,7 +256,6 @@
             <nav>
                 <ul>
                     <li><a href="menu.html">Меню</a></li>
-                    <!-- <li><a href="#delivery">Доставка</a></li> -->
                     <li><a href="#about">О ресторане</a></li>
                     <li><a href="#contacts">Справочная информация</a></li>
                 </ul>
@@ -265,33 +264,52 @@
     </footer>
 
     <script>
-        // JavaScript для работы с заказами и курьерами
         document.addEventListener('DOMContentLoaded', function() {
-            // Данные курьеров (в реальном приложении будут получаться с сервера)
+            // Данные курьеров с информацией о занятости
             const couriers = [
-                { login: 'courier1', password: 'pass123' },
-                { login: 'courier2', password: 'pass456' },
-                { login: 'courier3', password: 'pass789' }
+                { login: 'courier1', password: 'pass123', busy: false },
+                { login: 'courier2', password: 'pass456', busy: true }, // Этот курьер занят
+                { login: 'courier3', password: 'pass789', busy: false }
             ];
             
             // Заполняем таблицу курьеров
             const couriersTable = document.getElementById('couriers-table').getElementsByTagName('tbody')[0];
-            couriers.forEach(courier => {
-                const row = couriersTable.insertRow();
-                row.insertCell(0).textContent = courier.login;
-                row.insertCell(1).textContent = courier.password;
-                const actionCell = row.insertCell(2);
-                const selectBtn = document.createElement('button');
-                selectBtn.className = 'select-btn';
-                selectBtn.textContent = 'Выбрать';
-                selectBtn.dataset.login = courier.login;
-                actionCell.appendChild(selectBtn);
-            });
+            
+            function renderCouriers() {
+                couriersTable.innerHTML = ''; // Очищаем таблицу
+                
+                couriers.forEach(courier => {
+                    const row = couriersTable.insertRow();
+                    row.insertCell(0).textContent = courier.login;
+                    row.insertCell(1).textContent = courier.password;
+                    
+                    // Добавляем ячейку с статусом
+                    const statusCell = row.insertCell(2);
+                    statusCell.textContent = courier.busy ? 'Занят' : 'Свободен';
+                    statusCell.style.color = courier.busy ? '#ff9966' : '#66ff99';
+                    
+                    const actionCell = row.insertCell(3);
+                    const selectBtn = document.createElement('button');
+                    selectBtn.className = 'select-btn';
+                    selectBtn.textContent = courier.busy ? 'Занят' : 'Выбрать';
+                    selectBtn.dataset.login = courier.login;
+                    
+                    if (courier.busy) {
+                        selectBtn.classList.add('busy');
+                        selectBtn.disabled = true;
+                    }
+                    
+                    actionCell.appendChild(selectBtn);
+                });
+            }
+            
+            // Первоначальная отрисовка курьеров
+            renderCouriers();
             
             let selectedOrder = null;
             let selectedCourier = null;
             
-            // Обработчики для кнопок "Назначить курьеру" в таблице заказов
+            // Обработчики для кнопок "Назначить курьеру"
             document.querySelectorAll('.assign-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     if (this.disabled) return;
@@ -303,31 +321,32 @@
                     
                     // Выделяем текущую кнопку
                     this.classList.add('selected');
-                    
                     selectedOrder = this.dataset.order;
                     document.getElementById('confirm-assign').style.display = 'none';
                     
-                    // Показываем таблицу курьеров
+                    // Обновляем список курьеров и показываем блок
+                    renderCouriers();
                     document.querySelector('.couriers-block').style.display = 'block';
                 });
             });
             
             // Обработчики для кнопок "Выбрать" в таблице курьеров
             couriersTable.addEventListener('click', function(e) {
-                if (e.target.classList.contains('select-btn')) {
-                    selectedCourier = e.target.dataset.login;
-                    
-                    // Сбрасываем выделение у всех кнопок
-                    document.querySelectorAll('.select-btn').forEach(btn => {
-                        btn.classList.remove('selected');
-                    });
-                    
-                    // Выделяем выбранную кнопку
-                    e.target.classList.add('selected');
-                    
-                    // Показываем кнопку подтверждения
-                    document.getElementById('confirm-assign').style.display = 'inline-block';
-                }
+                const selectBtn = e.target.closest('.select-btn');
+                if (!selectBtn || selectBtn.classList.contains('busy')) return;
+                
+                selectedCourier = selectBtn.dataset.login;
+                
+                // Сбрасываем выделение у всех кнопок
+                document.querySelectorAll('.select-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                
+                // Выделяем выбранную кнопку
+                selectBtn.classList.add('selected');
+                
+                // Показываем кнопку подтверждения
+                document.getElementById('confirm-assign').style.display = 'inline-block';
             });
             
             // Обработчик для кнопки подтверждения назначения
@@ -342,7 +361,12 @@
                             row.cells[3].querySelector('button').disabled = true;
                             row.cells[3].querySelector('button').classList.remove('selected');
                             
-                            // Здесь можно добавить AJAX-запрос для сохранения на сервере
+                            // Помечаем курьера как занятого в данных
+                            const courier = couriers.find(c => c.login === selectedCourier);
+                            if (courier) {
+                                courier.busy = true;
+                            }
+                            
                             alert(`Заказ #${selectedOrder} назначен курьеру ${selectedCourier}`);
                         }
                     });
@@ -354,11 +378,6 @@
                     selectedOrder = null;
                     selectedCourier = null;
                     this.style.display = 'none';
-                    
-                    // Сбрасываем выделение кнопок выбора курьера
-                    document.querySelectorAll('.select-btn').forEach(btn => {
-                        btn.classList.remove('selected');
-                    });
                 }
             });
         });
