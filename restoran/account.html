@@ -140,6 +140,13 @@ function validateName(value, fieldName) {
     return null;
 }
 
+function validateNumbersOnly(value, fieldName) {
+    if (!/^\d+$/.test(value)) {
+        return `${fieldName} должен содержать только цифры`;
+    }
+    return null;
+}
+
 function showError(inputElement, message) {
     const formGroup = inputElement.closest(".form-group");
     let errorElement = formGroup.querySelector(".error-message");
@@ -186,28 +193,47 @@ function validateAddressFields() {
         isValid = false;
     }
     
-    
-    // Квартира (1-3 символа)
+    // Квартира (1-3 символа, только цифры)
     const apartment = document.getElementById("address-apartment").value.trim();
-    const apartmentError = validateLength(apartment, 1, 3, "Номер квартиры");
-    if (apartmentError) {
-        showError(document.getElementById("address-apartment"), apartmentError);
+    const apartmentLengthError = validateLength(apartment, 1, 3, "Номер квартиры");
+    const apartmentNumbersError = validateNumbersOnly(apartment, "Номер квартиры");
+    
+    if (apartmentLengthError) {
+        showError(document.getElementById("address-apartment"), apartmentLengthError);
+        isValid = false;
+    } else if (apartmentNumbersError) {
+        showError(document.getElementById("address-apartment"), apartmentNumbersError);
         isValid = false;
     }
 
-    // подьезд (1-3 символа)
+    // Подъезд (1-3 символа, только цифры)
     const entrance = document.getElementById("address-entrance").value.trim();
-    const entranceError = validateLength(entrance, 1, 3, "Номер подъезда");
-    if (entranceError) {
-        showError(document.getElementById("address-entrance"), entranceError);
-        isValid = false;
+    if (entrance) { // Проверяем только если поле заполнено
+        const entranceLengthError = validateLength(entrance, 1, 3, "Номер подъезда");
+        const entranceNumbersError = validateNumbersOnly(entrance, "Номер подъезда");
+        
+        if (entranceLengthError) {
+            showError(document.getElementById("address-entrance"), entranceLengthError);
+            isValid = false;
+        } else if (entranceNumbersError) {
+            showError(document.getElementById("address-entrance"), entranceNumbersError);
+            isValid = false;
+        }
     }
-    // этаж (1-3 символа)
+
+    // Этаж (1-3 символа, только цифры)
     const floor = document.getElementById("address-floor").value.trim();
-    const floorError = validateLength(floor, 1, 3, "Номер этажа");
-    if (floorError) {
-        showError(document.getElementById("address-floor"), floorError);
-        isValid = false;
+    if (floor) { // Проверяем только если поле заполнено
+        const floorLengthError = validateLength(floor, 1, 3, "Номер этажа");
+        const floorNumbersError = validateNumbersOnly(floor, "Номер этажа");
+        
+        if (floorLengthError) {
+            showError(document.getElementById("address-floor"), floorLengthError);
+            isValid = false;
+        } else if (floorNumbersError) {
+            showError(document.getElementById("address-floor"), floorNumbersError);
+            isValid = false;
+        }
     }
 
     return isValid;
@@ -238,26 +264,45 @@ document.getElementById("address-street").addEventListener("input", function() {
 document.getElementById("address-apartment").addEventListener("input", function() {
     clearError(this);
     const apartment = this.value.trim();
-    if (apartment.length < 1 || apartment.length > 3) {
-        showError(this, "Номер квартиры должен быть от 1 до 3 символов");
+    const lengthError = validateLength(apartment, 1, 3, "Номер квартиры");
+    const numbersError = validateNumbersOnly(apartment, "Номер квартиры");
+    
+    if (lengthError) {
+        showError(this, lengthError);
+    } else if (numbersError) {
+        showError(this, numbersError);
     }
 });
 
-// подьезд
+// Подъезд
 document.getElementById("address-entrance").addEventListener("input", function() {
     clearError(this);
     const entrance = this.value.trim();
-    if (entrance.length < 1 || entrance.length > 3) {
-        showError(this, "Номер подъезда должен быть от 1 до 3 символов");
+    if (entrance) { // Проверяем только если поле заполнено
+        const lengthError = validateLength(entrance, 1, 3, "Номер подъезда");
+        const numbersError = validateNumbersOnly(entrance, "Номер подъезда");
+        
+        if (lengthError) {
+            showError(this, lengthError);
+        } else if (numbersError) {
+            showError(this, numbersError);
+        }
     }
 });
 
-// подьезд
+// Этаж
 document.getElementById("address-floor").addEventListener("input", function() {
     clearError(this);
     const floor = this.value.trim();
-    if (floor.length < 1 || floor.length > 3) {
-        showError(this, "Номер этажа должен быть от 1 до 3 символов");
+    if (floor) { // Проверяем только если поле заполнено
+        const lengthError = validateLength(floor, 1, 3, "Номер этажа");
+        const numbersError = validateNumbersOnly(floor, "Номер этажа");
+        
+        if (lengthError) {
+            showError(this, lengthError);
+        } else if (numbersError) {
+            showError(this, numbersError);
+        }
     }
 });
 
