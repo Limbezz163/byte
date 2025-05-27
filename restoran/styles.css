@@ -1508,20 +1508,6 @@ header {
     fill: #F4F2E5;
 }
 
-/* Кнопка закрытия личного кабинета
-.account-close-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-    padding: 10px;
-    background: #F4F2E5;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-} */
 
 /* Адаптация для мобильных */
 @media (max-width: 768px) {
@@ -1566,4 +1552,3 @@ header {
         right: 15px;
     }
 }
-
