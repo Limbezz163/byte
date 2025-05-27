@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
-
         .header-row {
             display: flex;
             align-items: center;
@@ -40,7 +39,7 @@
             background-color: #941919;
         }
 
-        /* Остальные стили */
+        /* Основные стили */
         .orders-container {
             display: flex;
             gap: 20px;
@@ -85,7 +84,6 @@
             color: #F4F2E5;
             border-radius: 33px;
             cursor: pointer;
-            transition: all 0.3s;
             font-weight: bold;
         }
         
@@ -103,6 +101,16 @@
         .select-btn.selected {
             background-color: #394A92;
             border: none;
+        }
+        
+        .select-btn.busy {
+            background-color: #941919;
+            border-color: #941919;
+            cursor: not-allowed;
+        }
+        
+        .select-btn.busy:hover {
+            background-color: #941919;
         }
         
         .confirm-assign {
@@ -173,12 +181,7 @@
     
     <main class="account-page">
         <section class="account-section">
-            <div style="
-                        display: flex;
-                        width: 100%;
-                        justify-content: center;
-                        gap: 20px;">
-                <!-- Измененная строка с заголовком и кнопкой -->
+            <div style="display: flex; width: 100%; justify-content: center; gap: 20px;">
                 <div class="header-row">
                     <a href="index.html" class="back-to-home">На главную</a>
                     <h1>Личный кабинет</h1>
@@ -189,6 +192,7 @@
                         <h2>Добро пожаловать, <span id="account-username">Менеджер</span>!</h2>
                         <p>Email: <span id="account-email">Неизвестно</span></p>
                     </div>
+                    
                     <div class="orders-container">
                         <div class="orders-block">
                             <h3 style="color: #F4F2E5;">Активные заказы</h3>
@@ -231,11 +235,12 @@
                                     <tr>
                                         <th>Логин</th>
                                         <th>Пароль</th>
+                                        <th>Статус</th>
                                         <th>Действие</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Содержимое будет заполнено через JS -->
+                                    <!-- Содержимое заполняется через JS -->
                                 </tbody>
                             </table>
                             <button id="confirm-assign" class="confirm-assign">Подтвердить назначение</button>
@@ -260,58 +265,94 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Данные курьеров с информацией о занятости
             const couriers = [
-                { login: 'courier1', password: 'pass123' },
-                { login: 'courier2', password: 'pass456' },
-                { login: 'courier3', password: 'pass789' }
+                { login: 'courier1', password: 'pass123', busy: false },
+                { login: 'courier2', password: 'pass456', busy: true }, // Этот курьер занят
+                { login: 'courier3', password: 'pass789', busy: false }
             ];
             
+            // Заполняем таблицу курьеров
             const couriersTable = document.getElementById('couriers-table').getElementsByTagName('tbody')[0];
-            couriers.forEach(courier => {
-                const row = couriersTable.insertRow();
-                row.insertCell(0).textContent = courier.login;
-                row.insertCell(1).textContent = courier.password;
-                const actionCell = row.insertCell(2);
-                const selectBtn = document.createElement('button');
-                selectBtn.className = 'select-btn';
-                selectBtn.textContent = 'Выбрать';
-                selectBtn.dataset.login = courier.login;
-                actionCell.appendChild(selectBtn);
-            });
+            
+            function renderCouriers() {
+                couriersTable.innerHTML = ''; // Очищаем таблицу
+                
+                couriers.forEach(courier => {
+                    const row = couriersTable.insertRow();
+                    row.insertCell(0).textContent = courier.login;
+                    row.insertCell(1).textContent = courier.password;
+                    
+                    // Добавляем ячейку с статусом
+                    const statusCell = row.insertCell(2);
+                    statusCell.textContent = courier.busy ? 'Занят' : 'Свободен';
+                    statusCell.style.color = courier.busy ? '#ff9966' : '#66ff99';
+                    
+                    const actionCell = row.insertCell(3);
+                    const selectBtn = document.createElement('button');
+                    selectBtn.className = 'select-btn';
+                    selectBtn.textContent = courier.busy ? 'Занят' : 'Выбрать';
+                    selectBtn.dataset.login = courier.login;
+                    
+                    if (courier.busy) {
+                        selectBtn.classList.add('busy');
+                        selectBtn.disabled = true;
+                    }
+                    
+                    actionCell.appendChild(selectBtn);
+                });
+            }
+            
+            // Первоначальная отрисовка курьеров
+            renderCouriers();
             
             let selectedOrder = null;
             let selectedCourier = null;
             
+            // Обработчики для кнопок "Назначить курьеру"
             document.querySelectorAll('.assign-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     if (this.disabled) return;
                     
+                    // Сбрасываем выделение у всех кнопок
                     document.querySelectorAll('.assign-btn').forEach(b => {
                         b.classList.remove('selected');
                     });
                     
+                    // Выделяем текущую кнопку
                     this.classList.add('selected');
                     selectedOrder = this.dataset.order;
                     document.getElementById('confirm-assign').style.display = 'none';
+                    
+                    // Обновляем список курьеров и показываем блок
+                    renderCouriers();
                     document.querySelector('.couriers-block').style.display = 'block';
                 });
             });
             
+            // Обработчики для кнопок "Выбрать" в таблице курьеров
             couriersTable.addEventListener('click', function(e) {
-                if (e.target.classList.contains('select-btn')) {
-                    selectedCourier = e.target.dataset.login;
-                    
-                    document.querySelectorAll('.select-btn').forEach(btn => {
-                        btn.classList.remove('selected');
-                    });
-                    
-                    e.target.classList.add('selected');
-                    document.getElementById('confirm-assign').style.display = 'inline-block';
-                }
+                const selectBtn = e.target.closest('.select-btn');
+                if (!selectBtn || selectBtn.classList.contains('busy')) return;
+                
+                selectedCourier = selectBtn.dataset.login;
+                
+                // Сбрасываем выделение у всех кнопок
+                document.querySelectorAll('.select-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                
+                // Выделяем выбранную кнопку
+                selectBtn.classList.add('selected');
+                
+                // Показываем кнопку подтверждения
+                document.getElementById('confirm-assign').style.display = 'inline-block';
             });
             
+            // Обработчик для кнопки подтверждения назначения
             document.getElementById('confirm-assign').addEventListener('click', function() {
                 if (selectedOrder && selectedCourier) {
+                    // Находим строку заказа и обновляем статус
                     const orderRows = document.querySelectorAll('.orders-table tbody tr');
                     orderRows.forEach(row => {
                         if (row.cells[0].textContent === `#${selectedOrder}`) {
@@ -319,18 +360,24 @@
                             row.cells[2].className = 'status-assigned';
                             row.cells[3].querySelector('button').disabled = true;
                             row.cells[3].querySelector('button').classList.remove('selected');
+                            
+                            // Помечаем курьера как занятого в данных
+                            const courier = couriers.find(c => c.login === selectedCourier);
+                            if (courier) {
+                                courier.busy = true;
+                            }
+                            
                             alert(`Заказ #${selectedOrder} назначен курьеру ${selectedCourier}`);
                         }
                     });
                     
+                    // Скрываем блок курьеров
                     document.querySelector('.couriers-block').style.display = 'none';
+                    
+                    // Сбрасываем выбор
                     selectedOrder = null;
                     selectedCourier = null;
                     this.style.display = 'none';
-                    
-                    document.querySelectorAll('.select-btn').forEach(btn => {
-                        btn.classList.remove('selected');
-                    });
                 }
             });
         });
