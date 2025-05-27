@@ -237,10 +237,10 @@ function renderAddresses() {
 
     addressItem.innerHTML = `
       <div class="address-select">
-        <input type="radio" name="delivery-address" id="address-${index}" value="${index}" 
-               ${selectedAddressIndex === index ? "checked" : ""}>
-        <label for="address-${index}">${addressText}</label>
-      </div>
+  <input type="radio" name="delivery-address" id="address-${index}" value="${index}" 
+         ${selectedAddressIndex === index ? "checked" : ""} class="custom-radio">
+  <label for="address-${index}">${addressText}</label>
+</div>
       <div class="address-actions">
         <button class="edit-address-btn" data-index="${index}">Изменить</button>
         <button class="delete-address-btn" data-index="${index}">Удалить</button>
