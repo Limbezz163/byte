@@ -756,18 +756,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (cartIcon) {
     cartIcon.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (!currentUser) {
-        showCustomAlert(
-          "Для доступа к корзине необходимо авторизоваться",
-          false
-        );
-        showModal("auth-modal");
-        return;
-      }
-      showModal("cart-modal");
+        e.preventDefault();
+        
+        // Проверяем наличие userLogin в sessionStorage
+        const userLogin = sessionStorage.getItem('userLogin');
+        
+        if (!userLogin) {
+            showCustomAlert(
+                "Для доступа к корзине необходимо авторизоваться",
+                false
+            );
+            showModal("auth-modal");
+            return;
+        }
+        
+        // Если пользователь авторизован, показываем корзину
+        showModal("cart-modal");
+        
+        // Дополнительно: загружаем данные корзины для этого пользователя
+        loadCartData(userLogin);
     });
-  }
+}
 
   closeBtns.forEach((btn) => {
     btn.addEventListener("click", function () {
@@ -905,19 +914,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         hideModal("auth-modal");
         showCustomAlert("Вы успешно вошли!");
-
+        console.log(data.user.job_title);
         if (data.user.job_title === "manager") {
           window.location.href = 'manager.html';
         }
-        if (data.user.job_title === "delivery_man") {
+        else if (data.user.job_title === "delivery_man") {
           window.location.href = 'courier.html';
         }
-        if (data.user.job_title === "administrator") {
+        else if (data.user.job_title === "administrator") {
           window.location.href = 'admin.html';
         }
         else {
           window.location.href = 'account.html';
-        }
+        } 
         // Перенаправляем в личный кабинет
 
 
