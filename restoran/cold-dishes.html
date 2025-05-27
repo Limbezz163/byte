@@ -379,21 +379,125 @@
     </script>
 
 <script>
-    function toggleFilterPanel() {
-        const panel = document.getElementById('filterPanel');
-        panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-    }
-    
-    // Закрытие панели при клике вне её
-    document.addEventListener('click', function(event) {
-        const panel = document.getElementById('filterPanel');
-        const filterBtn = document.querySelector('.filter-button');
-        
-        if (!panel.contains(event.target) && event.target !== filterBtn && !filterBtn.contains(event.target)) {
-            panel.style.display = 'none';
+        document.addEventListener("DOMContentLoaded", async () => {
+            let dishes = []; // Будем хранить все блюда здесь
+            
+            const fetchFunction = async () => {
+                try {
+                    const res = await fetch("http://localhost:8080/api/menu?limit=20&category=Холодные");
+
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+
+                    const data = await res.json();
+                    console.log(data);
+                    dishes = data.data; // Сохраняем все блюда
+                    renderDishes(dishes); // Рендерим все блюда изначально
+
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                }
+            };
+
+            // Функция для отображения блюд
+            function renderDishes(dishesToRender) {
+                const list = document.getElementById("dishCardsContainer");
+                if (list) {
+                    let listCardHTML = ''; // Накопительная переменная
+
+                    dishesToRender.forEach(item => {
+                        listCardHTML += `<div class="dish-card">
+                            <div class="dish-image"
+                                style="background-image: url('https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')">
+                            </div>
+                            <div class="dish-info">
+                                <h2>${item.dish_name}</h2>
+                                <div class="dish-meta">
+                                    <span class="dish-weight">${item.weight}гр</span>
+                                    <span class="dish-cuisine">${item.type_name} кухня</span>
+                                </div>
+                                <p class="dish-description">
+                                    ${item.description}
+                                </p>
+                                <div class="dish-footer">
+                                    <span class="dish-price">${item.price} ₽</span>
+                                    <button class="add-to-cart">В корзину</button>
+                                </div>
+                            </div>
+                        </div>`;
+                    });
+
+                    list.innerHTML = listCardHTML; // Один раз устанавливаем HTML
+                }
+            }
+
+            // Функция фильтрации блюд
+            function filterDishes() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const selectedCuisine = document.querySelector('.cuisine-item.active')?.dataset.cuisine;
+                const minPrice = parseInt(document.getElementById('minPrice').value) || 0;
+                const maxPrice = parseInt(document.getElementById('maxPrice').value) || Infinity;
+
+                const filtered = dishes.filter(dish => {
+                    // Поиск по названию и описанию
+                    const matchesSearch = dish.dish_name.toLowerCase().includes(searchTerm) || 
+                                          dish.description.toLowerCase().includes(searchTerm);
+                    
+                    // Фильтр по кухне
+                    const matchesCuisine = selectedCuisine === 'all' || dish.type_name === selectedCuisine;
+                    
+                    // Фильтр по цене
+                    const matchesPrice = dish.price >= minPrice && dish.price <= maxPrice;
+                    
+                    return matchesSearch && matchesCuisine && matchesPrice;
+                });
+
+                renderDishes(filtered);
+            }
+
+            // Инициализация фильтров
+            function initFilters() {
+                // Обработчики для фильтра по кухне
+                const cuisineItems = document.querySelectorAll('.cuisine-item');
+                cuisineItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        cuisineItems.forEach(i => i.classList.remove('active'));
+                        this.classList.add('active');
+                        filterDishes();
+                    });
+                });
+
+                // Активируем "Все" по умолчанию
+                document.querySelector('.cuisine-item[data-cuisine="all"]').classList.add('active');
+
+                // Обработчики для полей цены
+                document.getElementById('minPrice').addEventListener('input', filterDishes);
+                document.getElementById('maxPrice').addEventListener('input', filterDishes);
+
+                // Обработчик для поиска
+                document.getElementById('searchInput').addEventListener('input', filterDishes);
+            }
+
+            await fetchFunction();
+            initFilters();
+        });
+
+        function toggleFilterPanel() {
+            const panel = document.getElementById('filterPanel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
         }
-    });
-</script>
+        
+        // Закрытие панели при клике вне её
+        document.addEventListener('click', function(event) {
+            const panel = document.getElementById('filterPanel');
+            const filterBtn = document.querySelector('.filter-button');
+            
+            if (!panel.contains(event.target) && event.target !== filterBtn && !filterBtn.contains(event.target)) {
+                panel.style.display = 'none';
+            }
+        });
+    </script>
 
 </body>
 

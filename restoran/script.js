@@ -137,11 +137,10 @@ function showCustomAlert(message, isSuccess = true) {
   alertDiv.className = `custom-alert ${isSuccess ? "" : "error"}`;
   alertDiv.innerHTML = `
     <svg viewBox="0 0 24 24">
-      <path d="${
-        isSuccess
-          ? "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
-          : "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
-      }"/>
+      <path d="${isSuccess
+      ? "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
+      : "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+    }"/>
     </svg>
     <span>${message}</span>
   `;
@@ -169,15 +168,36 @@ function loginUser(userData) {
     surname: userData.surname,
     phone: userData.phone || "",
   };
-  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+  sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
   updateUserUI();
   loadUserAddresses();
 }
 
 function logoutUser() {
   if (confirm("Вы уверены, что хотите выйти из аккаунта?")) {
-    currentUser = null;
-    localStorage.removeItem("currentUser");
+    // Список всех ключей, которые нужно удалить
+    const keysToRemove = [
+      'authToken',
+      'userData',
+      'userEmail',
+      'userId',
+      'userLogin',
+      'userName',
+      'userPatronymic',
+      'userPassword',
+      'userRole',
+      'userSurname'
+    ];
+    
+    // Удаляем каждый указанный ключ из sessionStorage
+    keysToRemove.forEach(key => {
+      sessionStorage.removeItem(key);
+    });
+    
+    // Альтернативный вариант - полная очистка sessionStorage
+    // sessionStorage.clear();
+    
+    // Перенаправляем на главную страницу
     window.location.href = "index.html";
   }
 }
@@ -204,7 +224,7 @@ function updateUserUI() {
 function loadUserAddresses() {
   if (!currentUser) return;
 
-  const savedAddresses = localStorage.getItem(`addresses_${currentUser.email}`);
+  const savedAddresses = sessionStorage.getItem(`addresses_${currentUser.email}`);
   if (savedAddresses) {
     userAddresses = JSON.parse(savedAddresses);
     renderAddresses();
@@ -213,7 +233,7 @@ function loadUserAddresses() {
 
 function saveUserAddresses() {
   if (currentUser) {
-    localStorage.setItem(
+    sessionStorage.setItem(
       `addresses_${currentUser.email}`,
       JSON.stringify(userAddresses)
     );
@@ -259,7 +279,7 @@ function renderAddresses() {
         if (userAddresses[selectedAddressIndex]) {
           deliveryAddress = formatAddress(userAddresses[selectedAddressIndex]);
           if (currentUser) {
-            localStorage.setItem(
+            sessionStorage.setItem(
               `address_${currentUser.email}`,
               deliveryAddress
             );
@@ -298,7 +318,7 @@ function addNewAddress(addressData) {
   selectedAddressIndex = userAddresses.length - 1;
   deliveryAddress = formatAddress(addressData);
   if (currentUser) {
-    localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
+    sessionStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
   }
   renderAddresses();
   hideModal("address-modal");
@@ -345,7 +365,7 @@ function editAddress(index) {
     if (selectedAddressIndex === index) {
       deliveryAddress = formatAddress(updatedAddress);
       if (currentUser) {
-        localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
+        sessionStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
       }
     }
     renderAddresses();
@@ -366,7 +386,7 @@ function deleteAddress(index) {
       selectedAddressIndex = -1;
       deliveryAddress = "";
       if (currentUser) {
-        localStorage.removeItem(`address_${currentUser.email}`);
+        sessionStorage.removeItem(`address_${currentUser.email}`);
       }
     } else if (selectedAddressIndex > index) {
       selectedAddressIndex--;
@@ -485,7 +505,7 @@ function clearCart() {
 
 function saveCart() {
   if (currentUser) {
-    localStorage.setItem(
+    sessionStorage.setItem(
       `cart_${currentUser.email}`,
       JSON.stringify(cartItems)
     );
@@ -494,7 +514,7 @@ function saveCart() {
 
 function loadCart() {
   if (currentUser) {
-    const savedCart = localStorage.getItem(`cart_${currentUser.email}`);
+    const savedCart = sessionStorage.getItem(`cart_${currentUser.email}`);
     if (savedCart) cartItems = JSON.parse(savedCart);
   }
   updateCartDisplay();
@@ -502,7 +522,7 @@ function loadCart() {
 
 function loadDeliveryAddress() {
   if (currentUser) {
-    const savedAddress = localStorage.getItem(`address_${currentUser.email}`);
+    const savedAddress = sessionStorage.getItem(`address_${currentUser.email}`);
     if (savedAddress) {
       deliveryAddress = savedAddress;
       // Находим индекс адреса в массиве
@@ -664,7 +684,7 @@ function checkoutOrder() {
 // ===== ОБРАБОТЧИКИ СОБЫТИЙ =====
 document.addEventListener("DOMContentLoaded", function () {
   // Загрузка данных пользователя
-  const savedUser = localStorage.getItem("currentUser");
+  const savedUser = sessionStorage.getItem("currentUser");
   if (savedUser) {
     currentUser = JSON.parse(savedUser);
     loadCart();
@@ -701,14 +721,36 @@ document.addEventListener("DOMContentLoaded", function () {
   // Обработчики для модальных окон
   if (authBtn) {
     authBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (currentUser) window.location.href = "account.html";
-      else {
-        showModal("auth-modal");
-        document.querySelector('.tab-btn[data-tab="login"]').click();
-      }
+        e.preventDefault();
+        const currentUser = sessionStorage.getItem('userLogin');
+        const userRole = sessionStorage.getItem('userRole');
+        
+        if (currentUser) {
+            // Перенаправляем в зависимости от роли
+            switch(userRole) {
+                case 'client':
+                    window.location.href = "account.html";
+                    break;
+                case 'manager':
+                    window.location.href = "manager.html";
+                    break;
+                case 'administrator':
+                    window.location.href = "admin.html";
+                    break;
+                case 'courier':
+                    window.location.href = "courier.html";
+                    break;
+                default:
+                    
+                    window.location.href = "account.html";
+            }
+        } else {
+            // Если пользователь не авторизован, показываем модальное окно авторизации
+            showModal("auth-modal");
+            document.querySelector('.tab-btn[data-tab="login"]').click();
+        }
     });
-  }
+}
 
   if (cartIcon) {
     cartIcon.addEventListener("click", (e) => {
@@ -763,7 +805,7 @@ document.addEventListener("DOMContentLoaded", function () {
     saveAddressBtn.addEventListener("click", () => {
       deliveryAddress = deliveryAddressInput.value.trim();
       if (currentUser) {
-        localStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
+        sessionStorage.setItem(`address_${currentUser.email}`, deliveryAddress);
         showCustomAlert("Адрес доставки сохранен");
       }
     });
@@ -771,187 +813,258 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (loginForm) {
     loginForm.addEventListener("submit", async function (e) {
-        e.preventDefault();
-        
-        // Показываем индикатор загрузки
-        const submitBtn = loginForm.querySelector('.submit-btn');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Вход...';
+      e.preventDefault();
 
-        const username = document.getElementById("login-username").value.trim();
-        const password = document.getElementById("login-password").value.trim();
+      // Показываем индикатор загрузки
+      const submitBtn = loginForm.querySelector('.submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Вход...';
 
-        // Валидация
-        const loginError = validateLength(username, 4, 20, "Логин");
-        const passwordError = validateLength(password, 6, 20, "Пароль");
+      const username = document.getElementById("login-username").value.trim();
+      const password = document.getElementById("login-password").value.trim();
 
-        if (loginError) showError(document.getElementById("login-username"), loginError);
-        if (passwordError) showError(document.getElementById("login-password"), passwordError);
-        
-        if (loginError || passwordError) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'ВОЙТИ';
-            return;
+      // Валидация
+      const loginError = validateLength(username, 4, 20, "Логин");
+      const passwordError = validateLength(password, 5, 20, "Пароль");
+
+      if (loginError) showError(document.getElementById("login-username"), loginError);
+      if (passwordError) showError(document.getElementById("login-password"), passwordError);
+
+      if (loginError || passwordError) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'ВОЙТИ';
+        return;
+      }
+
+      try {
+        // Отправляем данные на бекенд
+        const response = await fetch('http://localhost:8000/users/auth', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            login: username,
+            password: password
+          }),
+          credentials: 'include' // Для работы с куками/сессиями
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Ошибка входа');
         }
 
-        try {
-            // Отправляем данные на бекенд
-            const response = await fetch('http://localhost:8000/users/auth', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    login: username,
-                    password: password
-                }),
-                credentials: 'include' // Для работы с куками/сессиями
-            });
+        const data = await response.json();
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Ошибка входа');
-            }
-
-            const data = await response.json();
-            
-            // Сохраняем токен (если используется JWT)
-            if (data.token) {
-                localStorage.setItem('authToken', data.token);
-            }
-            
-            // Сохраняем данные пользователя
-            if (data.user) {
-                localStorage.setItem('userData', JSON.stringify(data.user));
-            }
-
-            hideModal("auth-modal");
-            showCustomAlert("Вы успешно вошли!");
-            
-            // Перенаправляем в личный кабинет
-            window.location.href = 'account.html';
-
-        } catch (error) {
-            console.error('Ошибка входа:', error);
-            showCustomAlert(error.message || 'Неверный логин или пароль', false);
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'ВОЙТИ';
+        // Сохраняем токен (если используется JWT)
+        if (data.token) {
+          sessionStorage.setItem('authToken', data.token);
         }
+
+        // Сохраняем данные пользователя
+        if (data.user) {
+          sessionStorage.setItem('userData', JSON.stringify(data.user));
+        }
+        if (data.access_token) {
+          sessionStorage.setItem('authToken', data.access_token);
+        }
+        if (data.user.id) {
+          sessionStorage.setItem('userId', data.user.id);
+        }
+        if (data.user.email) {
+          sessionStorage.setItem('userEmail', data.user.email);
+        }
+        if (data.user.name) {
+          sessionStorage.setItem('userName', data.user.name);
+        }
+        if (data.user.surname) {
+          sessionStorage.setItem('userSurname', data.user.surname);
+        }
+        if (data.user.patronymic) {
+          sessionStorage.setItem('userPatronymic', data.user.patronymic);
+        }
+        if (data.user.phone_number) {
+          sessionStorage.setItem('userPhineNumber', data.user.phone_number);
+        }
+        if (data.user.login) {
+          sessionStorage.setItem('userLogin', data.user.login);
+        }
+        if (data.user.password) {
+          sessionStorage.setItem('userPassword', data.user.password);
+        }
+        if (data.user.job_title) {
+          sessionStorage.setItem('userRole', data.user.job_title);
+        }
+        else{
+          sessionStorage.setItem('userRole', "Client");
+        }
+       
+
+        hideModal("auth-modal");
+        showCustomAlert("Вы успешно вошли!");
+
+        if (data.user.job_title === "manager") {
+          window.location.href = 'manager.html';
+        }
+        if (data.user.job_title === "delivery_man") {
+          window.location.href = 'courier.html';
+        }
+        if (data.user.job_title === "administrator") {
+          window.location.href = 'admin.html';
+        }
+        else{
+          window.location.href = 'account.html';
+        }
+        // Перенаправляем в личный кабинет
+
+
+      } catch (error) {
+        console.error('Ошибка входа:', error);
+        showCustomAlert(error.message || 'Неверный логин или пароль', false);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'ВОЙТИ';
+      }
     });
 
     loginForm.querySelectorAll("input").forEach((input) => {
-        input.addEventListener("input", function () {
-            clearError(this);
-        });
+      input.addEventListener("input", function () {
+        clearError(this);
+      });
     });
-}
+  }
 
   if (registerForm) {
     registerForm.addEventListener("submit", async function (e) {
-        e.preventDefault();
-        let hasErrors = false;
-        const formData = {
-            name: document.getElementById("reg-name").value.trim(),
-            surname: document.getElementById("reg-surname").value.trim(),
-            patronymic: document.getElementById("reg-patronymic").value.trim(),
-            phone: document.getElementById("reg-phone").value.trim(),
-            email: document.getElementById("reg-email").value.trim(),
-            login: document.getElementById("reg-login").value.trim(),
-            password: document.getElementById("reg-password").value.trim(),
-        };
+      e.preventDefault();
+      let hasErrors = false;
+      const formData = {
+        name: document.getElementById("reg-name").value.trim(),
+        surname: document.getElementById("reg-surname").value.trim(),
+        patronymic: document.getElementById("reg-patronymic").value.trim(),
+        phone: document.getElementById("reg-phone").value.trim(),
+        email: document.getElementById("reg-email").value.trim(),
+        login: document.getElementById("reg-login").value.trim(),
+        password: document.getElementById("reg-password").value.trim(),
+      };
 
-        document.querySelectorAll(".error-message").forEach((el) => el.remove());
-        document.querySelectorAll(".form-group input").forEach((input) => {
-            input.classList.remove("invalid");
+      document.querySelectorAll(".error-message").forEach((el) => el.remove());
+      document.querySelectorAll(".form-group input").forEach((input) => {
+        input.classList.remove("invalid");
+      });
+
+      const errors = {
+        name: validateLength(formData.name, 2, 30, "Имя") || validateName(formData.name, "Имя"),
+        surname: validateLength(formData.surname, 2, 30, "Фамилия") || validateName(formData.surname, "Фамилия"),
+        patronymic: formData.patronymic
+          ? validateLength(formData.patronymic, 2, 30, "Отчество") || validateName(formData.patronymic, "Отчество")
+          : null,
+        phone: validatePhone(formData.phone),
+        email: validateEmail(formData.email),
+        login: validateLength(formData.login, 4, 20, "Логин"),
+        password: validateLength(formData.password, 5, 20, "Пароль"),
+      };
+
+      Object.keys(errors).forEach((field) => {
+        if (errors[field]) {
+          showError(document.getElementById(`reg-${field}`), errors[field]);
+          hasErrors = true;
+        }
+      });
+
+      if (hasErrors) {
+        showCustomAlert("Пожалуйста, исправьте ошибки в форме", false);
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:8000/users/register', { // Укажите правильный endpoint
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
         });
 
-        const errors = {
-            name: validateLength(formData.name, 2, 30, "Имя") || validateName(formData.name, "Имя"),
-            surname: validateLength(formData.surname, 2, 30, "Фамилия") || validateName(formData.surname, "Фамилия"),
-            patronymic: formData.patronymic
-                ? validateLength(formData.patronymic, 2, 30, "Отчество") || validateName(formData.patronymic, "Отчество")
-                : null,
-            phone: validatePhone(formData.phone),
-            email: validateEmail(formData.email),
-            login: validateLength(formData.login, 4, 20, "Логин"),
-            password: validateLength(formData.password, 6, 20, "Пароль"),
-        };
-
-        Object.keys(errors).forEach((field) => {
-            if (errors[field]) {
-                showError(document.getElementById(`reg-${field}`), errors[field]);
-                hasErrors = true;
-            }
-        });
-
-        if (hasErrors) {
-            showCustomAlert("Пожалуйста, исправьте ошибки в форме", false);
-            return;
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Ошибка регистрации');
         }
 
-        try {
-            const response = await fetch('http://localhost:8000/users/register', { // Укажите правильный endpoint
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
+        const data = await response.json();
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Ошибка регистрации');
-            }
-
-            const data = await response.json();
-            
-            // Сохраняем токен, если он пришел в ответе
-            if (data.access_token) {
-                localStorage.setItem('authToken', data.access_token);
-            }
-            localStorage.setItem('userRole', "Клиент");
-            hideModal("auth-modal");
-            showCustomAlert("Регистрация прошла успешно!");
-            
-            // Обновляем состояние приложения или перенаправляем пользователя
-            // Например: window.location.href = '/profile';
-            
-        } catch (error) {
-            console.error('Ошибка регистрации:', error);
-            showCustomAlert(error.message || 'Произошла ошибка при регистрации', false);
+        // Сохраняем токен, если он пришел в ответе
+        if (data.access_token) {
+          sessionStorage.setItem('authToken', data.access_token);
         }
+        if (data.user.id) {
+          sessionStorage.setItem('userId', data.user.id);
+        }
+        if (data.user.email) {
+          sessionStorage.setItem('userEmail', data.user.email);
+        }
+        if (data.user.name) {
+          sessionStorage.setItem('userName', data.user.name);
+        }
+        if (data.user.surname) {
+          sessionStorage.setItem('userSurname', data.user.surname);
+        }
+        if (data.user.patronymic) {
+          sessionStorage.setItem('userPatronymic', data.user.patronymic);
+        }
+        if (data.user.phone_number) {
+          sessionStorage.setItem('userPhoneNumber', data.user.phone_number);
+        }
+        if (data.user.login) {
+          sessionStorage.setItem('userLogin', data.user.login);
+        }
+        if (data.user.password) {
+          sessionStorage.setItem('userPassword', data.user.password);
+        }
+
+        sessionStorage.setItem('userRole', "client");
+        hideModal("auth-modal");
+        showCustomAlert("Регистрация прошла успешно!");
+
+        // Обновляем состояние приложения или перенаправляем пользователя
+        // Например: window.location.href = '/profile';
+
+      } catch (error) {
+        console.error('Ошибка регистрации:', error);
+        showCustomAlert(error.message || 'Произошла ошибка при регистрации', false);
+      }
     });
 
     registerForm.querySelectorAll("input").forEach((input) => {
-        input.addEventListener("input", function () {
-            clearError(this);
-            const field = this.id.replace("reg-", "");
-            const value = this.value.trim();
-            let error = null;
+      input.addEventListener("input", function () {
+        clearError(this);
+        const field = this.id.replace("reg-", "");
+        const value = this.value.trim();
+        let error = null;
 
-            switch (field) {
-                case "name":
-                    error = validateName(value, "Имя");
-                    break;
-                case "surname":
-                    error = validateName(value, "Фамилия");
-                    break;
-                case "patronymic":
-                    if (value) error = validateName(value, "Отчество");
-                    break;
-                case "phone":
-                    error = validatePhone(value);
-                    break;
-                case "email":
-                    error = validateEmail(value);
-                    break;
-            }
+        switch (field) {
+          case "name":
+            error = validateName(value, "Имя");
+            break;
+          case "surname":
+            error = validateName(value, "Фамилия");
+            break;
+          case "patronymic":
+            if (value) error = validateName(value, "Отчество");
+            break;
+          case "phone":
+            error = validatePhone(value);
+            break;
+          case "email":
+            error = validateEmail(value);
+            break;
+        }
 
-            if (error) showError(this, error);
-        });
+        if (error) showError(this, error);
+      });
     });
-}
+  }
 
   // Переключение между меню (если есть)
   const switchButtons = document.querySelectorAll(".menu-switch-btn");
