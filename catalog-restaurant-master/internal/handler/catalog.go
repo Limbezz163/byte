@@ -49,6 +49,7 @@ func GetDishsOfMenu(w http.ResponseWriter, r *http.Request) {
 		ch <- categoryMapSlice
 		close(ch)
 	}()
+	categoryUrl := r.URL.Query().Get("category")
 	offset, _ := strconv.Atoi(r.URL.Query().Get("offset"))
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
 
@@ -71,19 +72,23 @@ func GetDishsOfMenu(w http.ResponseWriter, r *http.Request) {
 		var price, calories float64
 
 		rows.Scan(&id, &name, &description, &urlImage, &weight, &calories, &price, &typeCuisine)
-		dishs = append(
-			dishs,
-			model.Dish{
-				id,
-				name,
-				description,
-				price,
-				urlImage,
-				categoryMapSlice[id],
-				calories,
-				weight,
-				typeCuisine})
-
+		for _, category := range categoryMapSlice[id] {
+			if category == categoryUrl {
+				dishs = append(
+					dishs,
+					model.Dish{
+						id,
+						name,
+						description,
+						price,
+						urlImage,
+						categoryMapSlice[id],
+						calories,
+						weight,
+						typeCuisine})
+				break
+			}
+		}
 	}
 	paginat := model.PaginationMenu{limit, offset, total}
 

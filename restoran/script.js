@@ -770,33 +770,82 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (loginForm) {
-    loginForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const username = document.getElementById("login-username").value.trim();
-      const password = document.getElementById("login-password").value.trim();
+    loginForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        
+        // Показываем индикатор загрузки
+        const submitBtn = loginForm.querySelector('.submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Вход...';
 
-      const loginError = validateLength(username, 4, 20, "Логин");
-      const passwordError = validateLength(password, 6, 20, "Пароль");
+        const username = document.getElementById("login-username").value.trim();
+        const password = document.getElementById("login-password").value.trim();
 
-      if (loginError)
-        showError(document.getElementById("login-username"), loginError);
-      if (passwordError)
-        showError(document.getElementById("login-password"), passwordError);
-      if (loginError || passwordError) return;
+        // Валидация
+        const loginError = validateLength(username, 4, 20, "Логин");
+        const passwordError = validateLength(password, 6, 20, "Пароль");
 
-      loginUser({ login: username, email: username });
-      hideModal("auth-modal");
-      showCustomAlert("Вы успешно вошли!");
-      loadCart();
-      loadDeliveryAddress();
+        if (loginError) showError(document.getElementById("login-username"), loginError);
+        if (passwordError) showError(document.getElementById("login-password"), passwordError);
+        
+        if (loginError || passwordError) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'ВОЙТИ';
+            return;
+        }
+
+        try {
+            // Отправляем данные на бекенд
+            const response = await fetch('http://localhost:8000/users/auth', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    login: username,
+                    password: password
+                }),
+                credentials: 'include' // Для работы с куками/сессиями
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Ошибка входа');
+            }
+
+            const data = await response.json();
+            
+            // Сохраняем токен (если используется JWT)
+            if (data.token) {
+                localStorage.setItem('authToken', data.token);
+            }
+            
+            // Сохраняем данные пользователя
+            if (data.user) {
+                localStorage.setItem('userData', JSON.stringify(data.user));
+            }
+
+            hideModal("auth-modal");
+            showCustomAlert("Вы успешно вошли!");
+            
+            // Перенаправляем в личный кабинет
+            window.location.href = 'account.html';
+
+        } catch (error) {
+            console.error('Ошибка входа:', error);
+            showCustomAlert(error.message || 'Неверный логин или пароль', false);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'ВОЙТИ';
+        }
     });
 
     loginForm.querySelectorAll("input").forEach((input) => {
-      input.addEventListener("input", function () {
-        clearError(this);
-      });
+        input.addEventListener("input", function () {
+            clearError(this);
+        });
     });
-  }
+}
 
   if (registerForm) {
     registerForm.addEventListener("submit", async function (e) {
@@ -861,7 +910,13 @@ document.addEventListener("DOMContentLoaded", function () {
             if (data.access_token) {
                 localStorage.setItem('authToken', data.access_token);
             }
-            
+            if (data.user.id) {
+                localStorage.setItem('user.Id', data.user.id);
+            }
+            if (data.access_token) {
+                localStorage.setItem('authToken', data.access_token);
+            }
+            localStorage.setItem('userRole', "Клиент");
             hideModal("auth-modal");
             showCustomAlert("Регистрация прошла успешно!");
             
