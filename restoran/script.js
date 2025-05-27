@@ -910,6 +910,12 @@ document.addEventListener("DOMContentLoaded", function () {
             if (data.access_token) {
                 localStorage.setItem('authToken', data.access_token);
             }
+            if (data.user.id) {
+                localStorage.setItem('user.Id', data.user.id);
+            }
+            if (data.access_token) {
+                localStorage.setItem('authToken', data.access_token);
+            }
             localStorage.setItem('userRole', "Клиент");
             hideModal("auth-modal");
             showCustomAlert("Регистрация прошла успешно!");
