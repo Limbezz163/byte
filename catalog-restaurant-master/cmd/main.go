@@ -38,9 +38,10 @@ func main() {
 
 	r.HandleFunc("/api/menu", handler.GetDishsOfMenu).Methods("GET")
 	r.HandleFunc("/cart/", middleware.JwtTokenVerificationMiddleware(handler.GetDishsMenu)).Methods("GET")
-	r.HandleFunc("/cart/", middleware.JwtTokenVerificationMiddleware(handler.PostDishToCart)).Methods("Post")
+	//r.HandleFunc("/cart/", middleware.JwtTokenVerificationMiddleware(handler.PostDishToCart)).Methods("Post")
 
 	r.HandleFunc("/orders/", middleware.JwtTokenVerificationMiddleware(handler.GetOrdersOfUser)).Methods("GET")
+	r.HandleFunc("/orders/add", middleware.JwtTokenVerificationMiddleware(handler.PostOrderOfUser)).Methods("Post")
 	//r.HandleFunc("/users/updateUser", auth.JWTAuthMiddleware(handler.PutUser)).Methods("PUT")
 	//r.HandleFunc("/menu/dish/{id}", handler.GetDish).Methods("GET")
 
