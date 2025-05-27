@@ -8,7 +8,7 @@ import (
 )
 
 func ConnectDataBase() *pgxpool.Pool {
-	connStr := "postgres://postgres:120703ar@localhost:5432/restaurant"
+	connStr := "postgres://postgres:root@localhost:5432/restaurant"
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

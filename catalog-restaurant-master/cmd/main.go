@@ -10,10 +10,7 @@ import (
 	"github.com/rs/cors"
 	"log"
 	"net/http"
-	"os"
 )
-
-var jwtKey = []byte(os.Getenv("JWT_KEY"))
 
 func main() {
 	// Загружаем .env файл
@@ -29,7 +26,7 @@ func main() {
 		return
 	}
 
-	ports= append(ports,"http://127.0.0.1:5500" )
+	ports = append(ports, "http://127.0.0.1:5500")
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   ports,
@@ -41,6 +38,9 @@ func main() {
 
 	r.HandleFunc("/api/menu", handler.GetDishsOfMenu).Methods("GET")
 	r.HandleFunc("/cart/", middleware.JwtTokenVerificationMiddleware(handler.GetDishsMenu)).Methods("GET")
+	r.HandleFunc("/cart/", middleware.JwtTokenVerificationMiddleware(handler.PostDishToCart)).Methods("Post")
+
+	r.HandleFunc("/orders/", middleware.JwtTokenVerificationMiddleware(handler.GetOrdersOfUser)).Methods("GET")
 	//r.HandleFunc("/users/updateUser", auth.JWTAuthMiddleware(handler.PutUser)).Methods("PUT")
 	//r.HandleFunc("/menu/dish/{id}", handler.GetDish).Methods("GET")
 

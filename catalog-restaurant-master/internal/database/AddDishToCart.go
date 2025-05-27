@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func PostDishToCart(session string, dish string, quantity int) (model.CartItem, error) {
+func AddDishToCart(session string, dish string, quantity int) (model.CartItem, error) {
 	dbpool := ConnectDataBase()
 	defer dbpool.Close()
 
