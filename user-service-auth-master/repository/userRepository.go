@@ -57,6 +57,8 @@ func (u *userRepository) CreateUser(user *model.User) (*model.User, error) {
 		`INSERT INTO "user" (name, patronymic, surname, email, phone_number, login, password) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
 		&user.Name, patronymic, &user.Surname, &user.Email, &user.PhoneNumber, &user.Login, &password).Scan(&user.ID)
 
+	user.Password = ""
+
 	if err != nil {
 		return nil, err
 	}

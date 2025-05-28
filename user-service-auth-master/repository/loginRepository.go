@@ -35,7 +35,7 @@ func (repo *loginRepository) Authenticate(login *model.LoginRequest) (model.Logi
 	role = ""
 	err := repo.dbpool.QueryRow(context.Background(),
 		`SELECT id,name, surname, patronymic,phone_number,email,login, password FROM "user" WHERE login = $1`, &login.Login).
-		Scan(&id, &name, &surname, &patronymic, &phone, &email,  &loginUser, &password)
+		Scan(&id, &name, &surname, &patronymic, &phone, &email, &loginUser, &password, &loginUser, &password)
 	if err != nil {
 		err = repo.dbpool.QueryRow(context.Background(),
 			`SELECT e.id,e.name, e.surname, e.patronymic,e.phone_number,e.email,e.login, e.password, jt.job_title FROM "employee" e INNER JOIN "job_title" jt ON e.id_job_title = jt.id  WHERE e.login = $1`, &login.Login).
