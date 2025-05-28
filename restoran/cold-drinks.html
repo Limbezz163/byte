@@ -1,612 +1,517 @@
 <!DOCTYPE html>
 <html lang="ru">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>BITE - Холодные Напитки</title>
-        <link rel="stylesheet" href="styles.css" />
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f8f8f8;
-            }
 
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
-                position: relative;
-            }
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BITE - Холодные Напитки</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
 
-            /* Стили для поисковой строки */
-            .search-box {
-                display: flex;
-                align-items: center;
-                background-color: #8b0000;
-                border-radius: 20px;
-                padding: 10px 15px;
-                width: 70%;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
 
-            .search-box input {
-                border: none;
-                outline: none;
-                width: 100%;
-                padding: 5px;
-                font-size: 16px;
-                background-color: transparent;
-                color: white;
-            }
+        /* Стили для поисковой строки */
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #8b0000;
+            border-radius: 20px;
+            padding: 10px 15px;
+            width: 70%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-            .search-box input::placeholder {
-                color: rgba(255, 255, 255, 0.7);
-            }
+        .search-box input {
+            border: none;
+            outline: none;
+            width: 100%;
+            padding: 5px;
+            font-size: 16px;
+            background-color: transparent;
+            color: white;
+        }
 
-            .search-icon {
-                color: white;
-                margin-right: 10px;
-                font-size: 18px;
-            }
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
 
-            /* Стили для кнопки фильтра */
-            .filter-button {
-                background-color: white;
-                border: none;
-                border-radius: 20px;
-                padding: 10px 20px;
-                display: flex;
-                align-items: center;
-                cursor: pointer;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                font-weight: bold;
-                font-size: 16px;
-            }
+        .search-icon {
+            color: white;
+            margin-right: 10px;
+            font-size: 18px;
+        }
 
-            .filter-icon {
-                margin-right: 8px;
-                font-size: 16px;
-            }
+        /* Стили для кнопки фильтра */
+        .filter-button {
+            background-color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            font-size: 16px;
+        }
 
-            /* Стили для панели фильтров */
-            .filter-panel {
-                display: none;
-                background-color: #8b0000;
-                border-radius: 10px;
-                padding: 20px;
-                margin-top: 10px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                width: 280px;
-                position: absolute;
-                right: 0;
-                top: 60px;
-                z-index: 1000;
-            }
+        .filter-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
 
-            .filter-section {
-                margin-bottom: 20px;
-            }
+        /* Стили для панели фильтров */
+        .filter-panel {
+            display: none;
+            background-color: #8b0000;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 280px;
+            position: absolute;
+            right: 0;
+            top: 60px;
+            z-index: 1000;
+        }
 
-            .filter-title {
-                font-size: 16px;
-                font-weight: bold;
-                margin-bottom: 15px;
-                color: #f4f2e5;
-            }
+        .filter-section {
+            margin-bottom: 20px;
+        }
 
-            .cuisine-list {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-            }
+        .filter-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #f4f2e5;
+        }
 
-            .cuisine-item {
-                padding: 8px 0;
-                border-bottom: 1px solid #eee;
-                font-size: 15px;
-                color: #f4f2e5;
-                cursor: pointer;
-            }
+        .cuisine-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-            .cuisine-item:hover {
-                color: #fff;
-                font-weight: bold;
-            }
+        .cuisine-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 15px;
+            color: #f4f2e5;
+            cursor: pointer;
+        }
 
-            .cuisine-item.active {
-                color: #fff;
-                font-weight: bold;
-            }
+        .cuisine-item:hover {
+            color: #fff;
+            font-weight: bold;
+        }
 
-            .cuisine-item:last-child {
-                border-bottom: none;
-            }
+        .cuisine-item.active {
+            color: #fff;
+            font-weight: bold;
+        }
 
-            .price-filter {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                margin-top: 15px;
-            }
+        .cuisine-item:last-child {
+            border-bottom: none;
+        }
 
-            .price-input {
-                width: 80px;
-                padding: 8px 10px;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                font-size: 14px;
-            }
+        .price-filter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
 
-            .price-separator {
-                color: #777;
-            }
+        .price-input {
+            width: 80px;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
 
-            /* Расположение поиска и фильтра */
-            .search-filter-container {
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 25px;
-            }
+        .price-separator {
+            color: #777;
+        }
 
-            /* Стили для карточек блюд */
-            .dishes-container {
-                margin-top: 30px;
-            }
+        /* Расположение поиска и фильтра */
+        .search-filter-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
 
-            .dishes-title {
-                font-size: 28px;
-                margin-bottom: 20px;
-                color: #333;
-            }
+        /* Стили для карточек блюд */
+        .dishes-container {
+            margin-top: 30px;
+        }
 
-            .dish-cards-container {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 25px;
-            }
+        .dishes-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
 
-            .dish-card {
-                background: white;
-                border-radius: 10px;
-                overflow: hidden;
-                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-                transition: transform 0.3s ease;
-            }
+        .dish-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
 
-            .dish-card:hover {
-                transform: translateY(-5px);
-            }
+        .dish-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
 
-            .dish-image {
-                height: 200px;
-                background-size: cover;
-                background-position: center;
-            }
+        .dish-card:hover {
+            transform: translateY(-5px);
+        }
 
-            .dish-info {
-                padding: 20px;
-            }
+        .dish-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
 
-            .dish-info h2 {
-                margin: 0 0 10px;
-                font-size: 18px;
-                color: #333;
-            }
+        .dish-info {
+            padding: 20px;
+        }
 
-            .dish-meta {
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 10px;
-                font-size: 14px;
-                color: #666;
-            }
+        .dish-info h2 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #333;
+        }
 
-            .dish-description {
-                font-size: 14px;
-                color: #555;
-                margin-bottom: 15px;
-                line-height: 1.4;
-            }
+        .dish-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #666;
+        }
 
-            .dish-footer {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+        .dish-description {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
 
-            .dish-price {
-                font-weight: bold;
-                font-size: 18px;
-                color: #8b0000;
-            }
+        .dish-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-            .add-to-cart {
-                background-color: #8b0000;
-                color: white;
-                border: none;
-                padding: 8px 15px;
-                border-radius: 5px;
-                cursor: pointer;
-                font-weight: bold;
-                transition: background-color 0.3s;
-            }
+        .dish-price {
+            font-weight: bold;
+            font-size: 18px;
+            color: #8b0000;
+        }
 
-            .add-to-cart:hover {
-                background-color: #6d0000;
-            }
+        .add-to-cart {
+            background-color: #8b0000;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
 
-            .no-results {
-                grid-column: 1 / -1;
-                text-align: center;
-                padding: 40px;
-                font-size: 18px;
-                color: #666;
-            }
-        </style>
-    </head>
+        .add-to-cart:hover {
+            background-color: #6d0000;
+        }
 
-    <body>
-        <header>
-            <div class="container">
-                <div class="logo">ВIТЕ</div>
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
+</head>
 
-                <nav class="nav-center">
-                    <ul>
-                        <li><a href="index.html">Главная</a></li>
-                        <!-- <li><a href="#delivery">Доставка</a></li> -->
-                        <li><a href="#about">О ресторане</a></li>
-                    </ul>
-                </nav>
-
-                <div class="social-icons">
-                    <a href="#" aria-label="ВКонтакте">
-                        <img
-                            src="https://pngicon.ru/file/uploads/vk.png"
-                            alt="VK"
-                            width="28"
-                            height="28"
-                        />
-                    </a>
-                    <a href="#" aria-label="Телеграм">
-                        <svg
-                            width="28"
-                            height="28"
-                            viewBox="0 0 24 24"
-                            fill="#F4F2E5"
-                        >
-                            <path
-                                d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.534.26l.2-3.004 5.59-5.043c.24-.213-.054-.334-.373-.12l-6.91 4.34-2.97-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.53-.21 1.002.13.832.942z"
-                            />
-                        </svg>
-                    </a>
-                    <a href="#" aria-label="Личный кабинет" id="auth-icon">
-                        <svg
-                            width="29"
-                            height="29"
-                            viewBox="0 0 24 24"
-                            fill="#F4F2E5"
-                        >
-                            <path
-                                d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
-                            />
-                        </svg>
-                    </a>
-                    <a href="#" aria-label="Корзина" id="cart-icon">
-                        <svg
-                            width="35"
-                            height="35"
-                            viewBox="0 0 24 24"
-                            fill="#F4F2E5"
-                        >
-                            <path
-                                d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"
-                            />
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </header>
-
+<body>
+    <header>
         <div class="container">
-            <div
-                style="
+            <div class="logo">ВIТЕ</div>
+
+            <nav class="nav-center">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <!-- <li><a href="#delivery">Доставка</a></li> -->
+                    <li><a href="#about">О ресторане</a></li>
+                </ul>
+            </nav>
+
+            <div class="social-icons">
+                <a href="#" aria-label="ВКонтакте">
+                    <img src="https://pngicon.ru/file/uploads/vk.png" alt="VK" width="28" height="28" />
+                </a>
+                <a href="#" aria-label="Телеграм">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="#F4F2E5">
+                        <path
+                            d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.534.26l.2-3.004 5.59-5.043c.24-.213-.054-.334-.373-.12l-6.91 4.34-2.97-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.53-.21 1.002.13.832.942z" />
+                    </svg>
+                </a>
+                <a href="#" aria-label="Личный кабинет" id="auth-icon">
+                    <svg width="29" height="29" viewBox="0 0 24 24" fill="#F4F2E5">
+                        <path
+                            d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                    </svg>
+                </a>
+                <a href="#" aria-label="Корзина" id="cart-icon">
+                    <svg width="35" height="35" viewBox="0 0 24 24" fill="#F4F2E5">
+                        <path
+                            d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div style="
                     display: flex;
                     flex-direction: column;
                     gap: 20px;
                     width: 100%;
                     height: 100%;
-                "
-            >
-                <!-- Перемещенный блок поиска и фильтра наверх -->
-                <div style="display:flex; justify-content: center; align-items: center; margin-top: 150px;">
-                    <div class="search-filter-container">
-                        <div class="search-box">
-                            <span class="search-icon">🔍</span>
-                            <input
-                                type="text"
-                                id="searchInput"
-                                placeholder="Поиск..."
-                            />
-                        </div>
-
-                        <button
-                            class="filter-button"
-                            onclick="toggleFilterPanel()"
-                        >
-                            <span class="filter-icon">⚙️</span>
-                            Фильтр
-                        </button>
+                ">
+            <!-- Перемещенный блок поиска и фильтра наверх -->
+            <div style="display:flex; justify-content: center; align-items: center; margin-top: 150px;">
+                <div class="search-filter-container">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="searchInput" placeholder="Поиск..." />
                     </div>
 
-                    <!-- Панель фильтров (точно как на скриншоте) -->
-                    <div class="filter-panel" id="filterPanel">
-                        <div class="filter-section">
-                            <div class="filter-title">Тип кухни</div>
-                            <ul class="cuisine-list">
-                                <li
-                                    class="cuisine-item active"
-                                    data-cuisine="all"
-                                >
-                                    Все
-                                </li>
-                                <li
-                                    class="cuisine-item"
-                                    data-cuisine="Французская"
-                                >
-                                    Французская
-                                </li>
-                                <li
-                                    class="cuisine-item"
-                                    data-cuisine="Средиземноморская"
-                                >
-                                    Средиземноморская
-                                </li>
-                                <li
-                                    class="cuisine-item"
-                                    data-cuisine="Азиатская"
-                                >
-                                    Азиатская
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="filter-section">
-                            <div class="filter-title">Фильтровать по цене</div>
-                            <div class="price-filter">
-                                <input
-                                    type="number"
-                                    id="minPrice"
-                                    class="price-input"
-                                    placeholder="300"
-                                    min="0"
-                                />
-                                <span class="price-separator">-</span>
-                                <input
-                                    type="number"
-                                    id="maxPrice"
-                                    class="price-input"
-                                    placeholder="800"
-                                    min="0"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <main class="dishes-container" style="margin-top: 0px; padding: 0px 40px 60px;">
-                    <h1 class="dishes-title">Холодные Напитки</h1>
-                    <div class="dish-cards-container" id="dishCardsContainer">
-                        <!-- Здесь будут отображаться карточки блюд -->
-                    </div>
-                </main>
-            </div>
-        </div>
-        <!-- Модальное окно авторизации -->
-        <div id="auth-modal" class="modal">
-            <!-- Содержимое модального окна без изменений -->
-        </div>
-
-        <div id="cart-modal" class="modal">
-            <div class="modal-content account-content" style="overflow-y: auto">
-                <span class="close">&times;</span>
-
-                <!-- Блок 1: Заголовок корзины -->
-                <div class="cart-header-block">
-                    <div class="cart-title-wrapper">
-                        <svg
-                            class="trash-icon"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="#F4F2E5"
-                        >
-                            <path
-                                d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                            />
-                        </svg>
-                        <h2>Ваш заказ</h2>
-                    </div>
-                    <div id="cart-items" class="cart-items-block scrollable">
-                        <!-- Пример товара -->
-                        <div class="cart-item">
-                            <div class="item-actions">
-                                <button class="quantity-btn">-</button>
-                                <span class="item-quantity">1</span>
-                                <button class="quantity-btn">+</button>
-                                <button class="remove-btn">
-                                    <svg
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 24 24"
-                                        fill="#5B120D"
-                                    >
-                                        <path
-                                            d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                                        />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <p class="empty-cart">Ваша корзина пуста</p>
-                    </div>
+                    <button class="filter-button" onclick="toggleFilterPanel()">
+                        <span class="filter-icon">⚙️</span>
+                        Фильтр
+                    </button>
                 </div>
 
-                <!-- Блок 2: Адрес доставки -->
-                <div class="delivery-address-block">
-                    <h3>Выберите адрес доставки</h3>
-                    <div class="address-table">
-                        <table>
-                            <tr>
-                                <td>ул. Примерная, д. 1, кв. 2</td>
-                                <td class="address-checkbox">
-                                    <input
-                                        type="radio"
-                                        name="address"
-                                        id="address1"
-                                        checked
-                                    />
-                                    <label for="address1"></label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>ул. Другая, д. 3, кв. 4</td>
-                                <td class="address-checkbox">
-                                    <input
-                                        type="radio"
-                                        name="address"
-                                        id="address2"
-                                    />
-                                    <label for="address2"></label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>пр. Третий, д. 5, кв. 6</td>
-                                <td class="address-checkbox">
-                                    <input
-                                        type="radio"
-                                        name="address"
-                                        id="address3"
-                                    />
-                                    <label for="address3"></label>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Блок 3: Время доставки -->
-                <div class="delivery-time-block">
-                    <h3>Время доставки</h3>
-                    <div class="time-options">
-                        <button class="time-option-btn active" id="asap-btn">
-                            Как можно быстрее
-                        </button>
-                        <button class="time-option-btn" id="schedule-btn">
-                            Ко времени
-                        </button>
+                <!-- Панель фильтров (точно как на скриншоте) -->
+                <div class="filter-panel" id="filterPanel">
+                    <div class="filter-section">
+                        <div class="filter-title">Тип кухни</div>
+                        <ul class="cuisine-list">
+                            <li class="cuisine-item active" data-cuisine="all">
+                                Все
+                            </li>
+                            <li class="cuisine-item" data-cuisine="Французская">
+                                Французская
+                            </li>
+                            <li class="cuisine-item" data-cuisine="Средиземноморская">
+                                Средиземноморская
+                            </li>
+                            <li class="cuisine-item" data-cuisine="Азиатская">
+                                Азиатская
+                            </li>
+                        </ul>
                     </div>
 
-                    <div
-                        class="time-selection"
-                        id="time-selection"
-                        style="display: none"
-                    >
-                        <div class="time-input">
-                            <input
-                                type="text"
-                                id="delivery-date"
-                                class="date-picker"
-                                placeholder="Выберите дату"
-                                readonly
-                            />
+                    <div class="filter-section">
+                        <div class="filter-title">Фильтровать по цене</div>
+                        <div class="price-filter">
+                            <input type="number" id="minPrice" class="price-input" placeholder="300" min="0" />
+                            <span class="price-separator">-</span>
+                            <input type="number" id="maxPrice" class="price-input" placeholder="800" min="0" />
                         </div>
-                        <div class="time-input">
-                            <input
-                                type="text"
-                                id="delivery-time"
-                                class="time-picker"
-                                placeholder="Укажите время"
-                                readonly
-                            />
-                        </div>
-                    </div>
-
-                    <div class="cart-total">
-                        <p>Итого: <span id="cart-total-price">850</span> ₽</p>
-                        <button class="submit-btn order-btn" id="checkout-btn">
-                            Заказать
-                        </button>
                     </div>
                 </div>
             </div>
+            <main class="dishes-container" style="margin-top: 0px; padding: 0px 40px 60px;">
+                <h1 class="dishes-title">Холодные Напитки</h1>
+                <div class="dish-cards-container" id="dishCardsContainer">
+                    <!-- Здесь будут отображаться карточки блюд -->
+                </div>
+            </main>
         </div>
+    </div>
+    <!-- Модальное окно авторизации -->
+    <div id="auth-modal" class="modal">
+        <!-- Содержимое модального окна без изменений -->
+    </div>
 
-        <!-- Календарь для выбора даты (скрытый по умолчанию) -->
-        <div id="datepicker-container" class="datepicker-container"></div>
+    <div id="cart-modal" class="modal">
+        <div class="modal-content account-content" style="overflow-y: auto">
+            <span class="close">&times;</span>
 
-        <!-- Временной барабан (скрытый по умолчанию) -->
-        <div id="timepicker-container" class="timepicker-container">
-            <div class="timepicker">
-                <div class="hours-wheel"></div>
-                <div class="minutes-wheel"></div>
-                <div class="center-dot"></div>
+            <!-- Блок 1: Заголовок корзины -->
+            <div class="cart-header-block">
+                <div class="cart-title-wrapper">
+                    <svg class="trash-icon" width="24" height="24" viewBox="0 0 24 24" fill="#F4F2E5">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                    </svg>
+                    <h2>Ваш заказ</h2>
+                </div>
+                <div id="cart-items" class="cart-items-block scrollable">
+                    <!-- Пример товара -->
+                    <div class="cart-item">
+                        <div class="item-actions">
+                            <button class="quantity-btn">-</button>
+                            <span class="item-quantity">1</span>
+                            <button class="quantity-btn">+</button>
+                            <button class="remove-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#5B120D">
+                                    <path
+                                        d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="empty-cart">Ваша корзина пуста</p>
+                </div>
             </div>
-            <button class="timepicker-confirm">Подтвердить</button>
+
+            <!-- Блок 2: Адрес доставки -->
+            <div class="delivery-address-block">
+                <h3>Выберите адрес доставки</h3>
+                <div class="address-table">
+                    <table>
+                        <tr>
+                            <td>ул. Примерная, д. 1, кв. 2</td>
+                            <td class="address-checkbox">
+                                <input type="radio" name="address" id="address1" checked />
+                                <label for="address1"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>ул. Другая, д. 3, кв. 4</td>
+                            <td class="address-checkbox">
+                                <input type="radio" name="address" id="address2" />
+                                <label for="address2"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>пр. Третий, д. 5, кв. 6</td>
+                            <td class="address-checkbox">
+                                <input type="radio" name="address" id="address3" />
+                                <label for="address3"></label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Блок 3: Время доставки -->
+            <div class="delivery-time-block">
+                <h3>Время доставки</h3>
+                <div class="time-options">
+                    <button class="time-option-btn active" id="asap-btn">
+                        Как можно быстрее
+                    </button>
+                    <button class="time-option-btn" id="schedule-btn">
+                        Ко времени
+                    </button>
+                </div>
+
+                <div class="time-selection" id="time-selection" style="display: none">
+                    <div class="time-input">
+                        <input type="text" id="delivery-date" class="date-picker" placeholder="Выберите дату"
+                            readonly />
+                    </div>
+                    <div class="time-input">
+                        <input type="text" id="delivery-time" class="time-picker" placeholder="Укажите время"
+                            readonly />
+                    </div>
+                </div>
+
+                <div class="cart-total">
+                    <p>Итого: <span id="cart-total-price">850</span> ₽</p>
+                    <button class="submit-btn order-btn" id="checkout-btn">
+                        Заказать
+                    </button>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", async () => {
-                let dishes = []; // Будем хранить все блюда здесь
+    <!-- Календарь для выбора даты (скрытый по умолчанию) -->
+    <div id="datepicker-container" class="datepicker-container"></div>
 
-                // Функция для загрузки данных с сервера
-                const fetchDishes = async () => {
-                    try {
-                        const res = await fetch(
-                            "http://localhost:8080/api/menu?limit=20&category=ХолодныеНапитки"
+    <!-- Временной барабан (скрытый по умолчанию) -->
+    <div id="timepicker-container" class="timepicker-container">
+        <div class="timepicker">
+            <div class="hours-wheel"></div>
+            <div class="minutes-wheel"></div>
+            <div class="center-dot"></div>
+        </div>
+        <button class="timepicker-confirm">Подтвердить</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            let dishes = []; // Будем хранить все блюда здесь
+
+            // Функция для загрузки данных с сервера
+            const fetchDishes = async () => {
+                try {
+                    const res = await fetch(
+                        "http://localhost:8080/api/menu?limit=20&category=ХолодныеНапитки"
+                    );
+
+                    if (!res.ok) {
+                        throw new Error(
+                            `HTTP error! status: ${res.status}`
                         );
+                    }
 
-                        if (!res.ok) {
-                            throw new Error(
-                                `HTTP error! status: ${res.status}`
-                            );
-                        }
-
-                        const data = await res.json();
-                        console.log(data);
-                        dishes = data.data; // Сохраняем все блюда
-                        renderDishes(dishes); // Рендерим все блюда изначально
-                    } catch (error) {
-                        console.error("Error fetching data:", error);
-                        // В случае ошибки покажем заглушку
-                        document.getElementById(
-                            "dishCardsContainer"
-                        ).innerHTML = `
+                    const data = await res.json();
+                    console.log(data);
+                    dishes = data.data;
+                    console.log(dishes); // Сохраняем все блюда
+                    renderDishes(dishes); // Рендерим все блюда изначально
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                    // В случае ошибки покажем заглушку
+                    document.getElementById(
+                        "dishCardsContainer"
+                    ).innerHTML = `
                         <div class="no-results">
                             Произошла ошибка при загрузке меню. Пожалуйста, попробуйте позже.
                         </div>
                     `;
-                    }
-                };
+                }
+            };
 
-                // Функция для отображения блюд
-                function renderDishes(dishesToRender) {
-                    const container =
-                        document.getElementById("dishCardsContainer");
+            // Функция для отображения блюд
+            function renderDishes(dishesToRender) {
+                const container =
+                    document.getElementById("dishCardsContainer");
 
-                    if (dishesToRender.length === 0) {
-                        container.innerHTML = `
+                if (dishesToRender.length === 0) {
+                    container.innerHTML = `
                         <div class="no-results">
                             По вашему запросу ничего не найдено. Попробуйте изменить параметры поиска.
                         </div>
                     `;
-                        return;
-                    }
+                    return;
+                }
 
-                    let listCardHTML = ""; // Накопительная переменная
+                let listCardHTML = ""; // Накопительная переменная
 
-                    dishesToRender.forEach((item) => {
-                        listCardHTML += `
+                dishesToRender.forEach((item) => {
+                    listCardHTML += `
                     <div class="dish-card">
                         <div class="dish-image"
                             style="background-image: url('https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')">
@@ -622,129 +527,150 @@
                             </p>
                             <div class="dish-footer">
                                 <span class="dish-price">${item.price} ₽</span>
-                                <button class="add-to-cart" data-id="${item.dish_id}">В корзину</button>
+                                <button class="add-to-cart" data-id="${item.id}">В корзину</button>
                             </div>
                         </div>
                     </div>`;
-                    });
+                });
 
-                    container.innerHTML = listCardHTML;
+                container.innerHTML = listCardHTML;
 
-                    // Добавляем обработчики событий для кнопок "В корзину"
-                    document
-                        .querySelectorAll(".add-to-cart")
-                        .forEach((button) => {
-                            button.addEventListener("click", function () {
-                                const dishId = this.getAttribute("data-id");
-                                const dish = dishes.find(
-                                    (d) => d.dish_id == dishId
-                                );
-                                addToCart(dish);
-                            });
-                        });
-                }
-
-                // Функция фильтрации блюд
-                function filterDishes() {
-                    const searchTerm = document
-                        .getElementById("searchInput")
-                        .value.toLowerCase();
-                    const selectedCuisine = document.querySelector(
-                        ".cuisine-item.active"
-                    )?.dataset.cuisine;
-                    const minPrice =
-                        parseInt(document.getElementById("minPrice").value) ||
-                        0;
-                    const maxPrice =
-                        parseInt(document.getElementById("maxPrice").value) ||
-                        Infinity;
-
-                    const filtered = dishes.filter((dish) => {
-                        // Поиск по названию и описанию
-                        const matchesSearch =
-                            dish.dish_name.toLowerCase().includes(searchTerm) ||
-                            (dish.description &&
-                                dish.description
-                                    .toLowerCase()
-                                    .includes(searchTerm));
-
-                        // Фильтр по кухне
-                        const matchesCuisine =
-                            selectedCuisine === "all" ||
-                            dish.type_name === selectedCuisine;
-
-                        // Фильтр по цене
-                        const matchesPrice =
-                            dish.price >= minPrice && dish.price <= maxPrice;
-
-                        return matchesSearch && matchesCuisine && matchesPrice;
-                    });
-
-                    renderDishes(filtered);
-                }
-
-                // Функция добавления в корзину
-                function addToCart(dish) {
-                    console.log("Добавлено в корзину:", dish);
-                    // Здесь можно добавить логику для работы с корзиной
-                    alert(`Блюдо "${dish.dish_name}" добавлено в корзину!`);
-                }
-
-                // Инициализация фильтров
-                function initFilters() {
-                    // Обработчики для фильтра по кухне
-                    const cuisineItems =
-                        document.querySelectorAll(".cuisine-item");
-                    cuisineItems.forEach((item) => {
-                        item.addEventListener("click", function () {
-                            cuisineItems.forEach((i) =>
-                                i.classList.remove("active")
+                // Добавляем обработчики событий для кнопок "В корзину"
+                document
+                    .querySelectorAll(".add-to-cart")
+                    .forEach((button) => {
+                        button.addEventListener("click", function () {
+                            const dishId = this.getAttribute("data-id");
+                            const dish = dishes.find(
+                                (d) => d.id == dishId
                             );
-                            this.classList.add("active");
-                            filterDishes();
+                            addToCart(dish);
                         });
                     });
+            }
 
-                    // Обработчики для полей цены
-                    document
-                        .getElementById("minPrice")
-                        .addEventListener("input", filterDishes);
-                    document
-                        .getElementById("maxPrice")
-                        .addEventListener("input", filterDishes);
+            // Функция фильтрации блюд
+            function filterDishes() {
+                const searchTerm = document
+                    .getElementById("searchInput")
+                    .value.toLowerCase();
+                const selectedCuisine = document.querySelector(
+                    ".cuisine-item.active"
+                )?.dataset.cuisine;
+                const minPrice =
+                    parseInt(document.getElementById("minPrice").value) ||
+                    0;
+                const maxPrice =
+                    parseInt(document.getElementById("maxPrice").value) ||
+                    Infinity;
 
-                    // Обработчик для поиска
-                    document
-                        .getElementById("searchInput")
-                        .addEventListener("input", filterDishes);
+                const filtered = dishes.filter((dish) => {
+                    // Поиск по названию и описанию
+                    const matchesSearch =
+                        dish.dish_name.toLowerCase().includes(searchTerm) ||
+                        (dish.description &&
+                            dish.description
+                                .toLowerCase()
+                                .includes(searchTerm));
 
-                    // Обработчик для закрытия панели фильтров при клике вне её
-                    document.addEventListener("click", function (event) {
-                        const panel = document.getElementById("filterPanel");
-                        const filterBtn =
-                            document.querySelector(".filter-button");
+                    // Фильтр по кухне
+                    const matchesCuisine =
+                        selectedCuisine === "all" ||
+                        dish.type_name === selectedCuisine;
 
-                        if (
-                            !panel.contains(event.target) &&
-                            event.target !== filterBtn &&
-                            !filterBtn.contains(event.target)
-                        ) {
-                            panel.style.display = "none";
-                        }
-                    });
+                    // Фильтр по цене
+                    const matchesPrice =
+                        dish.price >= minPrice && dish.price <= maxPrice;
+
+                    return matchesSearch && matchesCuisine && matchesPrice;
+                });
+
+                renderDishes(filtered);
+            }
+
+            // Функция добавления в корзину
+            function addToCart(dish) {
+                console.log("Добавлено в корзину:", dish);
+                const cartDish = JSON.parse(sessionStorage.getItem('dish'))
+                if (cartDish) {
+                    const index = cartDish.findIndex((element) => {
+                        return element.element.dish_name === dish.dish_name
+                    })
+                    if (index !== -1) {
+                        cartDish[index]={ count: cartDish[index].count + 1, element: dish }
+                        sessionStorage.setItem('dish', JSON.stringify(cartDish));
+                    }
+                    else {
+                        cartDish.push({ count: 1, element: dish })
+                        sessionStorage.setItem('dish', JSON.stringify(cartDish));
+                    }
                 }
+                else {
+                    sessionStorage.setItem('dish', JSON.stringify([{ count: 1, element: dish }]))
 
-                // Функция для переключения панели фильтров
-                window.toggleFilterPanel = function () {
+                }
+                // Здесь можно добавить логику для работы с корзиной
+                alert(`Блюдо ${dish.dish_name} добавлено в корзину!`);
+            }
+
+
+
+            // Инициализация фильтров
+            function initFilters() {
+                // Обработчики для фильтра по кухне
+                const cuisineItems =
+                    document.querySelectorAll(".cuisine-item");
+                cuisineItems.forEach((item) => {
+                    item.addEventListener("click", function () {
+                        cuisineItems.forEach((i) =>
+                            i.classList.remove("active")
+                        );
+                        this.classList.add("active");
+                        filterDishes();
+                    });
+                });
+
+                // Обработчики для полей цены
+                document
+                    .getElementById("minPrice")
+                    .addEventListener("input", filterDishes);
+                document
+                    .getElementById("maxPrice")
+                    .addEventListener("input", filterDishes);
+
+                // Обработчик для поиска
+                document
+                    .getElementById("searchInput")
+                    .addEventListener("input", filterDishes);
+
+                // Обработчик для закрытия панели фильтров при клике вне её
+                document.addEventListener("click", function (event) {
                     const panel = document.getElementById("filterPanel");
-                    panel.style.display =
-                        panel.style.display === "block" ? "none" : "block";
-                };
+                    const filterBtn =
+                        document.querySelector(".filter-button");
 
-                // Инициализация
-                await fetchDishes();
-                initFilters();
-            });
-        </script>
-    </body>
+                    if (
+                        !panel.contains(event.target) &&
+                        event.target !== filterBtn &&
+                        !filterBtn.contains(event.target)
+                    ) {
+                        panel.style.display = "none";
+                    }
+                });
+            }
+
+            // Функция для переключения панели фильтров
+            window.toggleFilterPanel = function () {
+                const panel = document.getElementById("filterPanel");
+                panel.style.display =
+                    panel.style.display === "block" ? "none" : "block";
+            };
+
+            // Инициализация
+            await fetchDishes();
+            initFilters();
+        });
+    </script>
+</body>
+
 </html>

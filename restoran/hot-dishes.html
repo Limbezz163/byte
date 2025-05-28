@@ -622,7 +622,7 @@
                             </p>
                             <div class="dish-footer">
                                 <span class="dish-price">${item.price} ₽</span>
-                                <button class="add-to-cart" data-id="${item.dish_id}">В корзину</button>
+                                <button class="add-to-cart" data-id="${item.id}">В корзину</button>
                             </div>
                         </div>
                     </div>`;
@@ -637,7 +637,7 @@
                             button.addEventListener("click", function () {
                                 const dishId = this.getAttribute("data-id");
                                 const dish = dishes.find(
-                                    (d) => d.dish_id == dishId
+                                    (d) => d.id == dishId
                                 );
                                 addToCart(dish);
                             });
@@ -683,12 +683,29 @@
                     renderDishes(filtered);
                 }
 
-                // Функция добавления в корзину
-                function addToCart(dish) {
-                    console.log("Добавлено в корзину:", dish);
-                    // Здесь можно добавить логику для работы с корзиной
-                    alert(`Блюдо "${dish.dish_name}" добавлено в корзину!`);
+               function addToCart(dish) {
+                console.log("Добавлено в корзину:", dish);
+                const cartDish = JSON.parse(sessionStorage.getItem('dish'))
+                if (cartDish) {
+                    const index = cartDish.findIndex((element) => {
+                        return element.element.dish_name === dish.dish_name
+                    })
+                    if (index !== -1) {
+                        cartDish[index]={ count: cartDish[index].count + 1, element: dish }
+                        sessionStorage.setItem('dish', JSON.stringify(cartDish));
+                    }
+                    else {
+                        cartDish.push({ count: 1, element: dish })
+                        sessionStorage.setItem('dish', JSON.stringify(cartDish));
+                    }
                 }
+                else {
+                    sessionStorage.setItem('dish', JSON.stringify([{ count: 1, element: dish }]))
+
+                }
+                // Здесь можно добавить логику для работы с корзиной
+                alert(`Блюдо ${dish.dish_name} добавлено в корзину!`);
+            }
 
                 // Инициализация фильтров
                 function initFilters() {
