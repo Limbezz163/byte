@@ -31,7 +31,7 @@ func main() {
 		return
 	}
 
-	ports= append (ports, "http://127.0.0.1:5500")
+	ports = append(ports, "http://127.0.0.1:5500")
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   ports,
@@ -45,6 +45,7 @@ func main() {
 	r.HandleFunc("/users/register", handler.PostRegisterUser).Methods("POST")
 	r.HandleFunc("/users/auth", handler.PostLogin).Methods("POST")
 	r.HandleFunc("/users/updateUser", auth.JWTAuthMiddleware(handler.PutUser)).Methods("PUT")
+	r.HandleFunc("/users/address", auth.JWTAuthMiddleware(handler.PostAddressToUser)).Methods("POST")
 
 	logger.Info("User handlers work correctly")
 
