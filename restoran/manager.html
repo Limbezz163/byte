@@ -199,30 +199,26 @@
                             <table class="orders-table">
                                 <thead>
                                     <tr>
-                                        <th>Номер</th>
-                                        <th>Адрес</th>
+                                        <th>ID</th>
                                         <th>Статус</th>
                                         <th>Действие</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>#1001</td>
-                                        <td>ул. Примерная, д. 1, кв. 2</td>
+                                    <tr data-order="1001">
+                                        <td>1001</td>
                                         <td class="status-pending">Ожидается</td>
                                         <td><button class="assign-btn" data-order="1001">Назначить курьеру</button></td>
                                     </tr>
-                                    <tr>
-                                        <td>#1002</td>
-                                        <td>ул. Другая, д. 3, кв. 4</td>
+                                    <tr data-order="1002">
+                                        <td>1002</td>
                                         <td class="status-pending">Ожидается</td>
                                         <td><button class="assign-btn" data-order="1002">Назначить курьеру</button></td>
                                     </tr>
-                                    <tr>
-                                        <td>#1003</td>
-                                        <td>пр. Третий, д. 5, кв. 6</td>
-                                        <td class="status-assigned">Ожидается</td>
-                                        <td><button class="assign-btn" data-order="1003">Назначить курьеру</button></td>
+                                    <tr data-order="1003">
+                                        <td>1003</td>
+                                        <td class="status-accepted">Принят</td>
+                                        <td><button class="delivered-btn" data-order="1003">Доставлен</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -233,8 +229,7 @@
                             <table class="couriers-table" id="couriers-table">
                                 <thead>
                                     <tr>
-                                        <th>Логин</th>
-                                        <th>Пароль</th>
+                                        <th>ID</th>
                                         <th>Статус</th>
                                         <th>Действие</th>
                                     </tr>
@@ -250,6 +245,15 @@
             </div>
         </section>
     </main>
+
+    <!-- Кнопка выхода добавлена отдельно -->
+    <button class="logout-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24">
+            <path
+                d="M16 17v-3H9v-4h7V7l5 5-5 5M14 2a2 2 0 0 1 2 2v2h-2V4H5v16h9v-2h2v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9z" />
+        </svg>
+        Выйти
+    </button>
     
     <footer>
         <div class="container">
@@ -264,12 +268,20 @@
     </footer>
 
     <script>
+
+        // Функция выхода пользователя
+        function logoutUser() {
+            if (confirm('Вы уверены, что хотите выйти из аккаунта?')) {
+        
+                window.location.href = "index.html";
+            }
+        }
         document.addEventListener('DOMContentLoaded', function() {
             // Данные курьеров с информацией о занятости
             const couriers = [
-                { login: 'courier1', password: 'pass123', busy: false },
-                { login: 'courier2', password: 'pass456', busy: true }, // Этот курьер занят
-                { login: 'courier3', password: 'pass789', busy: false }
+                { id: '1', busy: false },
+                { id: '2', busy: true }, // Этот курьер занят
+                { id: '3', busy: false }
             ];
             
             // Заполняем таблицу курьеров
@@ -280,19 +292,18 @@
                 
                 couriers.forEach(courier => {
                     const row = couriersTable.insertRow();
-                    row.insertCell(0).textContent = courier.login;
-                    row.insertCell(1).textContent = courier.password;
+                    row.insertCell(0).textContent = courier.id;
                     
                     // Добавляем ячейку с статусом
-                    const statusCell = row.insertCell(2);
+                    const statusCell = row.insertCell(1);
                     statusCell.textContent = courier.busy ? 'Занят' : 'Свободен';
                     statusCell.style.color = courier.busy ? '#ff9966' : '#66ff99';
                     
-                    const actionCell = row.insertCell(3);
+                    const actionCell = row.insertCell(2);
                     const selectBtn = document.createElement('button');
                     selectBtn.className = 'select-btn';
                     selectBtn.textContent = courier.busy ? 'Занят' : 'Выбрать';
-                    selectBtn.dataset.login = courier.login;
+                    selectBtn.dataset.id = courier.id;
                     
                     if (courier.busy) {
                         selectBtn.classList.add('busy');
@@ -330,12 +341,37 @@
                 });
             });
             
+            // Обработчик для кнопки "Доставлен"
+            function setupDeliveredButton(button) {
+                button.addEventListener('click', function() {
+                    const orderId = this.dataset.order;
+                    const orderRow = document.querySelector(`tr[data-order="${orderId}"]`);
+                    
+                    if (orderRow) {
+                        // Обновляем статус заказа
+                        orderRow.cells[1].textContent = 'Доставлен';
+                        orderRow.cells[1].className = 'status-delivered';
+                        
+                        // Удаляем кнопку
+                        orderRow.cells[2].innerHTML = '';
+                        
+                        // Освобождаем курьера (если нужно)
+                        // В реальном приложении здесь нужно определить, какой курьер был назначен
+                    }
+                });
+            }
+            
+            // Инициализация кнопок "Доставлен"
+            document.querySelectorAll('.delivered-btn').forEach(btn => {
+                setupDeliveredButton(btn);
+            });
+            
             // Обработчики для кнопок "Выбрать" в таблице курьеров
             couriersTable.addEventListener('click', function(e) {
                 const selectBtn = e.target.closest('.select-btn');
                 if (!selectBtn || selectBtn.classList.contains('busy')) return;
                 
-                selectedCourier = selectBtn.dataset.login;
+                selectedCourier = selectBtn.dataset.id;
                 
                 // Сбрасываем выделение у всех кнопок
                 document.querySelectorAll('.select-btn').forEach(btn => {
@@ -353,23 +389,27 @@
             document.getElementById('confirm-assign').addEventListener('click', function() {
                 if (selectedOrder && selectedCourier) {
                     // Находим строку заказа и обновляем статус
-                    const orderRows = document.querySelectorAll('.orders-table tbody tr');
-                    orderRows.forEach(row => {
-                        if (row.cells[0].textContent === `#${selectedOrder}`) {
-                            row.cells[2].textContent = 'Назначен курьеру';
-                            row.cells[2].className = 'status-assigned';
-                            row.cells[3].querySelector('button').disabled = true;
-                            row.cells[3].querySelector('button').classList.remove('selected');
-                            
-                            // Помечаем курьера как занятого в данных
-                            const courier = couriers.find(c => c.login === selectedCourier);
-                            if (courier) {
-                                courier.busy = true;
-                            }
-                            
-                            alert(`Заказ #${selectedOrder} назначен курьеру ${selectedCourier}`);
+                    const orderRow = document.querySelector(`tr[data-order="${selectedOrder}"]`);
+                    if (orderRow) {
+                        // Меняем статус на "Принят"
+                        orderRow.cells[1].textContent = 'Принят';
+                        orderRow.cells[1].className = 'status-accepted';
+                        
+                        // Меняем кнопку на "Доставлен"
+                        orderRow.cells[2].innerHTML = `<button class="delivered-btn" data-order="${selectedOrder}">Доставлен</button>`;
+                        
+                        // Добавляем обработчик для новой кнопки
+                        const newButton = orderRow.querySelector('.delivered-btn');
+                        setupDeliveredButton(newButton);
+                        
+                        // Помечаем курьера как занятого в данных
+                        const courier = couriers.find(c => c.id === selectedCourier);
+                        if (courier) {
+                            courier.busy = true;
                         }
-                    });
+                        
+                        alert(`Заказ ${selectedOrder} назначен курьеру ${selectedCourier}. Статус изменен на "Принят".`);
+                    }
                     
                     // Скрываем блок курьеров
                     document.querySelector('.couriers-block').style.display = 'none';
@@ -378,6 +418,9 @@
                     selectedOrder = null;
                     selectedCourier = null;
                     this.style.display = 'none';
+                    
+                    // Обновляем список курьеров
+                    renderCouriers();
                 }
             });
         });
