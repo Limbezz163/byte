@@ -42,7 +42,8 @@ func main() {
 
 	r.HandleFunc("/orders/", middleware.JwtTokenVerificationMiddleware(handler.GetOrdersOfUser)).Methods("GET")
 	r.HandleFunc("/orders/add", middleware.JwtTokenVerificationMiddleware(handler.PostOrderOfUser)).Methods("POST")
-	r.HandleFunc("/orders/update", middleware.JwtTokenVerificationMiddleware(handler.PutOrder)).Methods("PUT")
+	r.HandleFunc("/orders/update_status", middleware.JwtTokenVerificationMiddleware(handler.PutOrderStatus)).Methods("PUT")
+	r.HandleFunc("/orders/update_delivery_men", middleware.JwtTokenVerificationMiddleware(handler.PutOrderDeliveryMen)).Methods("PUT")
 	//r.HandleFunc("/users/updateUser", auth.JWTAuthMiddleware(handler.PutUser)).Methods("PUT")
 	//r.HandleFunc("/menu/dish/{id}", handler.GetDish).Methods("GET")
 

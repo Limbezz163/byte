@@ -7,10 +7,10 @@ import (
 	"net/http"
 )
 
-func PutOrder(w http.ResponseWriter, r *http.Request) {
+func PutOrderStatus(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 
-	var order model.OrderPut
+	var order model.OrderPutStatus
 	err := json.NewDecoder(r.Body).Decode(&order)
 
 	if err != nil {

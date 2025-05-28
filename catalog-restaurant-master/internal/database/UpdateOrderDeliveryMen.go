@@ -6,11 +6,11 @@ import (
 	"fmt"
 )
 
-func UpdateOrder(order model.OrderPutStatus) (model.OrderPutStatus, error) {
+func UpdateOrderDeliveryMen(order model.OrderPutDeliveryMen) (model.OrderPutDeliveryMen, error) {
 	dbpool := ConnectDataBase()
 	defer dbpool.Close()
 
-	result, err := dbpool.Exec(context.Background(), `UPDATE "order" SET status = $1 WHERE order_id = $2`, order.Status, order.OrderId)
+	result, err := dbpool.Exec(context.Background(), `UPDATE "order" SET id_delivery_men = $1 WHERE order_id = $2`, order.DelivertMen, order.OrderId)
 	if err != nil {
 		return order, err
 	}
