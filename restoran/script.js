@@ -49,7 +49,7 @@ window.addEventListener("scroll", function () {
 
 // ===== ЭЛЕМЕНТЫ ДЛЯ РАБОТЫ С МОДАЛЬНЫМИ ОКНАМИ =====
 const authBtn = document.getElementById("auth-icon");
-const cartIcon = document.getElementById("cart-icon");
+const cartIcon = document.querySelector(".cart-icon");
 const authModal = document.getElementById("auth-modal");
 const accountModal = document.getElementById("account-modal");
 const cartModal = document.getElementById("cart-modal");
@@ -433,45 +433,119 @@ function showAddAddressModal() {
 
 // ===== РАБОТА С КОРЗИНОЙ =====
 
-function updateCartDisplay() {
-  const cartItemsContainer = document.getElementById("cart-items");
-  const cartTotalPrice = document.getElementById("cart-total-price");
-
-  if (!cartItemsContainer) return;
-
-  if (cartItems.length === 0) {
-    cartItemsContainer.innerHTML =
-      '<p class="empty-cart">Ваша корзина пуста</p>';
-    if (cartTotalPrice) cartTotalPrice.textContent = "0";
-  } else {
-    let html = "";
-    let total = 0;
-
-    cartItems.forEach((item) => {
-      total += item.price * item.quantity;
-      html += `
-        <div class="cart-item">
-          <div class="cart-item-name">${item.name} × ${item.quantity}</div>
-          <div class="cart-item-price">${item.price * item.quantity} ₽</div>
-          <div class="cart-item-remove" data-id="${item.id}">×</div>
-        </div>
-      `;
+function renderCart() {
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotalPriceElement = document.getElementById('cart-total-price');
+    const cartData = JSON.parse(sessionStorage.getItem('dish')) || [];
+    
+    // Очищаем контейнер
+    cartItemsContainer.innerHTML = '';
+    
+    if (cartData.length === 0) {
+        // Если корзина пуста, показываем сообщение
+        cartItemsContainer.innerHTML = '<p class="empty-cart">Ваша корзина пуста</p>';
+        cartTotalPriceElement.textContent = '0';
+        return;
+    }
+    
+    let totalPrice = 0;
+    
+    // Для каждого элемента в корзине создаем блок
+    cartData.forEach((item, index) => {
+        const dish = item.element;
+        const count = item.count;
+        const itemTotal = dish.price * count;
+        totalPrice += itemTotal;
+        
+        const cartItemElement = document.createElement('div');
+        cartItemElement.className = 'cart-item';
+        cartItemElement.innerHTML = `
+            <div class="item-info">
+                <h3>${dish.dish_name}</h3>
+                <p>${dish.price} ₽ × ${count} = ${itemTotal} ₽</p>
+            </div>
+            <div class="item-actions">
+                <button class="quantity-btn minus-btn" data-index="${index}">-</button>
+                <span class="item-quantity">${count}</span>
+                <button class="quantity-btn plus-btn" data-index="${index}">+</button>
+                <button class="remove-btn" data-index="${index}">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#5B120D">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                    </svg>
+                </button>
+            </div>
+        `;
+        
+        cartItemsContainer.appendChild(cartItemElement);
     });
-
-    cartItemsContainer.innerHTML = html;
-    if (cartTotalPrice) cartTotalPrice.textContent = total;
-
-    document.querySelectorAll(".cart-item-remove").forEach((btn) => {
-      btn.addEventListener("click", function () {
-        const itemId = this.getAttribute("data-id");
-        removeFromCart(itemId);
-      });
-    });
-  }
+    
+    // Обновляем общую сумму
+    cartTotalPriceElement.textContent = totalPrice;
+    
+    // Добавляем обработчики событий для кнопок
+    addCartEventListeners();
 }
-/*
 
-*/
+function addCartEventListeners() {
+    // Обработчики для кнопок "+"
+    document.querySelectorAll('.plus-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const index = e.target.getAttribute('data-index');
+            updateCartItemCount(index, 1);
+        });
+    });
+    
+    // Обработчики для кнопок "-"
+    document.querySelectorAll('.minus-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const index = e.target.getAttribute('data-index');
+            updateCartItemCount(index, -1);
+        });
+    });
+    
+    // Обработчики для кнопок удаления
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const index = e.target.getAttribute('data-index');
+            removeCartItem(index);
+        });
+    });
+    
+    // Обработчик для кнопки заказа
+    document.getElementById('checkout-btn')?.addEventListener('click', checkout);
+}
+
+function updateCartItemCount(index, change) {
+    const cartData = JSON.parse(sessionStorage.getItem('dish')) || [];
+    const newCount = cartData[index].count + change;
+    
+    if (newCount <= 0) {
+        removeCartItem(index);
+    } else {
+        cartData[index].count = newCount;
+        sessionStorage.setItem('dish', JSON.stringify(cartData));
+        renderCart();
+    }
+}
+
+function removeCartItem(index) {
+    const cartData = JSON.parse(sessionStorage.getItem('dish')) || [];
+    cartData.splice(index, 1);
+    sessionStorage.setItem('dish', JSON.stringify(cartData));
+    renderCart();
+}
+
+function checkout() {
+    const totalPrice = document.getElementById('cart-total-price').textContent;
+    alert(`Заказ оформлен! Сумма: ${totalPrice} ₽`);
+    sessionStorage.removeItem('dish');
+    renderCart();
+}
+
+// Инициализация корзины
+document.addEventListener('DOMContentLoaded', renderCart);
+
+
 // ===== РАБОТА С ДАТОЙ И ВРЕМЕНЕМ ДОСТАВКИ =====
 function initDateTimePickers() {
   if (!datePicker || !timePicker) return;
@@ -616,6 +690,7 @@ function checkoutOrder() {
 }
 
 // ===== ОБРАБОТЧИКИ СОБЫТИЙ =====
+document.addEventListener('DOMContentLoaded', renderCart);
 document.addEventListener("DOMContentLoaded", function () {
   // Загрузка данных пользователя
   const savedUser = sessionStorage.getItem("currentUser");
@@ -628,7 +703,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Инициализация интерфейсов
-  updateCartDisplay();
+ 
   initDeliveryTimeSelection();
 
   // Загрузка Flatpickr
@@ -708,7 +783,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showModal("cart-modal");
         
         // Дополнительно: загружаем данные корзины для этого пользователя
-        loadCartData(userLogin);
+        
     });
 }
 
