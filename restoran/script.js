@@ -186,7 +186,8 @@ function logoutUser() {
       'userPatronymic',
       'userPassword',
       'userRole',
-      'userSurname'
+      'userSurname',
+      'dish'
     ];
 
     // Удаляем каждый указанный ключ из sessionStorage
@@ -431,6 +432,7 @@ function showAddAddressModal() {
 }
 
 // ===== РАБОТА С КОРЗИНОЙ =====
+
 function updateCartDisplay() {
   const cartItemsContainer = document.getElementById("cart-items");
   const cartTotalPrice = document.getElementById("cart-total-price");
@@ -467,77 +469,9 @@ function updateCartDisplay() {
     });
   }
 }
+/*
 
-function addToCart(item) {
-  if (!currentUser) {
-    showCustomAlert(
-      "Для добавления в корзину необходимо авторизоваться",
-      false
-    );
-    showModal("auth-modal");
-    return;
-  }
-
-  const existingItem = cartItems.find((i) => i.id === item.id);
-  if (existingItem) {
-    existingItem.quantity += 1;
-  } else {
-    cartItems.push({ ...item, quantity: 1 });
-  }
-
-  saveCart();
-  showCustomAlert(`"${item.name}" добавлен в корзину`);
-  updateCartDisplay();
-}
-
-function removeFromCart(itemId) {
-  cartItems = cartItems.filter((item) => item.id !== itemId);
-  saveCart();
-  updateCartDisplay();
-  showCustomAlert("Товар удален из корзины");
-}
-
-function clearCart() {
-  cartItems = [];
-  saveCart();
-  updateCartDisplay();
-}
-
-function saveCart() {
-  if (currentUser) {
-    sessionStorage.setItem(
-      `cart_${currentUser.email}`,
-      JSON.stringify(cartItems)
-    );
-  }
-}
-
-function loadCart() {
-  if (currentUser) {
-    const savedCart = sessionStorage.getItem(`cart_${currentUser.email}`);
-    if (savedCart) cartItems = JSON.parse(savedCart);
-  }
-  updateCartDisplay();
-}
-
-function loadDeliveryAddress() {
-  if (currentUser) {
-    const savedAddress = sessionStorage.getItem(`address_${currentUser.email}`);
-    if (savedAddress) {
-      deliveryAddress = savedAddress;
-      // Находим индекс адреса в массиве
-      const addressParts = savedAddress.split(", ");
-      if (addressParts.length >= 2) {
-        const city = addressParts[0];
-        const street = addressParts[1];
-        selectedAddressIndex = userAddresses.findIndex(
-          (addr) => addr.city === city && addr.street === street
-        );
-      }
-    }
-  }
-}
-
+*/
 // ===== РАБОТА С ДАТОЙ И ВРЕМЕНЕМ ДОСТАВКИ =====
 function initDateTimePickers() {
   if (!datePicker || !timePicker) return;
