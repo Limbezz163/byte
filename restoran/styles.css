@@ -131,7 +131,56 @@ nav ul li a:hover {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Легкая тень для текста */
     letter-spacing: 20px;
 }
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
 
+.item-info {
+    flex-grow: 1;
+}
+
+.item-info h3 
+{
+    color: #5B120D;
+    margin: 0 0 5px 0;
+}
+.item-quantity h3 
+{
+    color: #5B120D;
+    margin: 0 0 5px 0;
+}
+
+.item-info p {
+    margin: 0;
+    color: #5B120D;
+}
+
+.item-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-btn {
+    background: #5B120D;
+    color: #5B120D;;
+    border: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
 .hero h1::before {
     content: '';
     position: absolute;
@@ -870,7 +919,7 @@ input.invalid {
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 20px;
-    color: #F4F2E5;
+    color: #eee;
 }
 
 .cart-title-wrapper {
