@@ -714,10 +714,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", logoutUser);
   }
-  const logoutBtn1 = document.querySelector(".logout-btn1");
-  if (logoutBtn1) {
-    logoutBtn1.addEventListener("click", logoutUser);
-  }
+  
   const accountCloseBtn = document.querySelector(".account-close-btn");
   if (accountCloseBtn) {
     accountCloseBtn.addEventListener("click", function () {
